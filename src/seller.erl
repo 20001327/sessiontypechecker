@@ -11,7 +11,7 @@
 -export([start_link/0]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2,
          code_change/3]).
--export([send_address/1, send_ok/0, send_title/1]).
+-export([send_address/1, send_ok/0, send_title/1, send_quit/0]).
 
 -define(SERVER, ?MODULE).
 -define(QUOTE, 12).
@@ -33,9 +33,12 @@ handle_call(_Arg0, _Arg1, _Arg2) ->
 handle_cast({title, Title}, State = #seller_state{title=undefined}) ->
     bob:send_quote(?QUOTE),
     {reply,?QUOTE, #seller_state{title =Title, quote = ?QUOTE}};
-handle_cast(ok, #seller_state{title = Title, quote=12}) ->
+handle_cast(ok, #seller_state{title = Title, quote=Quote}) ->
     io:format("seller: received ok ~n"),
-    {noreply, #seller_state{title =Title, quote=12, status=ok}};
+    {noreply, #seller_state{title =Title, quote=Quote, status=ok}};
+handle_cast(quit, #seller_state{title = _Title, quote=_Quote}) ->
+    io:format("seller: received Quit ~n"),
+    {noreply, #seller_state{}};
 handle_cast({address,Address}, State = #seller_state{title = _Title, quote=_Quote, status=ok}) ->
     io:format("SELLER: received address ~p~n", [Address]),
     {reply, erlang:localtime(), #seller_state{}}.
@@ -60,6 +63,8 @@ send_address(Address)->
 send_ok()->
     gen_server:cast(?SERVER,ok).
 
+send_quit()->
+    gen_server:cast(?SERVER,quit).
 
 %%%===================================================================
 %%% Internal functions
