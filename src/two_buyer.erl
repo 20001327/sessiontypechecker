@@ -8,7 +8,6 @@
 
 %% Behaviour exports
 -export([init/1]).
--export([end_communication/0]).
 
 start_link() ->
   %% If needed, we can pass an argument to the init callback function.

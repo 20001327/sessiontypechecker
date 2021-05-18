@@ -30,7 +30,7 @@ init([]) ->
 handle_call(_Arg0, _Arg1, _Arg2) ->
     erlang:error(not_implemented).
 
-handle_cast({title, Title}, State = #seller_state{title=undefined}) ->
+handle_cast({title, Title}, #seller_state{title=undefined}) ->
     bob:send_quote(?QUOTE),
     {reply,?QUOTE, #seller_state{title =Title, quote = ?QUOTE}};
 handle_cast(ok, #seller_state{title = Title, quote=Quote}) ->
@@ -39,7 +39,7 @@ handle_cast(ok, #seller_state{title = Title, quote=Quote}) ->
 handle_cast(quit, #seller_state{title = _Title, quote=_Quote}) ->
     io:format("seller: received Quit ~n"),
     {noreply, #seller_state{}};
-handle_cast({address,Address}, State = #seller_state{title = _Title, quote=_Quote, status=ok}) ->
+handle_cast({address,Address}, #seller_state{title = _Title, quote=_Quote, status=ok}) ->
     io:format("SELLER: received address ~p~n", [Address]),
     {reply, erlang:localtime(), #seller_state{}}.
 
