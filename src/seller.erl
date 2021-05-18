@@ -32,7 +32,8 @@ handle_call(_Arg0, _Arg1, _Arg2) ->
 
 handle_cast({title, Title}, #seller_state{title=undefined}) ->
     bob:send_quote(?QUOTE),
-    {reply,?QUOTE, #seller_state{title =Title, quote = ?QUOTE}};
+    alice:send_quote(?QUOTE),
+    {noreply, #seller_state{title =Title, quote = ?QUOTE}};
 handle_cast(ok, #seller_state{title = Title, quote=Quote}) ->
     io:format("seller: received ok ~n"),
     {noreply, #seller_state{title =Title, quote=Quote, status=ok}};
@@ -41,7 +42,8 @@ handle_cast(quit, #seller_state{title = _Title, quote=_Quote}) ->
     {noreply, #seller_state{}};
 handle_cast({address,Address}, #seller_state{title = _Title, quote=_Quote, status=ok}) ->
     io:format("SELLER: received address ~p~n", [Address]),
-    {reply, erlang:localtime(), #seller_state{}}.
+    bob:sendTime(erlang:localtime()),
+    {noreply,  #seller_state{}}.
 
 
 handle_info(Info, State = #seller_state{}) ->

@@ -52,10 +52,10 @@ code_change(_OldVsn, State = #alice_state{}, _Extra) ->
   {ok, State}.
 
 send_title(Title) ->
-  seller:send_title(Title).
+  seller:send_title({title,Title}).
 
 send_quote(Quote) ->
-  gen_server:cast(?SERVER, Quote).
+  gen_server:cast(?SERVER, {quote,Quote}).
 
 send_quit() ->
   gen_server:cast(?SERVER, quit).
