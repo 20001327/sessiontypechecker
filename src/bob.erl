@@ -32,7 +32,6 @@ handle_call(_Request, _From, State = #bob_state{}) ->
   {reply, ok, State}.
 
 handle_cast({quote,Quote}, State = #bob_state{quote = undefined}) ->
-  io:format("BOB STATE:  ~p~n", [State]),
   io:format("BOB: receive quote from seller ~p~n", [Quote]),
   {noreply, #bob_state{quote = Quote}};
 handle_cast({quote,MyQuote}, State = #bob_state{quote = Quote}) ->
@@ -42,10 +41,11 @@ handle_cast({quote,MyQuote}, State = #bob_state{quote = Quote}) ->
     seller:send_address(?ADDRESS),
     {noreply,State};
     true ->
-      {noreply,#bob_state{}}
+      {stop,normal,#bob_state{}}
   end,
   Res;
 handle_cast({time,_Time}, _State = #bob_state{quote = _Quote}) ->
+  io:format("BOB: receive time from seller ~p~n", [_Time]),
   alice:send_ok(),
   {noreply,#bob_state{}}.
 

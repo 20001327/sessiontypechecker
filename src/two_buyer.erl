@@ -21,16 +21,16 @@ init(_Args) ->
   %% If there is more than 1 crash ('intensity') in
   %% 5 seconds ('period'), the entire supervisor crashes
   %% with all its children.
-  SupFlags = #{strategy => one_for_one,
+  SupFlags = #{strategy => one_for_all,
     intensity => 1,
     period => 5},
 
 
-  Seller = #{id => seller,
+  Seller = #{id => seller, restart => transient,
     start => {seller, start_link, []}},
-  Buyer1 = #{id => alice,
+  Buyer1 = #{id => alice, restart => transient,
     start => {alice, start_link, []}},
-  Buyer2 = #{id => bob,
+  Buyer2 = #{id => bob, restart => transient,
     start => {bob, start_link, []}},
 %%  Buyer3 = #{id => buyer_2,
 %%    start => {buyer_2, start_link, []}},

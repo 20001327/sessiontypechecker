@@ -37,11 +37,11 @@ handle_cast({quote,Quote}, State = #alice_state{quote = undefined}) ->
   bob:send_quote(Quote / 2),
   {noreply, #alice_state{quote = Quote}};
 handle_cast(ok, #alice_state{quote=_Quote}) ->
-  io:format("seller: received ok ~n"),
+  io:format("alice: received ok ~n"),
   {noreply, #alice_state{}};
 handle_cast(quit, #alice_state{quote=_Quote}) ->
-  io:format("seller: received quit ~n"),
-  {noreply, #alice_state{}}.
+  io:format("alice: received quit ~n"),
+  {stop,ok, #alice_state{}}.
 
 handle_info(_Info, State = #alice_state{}) ->
   {noreply, State}.
@@ -53,7 +53,7 @@ code_change(_OldVsn, State = #alice_state{}, _Extra) ->
   {ok, State}.
 
 send_title(Title) ->
-  seller:send_title({title,Title}).
+  seller:send_title(Title).
 
 send_quote(Quote) ->
   gen_server:cast(?SERVER, {quote,Quote}).
