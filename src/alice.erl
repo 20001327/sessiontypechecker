@@ -31,7 +31,8 @@ handle_call(_Req, _From, State = #alice_state{}) ->
   {reply, ok, State}.
 
 
-handle_cast({quote,Quote}, #alice_state{quote=undefined}) ->
+handle_cast({quote,Quote}, State = #alice_state{quote = undefined}) ->
+  io:format("ALICE STATE:  ~p~n", [State]),
   io:format("ALICE: quote receive from seller ~p~n", [Quote]),
   bob:send_quote(Quote / 2),
   {noreply, #alice_state{quote = Quote}};
