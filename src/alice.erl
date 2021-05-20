@@ -41,7 +41,7 @@ handle_cast(ok, #alice_state{quote=_Quote}) ->
   {noreply, #alice_state{}};
 handle_cast(quit, #alice_state{quote=_Quote}) ->
   io:format("alice: received quit ~n"),
-  {stop,ok, #alice_state{}}.
+  exit(normal).
 
 handle_info(_Info, State = #alice_state{}) ->
   {noreply, State}.

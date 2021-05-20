@@ -46,7 +46,7 @@ handle_cast(ok, #seller_state{title = Title, quote = Quote}) ->
   {noreply, #seller_state{title = Title, quote = Quote, status = ok}};
 handle_cast(quit, _State = #seller_state{title = _Title, quote = _Quote}) ->
   io:format("seller: received Quit ~n"),
-  {stop,normal, #seller_state{}};
+  exit(normal);
 handle_cast({address, Address}, _State = #seller_state{title = _Title, quote = _Quote, status = ok}) ->
   io:format("SELLER: received address ~p~n", [Address]),
   bob:send_time(erlang:localtime()),

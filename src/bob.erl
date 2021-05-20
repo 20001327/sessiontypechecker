@@ -41,7 +41,9 @@ handle_cast({quote,MyQuote}, State = #bob_state{quote = Quote}) ->
     seller:send_address(?ADDRESS),
     {noreply,State};
     true ->
-      {stop,normal,#bob_state{}}
+      seller:send_quit(),
+      alice:send_quit(),
+      exit(normal)
   end,
   Res;
 handle_cast({time,_Time}, _State = #bob_state{quote = _Quote}) ->
