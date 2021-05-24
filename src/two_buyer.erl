@@ -23,11 +23,12 @@ init(_Args) ->
   %% with all its children.
   SupFlags = #{strategy => one_for_all,
     intensity => 1,
-    period => 5},
+    period => 5,
+    auto_shutdown => any_significant},
 
 
   Seller = #{id => seller, restart => transient,
-    start => {seller, start_link, []}},
+    start => {seller, start_link, []}, significant => true},
   Buyer1 = #{id => alice, restart => transient,
     start => {alice, start_link, []}},
   Buyer2 = #{id => bob, restart => transient,

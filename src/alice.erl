@@ -25,23 +25,24 @@ start_link() ->
   gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 
 init([]) ->
+  seller:send_title("Bibbia"),
   {ok, #alice_state{}}.
+
 
 handle_call(_Req, _From, State = #alice_state{}) ->
   {reply, ok, State}.
 
-
 handle_cast({quote,Quote}, State = #alice_state{quote = undefined}) ->
   io:format("ALICE STATE:  ~p~n", [State]),
   io:format("ALICE: quote receive from seller ~p~n", [Quote]),
-  bob:send_quote(Quote / 2),
+  bob:send_contribute(Quote / 2),
   {noreply, #alice_state{quote = Quote}};
 handle_cast(ok, #alice_state{quote=_Quote}) ->
   io:format("alice: received ok ~n"),
   {noreply, #alice_state{}};
 handle_cast(quit, #alice_state{quote=_Quote}) ->
   io:format("alice: received quit ~n"),
-  exit(normal).
+  {stop,normal,#alice_state{}}.
 
 handle_info(_Info, State = #alice_state{}) ->
   {noreply, State}.

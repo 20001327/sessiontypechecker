@@ -9,14 +9,14 @@
 -behaviour(gen_server).
 
 -export([start_link/0]).
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2,
+-export([init/1, handle_cast/2, handle_info/2, terminate/2,
   code_change/3]).
--export([send_quote/1, send_time/1]).
+-export([send_quote/1, send_time/1, send_contribute/1, send_quit/0]).
 
 -define(ADDRESS, "Passo del fossato di San Barnaba").
 -define(SERVER, ?MODULE).
 
--record(bob_state, {quote, myquote}).
+-record(bob_state, {quote, myquote, buy}).
 
 %%%===================================================================
 %%% Spawning and gen_server implementation
@@ -28,28 +28,37 @@ start_link() ->
 init([]) ->
   {ok, #bob_state{}}.
 
-handle_call(_Request, _From, State = #bob_state{}) ->
-  {reply, ok, State}.
+do_interaction(Quote, MyQuote) ->
+  Res = if (Quote =/= undefined) and (MyQuote =/= undefined) ->
+    if Quote - MyQuote < 100 ->
+      seller:send_ok(),
+      seller:send_address(?ADDRESS),
+      #bob_state{quote = Quote, myquote = MyQuote, buy = true};
+      true ->
+        seller:send_quit(),
+        alice:send_quit(),
+        #bob_state{quote = Quote, myquote = MyQuote, buy = false}
+    end;
+          true ->
+            #bob_state{quote = Quote, myquote = MyQuote}
+        end,
+  Res.
 
-handle_cast({quote,Quote}, State = #bob_state{quote = undefined}) ->
+handle_cast({quote, Quote}, _State = #bob_state{quote = undefined, myquote = _MyQuote}) ->
   io:format("BOB: receive quote from seller ~p~n", [Quote]),
-  {noreply, #bob_state{quote = Quote}};
-handle_cast({quote,MyQuote}, State = #bob_state{quote = Quote}) ->
+  NewState = do_interaction(Quote, _MyQuote),
+  {noreply, NewState};
+handle_cast({myquote, MyQuote}, _State = #bob_state{quote = _Quote, myquote = undefined}) ->
   io:format("BOB: receive quote from alice ~p~n", [MyQuote]),
-  Res = if Quote - MyQuote < 100 ->
-    seller:send_ok(),
-    seller:send_address(?ADDRESS),
-    {noreply,State};
-    true ->
-      seller:send_quit(),
-      alice:send_quit(),
-      exit(normal)
-  end,
-  Res;
-handle_cast({time,_Time}, _State = #bob_state{quote = _Quote}) ->
+  NewState = do_interaction(_Quote, MyQuote),
+  {noreply, NewState};
+handle_cast({time, _Time}, _State = #bob_state{quote = _Quote, myquote = _MyQuote, buy = true}) ->
   io:format("BOB: receive time from seller ~p~n", [_Time]),
   alice:send_ok(),
-  {noreply,#bob_state{}}.
+  {noreply, #bob_state{}};
+handle_cast(quit, #bob_state{quote = _Quote, myquote =  _MyQuote, buy = false}) ->
+  io:format("BOB: receive quit , ending ... ~n"),
+  {stop, normal, #bob_state{}}.
 
 handle_info(_Info, State = #bob_state{}) ->
   {noreply, State}.
@@ -61,11 +70,16 @@ code_change(_OldVsn, State = #bob_state{}, _Extra) ->
   {ok, State}.
 
 send_quote(Quote) ->
-  gen_server:cast(?SERVER, {quote,Quote}).
+  gen_server:cast(?SERVER, {quote, Quote}).
 
+send_quit() ->
+  gen_server:cast(?SERVER,quit).
+
+send_contribute(Quote) ->
+  gen_server:cast(?SERVER, {myquote, Quote}).
 
 send_time(Time) ->
-  gen_server:cast(?SERVER, {time,Time}).
+  gen_server:cast(?SERVER, {time, Time}).
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================

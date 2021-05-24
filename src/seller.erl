@@ -27,6 +27,7 @@ start_link() ->
 
 init([]) ->
   {ok, #seller_state{}}.
+
 handle_call(_Arg0, _Arg1, _Arg2) ->
   erlang:error(not_implemented).
 
@@ -37,7 +38,7 @@ handle_cast({title, Title}, #seller_state{title = undefined}) ->
            {value, {_, Quote}} ->
                io:format("BOOK FOUND, it cost: ~p~n", [Quote]),
                bob:send_quote(Quote),
-             alice:send_quote(Quote),
+               alice:send_quote(Quote),
              {noreply, #seller_state{title = Title, quote = Quote}}
          end,
   Resp;
@@ -46,7 +47,9 @@ handle_cast(ok, #seller_state{title = Title, quote = Quote}) ->
   {noreply, #seller_state{title = Title, quote = Quote, status = ok}};
 handle_cast(quit, _State = #seller_state{title = _Title, quote = _Quote}) ->
   io:format("seller: received Quit ~n"),
-  exit(normal);
+  alice:send_quit(),
+  bob:send_quit(),
+  {stop,normal,#seller_state{}};
 handle_cast({address, Address}, _State = #seller_state{title = _Title, quote = _Quote, status = ok}) ->
   io:format("SELLER: received address ~p~n", [Address]),
   bob:send_time(erlang:localtime()),
