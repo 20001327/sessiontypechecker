@@ -29,9 +29,20 @@ start_link() ->
 init([]) ->
   {ok, #bob_state{}}.
 
-do_interaction(State) ->
-  Quote = State#bob_state.quote,
-  MyQuote = State#bob_state.myquote,
+do_interaction(State, Input) ->
+  Res = case Input of
+    {quote, Num} ->
+      MyQuote = State#bob_state.myquote,
+      Quote = Num,
+      do_interaction(inner,Quote,MyQuote);
+    {myquote, Num} ->
+      Quote = State#bob_state.quote,
+      MyQuote = Num,
+      do_interaction(inner,Quote,MyQuote)
+        end,
+  Res.
+
+do_interaction(inner,Quote,MyQuote) ->
   Res = if (Quote =/= undefined) and (MyQuote =/= undefined) ->
     if Quote - MyQuote < 100 ->
       seller:send_ok(),
@@ -47,19 +58,19 @@ do_interaction(State) ->
         end,
   Res.
 
-handle_cast({quote, Quote}, State) ->
+handle_cast(Input = {quote, Quote}, State) ->
   io:format("BOB: receive quote from seller ~p~n", [Quote]),
-  NewState = do_interaction(State),
+  NewState = do_interaction(State, Input),
   {noreply, NewState};
-handle_cast({myquote, MyQuote}, State) ->
+handle_cast(Input = {myquote, MyQuote}, State) ->
   io:format("BOB: receive quote from alice ~p~n", [MyQuote]),
-  NewState = do_interaction(State),
+  NewState = do_interaction(State, Input),
   {noreply, NewState};
 handle_cast({time, _Time}, _State = #bob_state{quote = _Quote, myquote = _MyQuote, buy = true}) ->
   io:format("BOB: receive time from seller ~p~n", [_Time]),
   alice:send_ok(),
   {noreply, #bob_state{}};
-handle_cast(quit, #bob_state{quote = _, myquote =_, buy = false}) ->
+handle_cast(quit, #bob_state{quote = _, myquote = _, buy = false}) ->
   io:format("BOB: receive quit , ending ... ~n"),
   {stop, normal, #bob_state{}}.
 
@@ -76,7 +87,7 @@ send_quote(Quote) ->
   gen_server:cast(?SERVER, {quote, Quote}).
 
 send_quit() ->
-  gen_server:cast(?SERVER,quit).
+  gen_server:cast(?SERVER, quit).
 
 send_contribute(Quote) ->
   gen_server:cast(?SERVER, {myquote, Quote}).
@@ -87,8 +98,26 @@ send_time(Time) ->
 %%% TESTS
 %%%===================================================================
 
-send_quote_test()->
-  {_,Pid} = start_link(),
+send_quote_test() ->
+  Res = start_link(),
+  case Res of
+    {error, {already_started, PidVal}} ->
+      Pid = PidVal;
+    {ok, PidVal} ->
+      Pid = PidVal
+  end,
+  send_quote(1),
+  Status = sys:get_state(Pid),
+  1 = Status#bob_state.quote.
+
+send_contribute_test() ->
+  Res = start_link(),
+  case Res of
+    {error, {already_started, PidVal}} ->
+      Pid = PidVal;
+    {ok, PidVal} ->
+      Pid = PidVal
+  end,
   send_contribute(1),
   Status = sys:get_state(Pid),
   1 = Status#bob_state.myquote.
