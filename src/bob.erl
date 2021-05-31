@@ -5,6 +5,7 @@
 %%% @end
 %%%-------------------------------------------------------------------
 -module(bob).
+-include_lib("eunit/include/eunit.hrl").
 
 -behaviour(gen_server).
 
@@ -28,7 +29,9 @@ start_link() ->
 init([]) ->
   {ok, #bob_state{}}.
 
-do_interaction(Quote, MyQuote) ->
+do_interaction(State) ->
+  Quote = State#bob_state.quote,
+  MyQuote = State#bob_state.myquote,
   Res = if (Quote =/= undefined) and (MyQuote =/= undefined) ->
     if Quote - MyQuote < 100 ->
       seller:send_ok(),
@@ -44,19 +47,19 @@ do_interaction(Quote, MyQuote) ->
         end,
   Res.
 
-handle_cast({quote, Quote}, _State = #bob_state{quote = undefined, myquote = _MyQuote}) ->
+handle_cast({quote, Quote}, State) ->
   io:format("BOB: receive quote from seller ~p~n", [Quote]),
-  NewState = do_interaction(Quote, _MyQuote),
+  NewState = do_interaction(State),
   {noreply, NewState};
-handle_cast({myquote, MyQuote}, _State = #bob_state{quote = _Quote, myquote = undefined}) ->
+handle_cast({myquote, MyQuote}, State) ->
   io:format("BOB: receive quote from alice ~p~n", [MyQuote]),
-  NewState = do_interaction(_Quote, MyQuote),
+  NewState = do_interaction(State),
   {noreply, NewState};
 handle_cast({time, _Time}, _State = #bob_state{quote = _Quote, myquote = _MyQuote, buy = true}) ->
   io:format("BOB: receive time from seller ~p~n", [_Time]),
   alice:send_ok(),
   {noreply, #bob_state{}};
-handle_cast(quit, #bob_state{quote = _Quote, myquote =  _MyQuote, buy = false}) ->
+handle_cast(quit, #bob_state{quote = _, myquote =_, buy = false}) ->
   io:format("BOB: receive quit , ending ... ~n"),
   {stop, normal, #bob_state{}}.
 
@@ -81,5 +84,11 @@ send_contribute(Quote) ->
 send_time(Time) ->
   gen_server:cast(?SERVER, {time, Time}).
 %%%===================================================================
-%%% Internal functions
+%%% TESTS
 %%%===================================================================
+
+send_quote_test()->
+  {_,Pid} = start_link(),
+  send_contribute(1),
+  Status = sys:get_state(Pid),
+  1 = Status#bob_state.myquote.
