@@ -2,12 +2,16 @@
 -module(two_buyer).
 
 -behaviour(supervisor).
+-include_lib("eunit/include/eunit.hrl").
+-include_lib("records.hrl").
 
 %% API exports
 -export([start_link/0]).
 
 %% Behaviour exports
 -export([init/1]).
+
+
 
 start_link() ->
   %% If needed, we can pass an argument to the init callback function.
@@ -42,3 +46,30 @@ init(_Args) ->
   %% Return the supervisor flags and the child specifications
   %% to the 'supervisor' module.
   {ok, {SupFlags, ChannelA}}.
+
+%two_buyer_test()->
+%  two_buyer:start_link().
+
+
+bob_send_quote_test() ->
+  Pid = start_and_get_pid(bob),
+  bob:send_quote(1),
+  Status = sys:get_state(Pid),
+  1 = Status#bob_state.quote.
+
+bob_send_contribute_test() ->
+  Pid = start_and_get_pid(bob),
+  bob:send_contribute(1),
+  Status = sys:get_state(Pid),
+  1 = Status#bob_state.myquote.
+
+
+start_and_get_pid(Actor) ->
+  Res = Actor:start_link(),
+  case Res of
+    {error, {already_started, PidVal}} ->
+      Pid = PidVal;
+    {ok, PidVal} ->
+      Pid = PidVal
+  end,
+  Pid.

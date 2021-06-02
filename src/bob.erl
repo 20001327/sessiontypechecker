@@ -6,6 +6,7 @@
 %%%-------------------------------------------------------------------
 -module(bob).
 -include_lib("eunit/include/eunit.hrl").
+-include_lib("records.hrl").
 
 -behaviour(gen_server).
 
@@ -17,7 +18,6 @@
 -define(ADDRESS, "Passo del fossato di San Barnaba").
 -define(SERVER, ?MODULE).
 
--record(bob_state, {quote, myquote, buy}).
 
 %%%===================================================================
 %%% Spawning and gen_server implementation
@@ -97,27 +97,3 @@ send_time(Time) ->
 %%%===================================================================
 %%% TESTS
 %%%===================================================================
-
-send_quote_test() ->
-  Res = start_link(),
-  case Res of
-    {error, {already_started, PidVal}} ->
-      Pid = PidVal;
-    {ok, PidVal} ->
-      Pid = PidVal
-  end,
-  send_quote(1),
-  Status = sys:get_state(Pid),
-  1 = Status#bob_state.quote.
-
-send_contribute_test() ->
-  Res = start_link(),
-  case Res of
-    {error, {already_started, PidVal}} ->
-      Pid = PidVal;
-    {ok, PidVal} ->
-      Pid = PidVal
-  end,
-  send_contribute(1),
-  Status = sys:get_state(Pid),
-  1 = Status#bob_state.myquote.
