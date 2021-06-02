@@ -59,11 +59,11 @@ do_interaction(inner,Quote,MyQuote) ->
   Res.
 
 handle_cast(Input = {quote, Quote}, State) ->
-  io:format("BOB: receive quote from seller ~p~n", [Quote]),
+  io:format(user, "BOB: receive quote from seller ~p~n", [Quote]),
   NewState = do_interaction(State, Input),
   {noreply, NewState};
 handle_cast(Input = {myquote, MyQuote}, State) ->
-  io:format("BOB: receive quote from alice ~p~n", [MyQuote]),
+  io:format(user, "BOB: receive quote from alice ~p~n", [MyQuote]),
   NewState = do_interaction(State, Input),
   {noreply, NewState};
 handle_cast({time, _Time}, _State = #bob_state{quote = _Quote, myquote = _MyQuote, buy = true}) ->
@@ -94,6 +94,3 @@ send_contribute(Quote) ->
 
 send_time(Time) ->
   gen_server:cast(?SERVER, {time, Time}).
-%%%===================================================================
-%%% TESTS
-%%%===================================================================
