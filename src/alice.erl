@@ -9,8 +9,7 @@
 -behaviour(gen_server).
 
 -export([start_link/0]).
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2,
-  code_change/3]).
+-export([init/1, handle_call/3, handle_cast/2, handle_info/2]).
 -export([send_title/1, send_quote/1, send_ok/0, send_quit/0]).
 
 -define(SERVER, ?MODULE).
@@ -23,21 +22,18 @@
 
 start_link() ->
   gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
-
 init([]) ->
-  seller:send_title("Bibbia"),
   {ok, #alice_state{}}.
 
 
 handle_call(_Req, _From, State = #alice_state{}) ->
   {reply, ok, State}.
 
-handle_cast({quote,Quote}, State = #alice_state{quote = undefined}) ->
-  io:format("ALICE STATE:  ~p~n", [State]),
+handle_cast({quote,Quote}, #alice_state{quote = undefined}) ->
   io:format("ALICE: quote receive from seller ~p~n", [Quote]),
-  bob:send_contribute(Quote / 2),
+  two_buyer:send_message(alice,bob,send_contribute,[Quote/2]),
   {noreply, #alice_state{quote = Quote}};
-handle_cast(ok, #alice_state{quote=_Quote}) ->
+handle_cast(okay, #alice_state{quote=_Quote}) ->
   io:format("alice: received ok ~n"),
   {noreply, #alice_state{}};
 handle_cast(quit, #alice_state{quote=_Quote}) ->
@@ -46,12 +42,6 @@ handle_cast(quit, #alice_state{quote=_Quote}) ->
 
 handle_info(_Info, State = #alice_state{}) ->
   {noreply, State}.
-
-terminate(_Reason, _State = #alice_state{}) ->
-  ok.
-
-code_change(_OldVsn, State = #alice_state{}, _Extra) ->
-  {ok, State}.
 
 send_title(Title) ->
   seller:send_title(Title).
@@ -63,7 +53,7 @@ send_quit() ->
   gen_server:cast(?SERVER, quit).
 
 send_ok() ->
-  gen_server:cast(?SERVER, ok).
+  gen_server:cast(?SERVER, okay).
 
 %%%===================================================================
 %%% Internal functions

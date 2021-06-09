@@ -6,7 +6,7 @@
 -include_lib("records.hrl").
 
 %% API exports
--export([start_link/0]).
+-export([start_link/0, send_message/4]).
 
 %% Behaviour exports
 -export([init/1]).
@@ -16,7 +16,9 @@
 start_link() ->
   %% If needed, we can pass an argument to the init callback function.
   Args = [],
-  supervisor:start_link({local, ?MODULE}, ?MODULE, Args).
+  supervisor:start_link({local, ?MODULE}, ?MODULE, Args),
+  two_buyer:send_message(alice, seller, send_title, ["Torah"]).
+
 
 %% The init callback function is called by the 'supervisor' module.
 init(_Args) ->
@@ -40,36 +42,43 @@ init(_Args) ->
 %%  Buyer3 = #{id => buyer_2,
 %%    start => {buyer_2, start_link, []}},
 
-  ChannelA = [Seller,Buyer1,Buyer2],
+  ChannelA = [Seller, Buyer1, Buyer2],
 %%  ChannelB = [Buyer3],
 
   %% Return the supervisor flags and the child specifications
   %% to the 'supervisor' module.
   {ok, {SupFlags, ChannelA}}.
 
-%two_buyer_test()->
-%  two_buyer:start_link().
+
+send_message(From, To, Function, Args) ->
+  seq_trace:set_token(label, {From, To}),
+  apply(To, Function, Args).
+
+two_buyer_test() ->
+  tracer:start(),
+  two_buyer:start_link(),
+  {ok,File1} = file:read_file("../correctTraces/1.txt"),
+  {ok,File2} = file:read_file("../correctTraces/2.txt"),
+  {ok,CurrentTrace} = file:read_file("trace.txt"),
+  CurrentArray = binary:split(CurrentTrace, [<<"\n">>], [global]),
+  ok = checkTrace(CurrentArray, [File1, File2]).
 
 
-bob_send_quote_test() ->
-  Pid = start_and_get_pid(bob),
-  bob:send_quote(1),
-  Status = sys:get_state(Pid),
-  1 = Status#bob_state.quote.
-
-bob_send_contribute_test() ->
-  Pid = start_and_get_pid(bob),
-  bob:send_contribute(1),
-  Status = sys:get_state(Pid),
-  1 = Status#bob_state.myquote.
+checkTrace(CurrentArray, [H | Tail]) ->
+  case checkFile(CurrentArray, H) of
+    true -> ok;
+      _ -> checkTrace(CurrentArray,Tail)
+  end;
+checkTrace(_CurrentArray,[])-> false.
 
 
-start_and_get_pid(Actor) ->
-  Res = Actor:start_link(),
-  case Res of
-    {error, {already_started, PidVal}} ->
-      Pid = PidVal;
-    {ok, PidVal} ->
-      Pid = PidVal
-  end,
-  Pid.
+checkFile(CurrentArray, CurrentFile) ->
+  TestArray = binary:split(CurrentFile, [<<"\n">>], [global]),
+  checkLines(CurrentArray,TestArray).
+
+checkLines([X|Rest], [X|Tail]) ->
+  checkLines(Rest,Tail);
+checkLines([_X|_Rest], [_]) ->
+  false;
+checkLines([], []) ->
+  true.
