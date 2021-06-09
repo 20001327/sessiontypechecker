@@ -51,7 +51,7 @@ handle_cast(quit, _State = #seller_state{title = _Title, quote = _Quote}) ->
   {noreply, #seller_state{}};
 handle_cast({address, Address}, _State = #seller_state{title = _Title, quote = _Quote, status = okay}) ->
   io:format(" -- SELLER: received address ~p", [Address]),
-  two_buyer:send_message(seller,bob,send_time,[erlang:localtime()]),
+  two_buyer:send_message(seller,bob,send_time,[{{2021,6,9},{11,2,15}}]),
   {noreply, #seller_state{}}.
 
 

@@ -1,0 +1,16 @@
+alice: Sent {title,"Torah"}
+seller: Received [{title,"Torah"}]
+seller: Sent {quote,27}
+seller: Sent {quote,27}
+bob: Received [{quote,27}]
+alice: Received [{quote,27}]
+alice: Sent {myquote,13.5}
+bob: Received [{myquote,13.5}]
+bob: Sent okay
+seller: Received [okay]
+bob: Sent {address,"Passo del fossato di San Barnaba"}
+seller: Received [{address,"Passo del fossato di San Barnaba"}]
+seller: Sent {time,{{2021,6,9},{11,2,15}}}
+bob: Received [{time,{{2021,6,9},{11,2,15}}}]
+bob: Sent okay
+alice: Received [okay]
