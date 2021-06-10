@@ -80,8 +80,6 @@ check() ->
   true = checkTrace(CurrentArray, [Array1, Array2, Array3, Array4]).
 
 checkTrace(CurrentArray, [H | Tail]) ->
-  EQ = H =:= CurrentArray,
-  io:format("Res ~p ~n~n~n", [EQ]),
   Res = case H of
           CurrentArray ->
             true;
@@ -90,5 +88,4 @@ checkTrace(CurrentArray, [H | Tail]) ->
         end,
   Res;
 checkTrace(_CurrentArray, []) ->
-  io:format("empty"),
   false.
