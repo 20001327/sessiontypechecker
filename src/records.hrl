@@ -1,1 +1,1 @@
--record(bob_state, {quote, myquote, buy}).
+-record(bob_state, {quote, myquote, buy, delegate}).

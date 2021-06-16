@@ -17,7 +17,10 @@ start_link() ->
   %% If needed, we can pass an argument to the init callback function.
   Args = [],
   supervisor:start_link({local, ?MODULE}, ?MODULE, Args),
-  two_buyer:send_message(alice, seller, send_title, ["Torah"]).
+  bob:start_delegation(carol),
+  two_buyer:send_message(alice, bob, prova_delegation, [])
+%%two_buyer:send_message(alice, seller, send_title, ["Torah"])
+.
 
 
 %% The init callback function is called by the 'supervisor' module.
@@ -39,20 +42,32 @@ init(_Args) ->
     start => {alice, start_link, []}},
   Buyer2 = #{id => bob, restart => transient,
     start => {bob, start_link, []}},
-%%  Buyer3 = #{id => buyer_2,
-%%    start => {buyer_2, start_link, []}},
+  Buyer3 = #{id => carol, restart => transient,
+    start => {carol, start_link, []}},
 
-  ChannelA = [Seller, Buyer1, Buyer2],
+  Children = [Seller, Buyer1, Buyer2, Buyer3],
 %%  ChannelB = [Buyer3],
 
   %% Return the supervisor flags and the child specifications
   %% to the 'supervisor' module.
-  {ok, {SupFlags, ChannelA}}.
+  {ok, {SupFlags, Children}}.
 
 
 send_message(From, To, Function, Args) ->
   seq_trace:set_token(label, {From, To}),
-  apply(To, Function, Args).
+  Recipient = get_delegate(To),
+  apply(Recipient, Function, Args).
+
+
+get_delegate(To) ->
+  State = sys:get_state(To),
+  StateName = element(1, State),
+  Delegate = if StateName == bob_state -> State#bob_state.delegate;
+               true -> To
+             end,
+  io:format("Stato Trovato: ~p~n",[State]),
+  Delegate.
+
 
 top_setup() ->
   tracer:start(),

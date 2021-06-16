@@ -12,7 +12,7 @@
 
 -export([start_link/0]).
 -export([init/1, handle_cast/2, handle_info/2]).
--export([send_quote/1, send_time/1, send_contribute/1, send_quit/0]).
+-export([send_quote/1, send_time/1, send_contribute/1, send_quit/0,start_delegation/1]).
 
 -define(ADDRESS, "Passo del fossato di San Barnaba").
 -define(SERVER, ?MODULE).
@@ -72,7 +72,9 @@ handle_cast({time, _Time}, _State = #bob_state{quote = _Quote, myquote = _MyQuot
   {noreply, #bob_state{}};
 handle_cast(quit, #bob_state{quote = _, myquote = _, buy = false}) ->
   io:format("BOB: receive quit , ending ... ~n"),
-  {stop, normal, #bob_state{}}.
+  {stop, normal, #bob_state{}};
+handle_cast({delegate,Delegate}, State = #bob_state{delegate = undefined}) ->
+  {noreply, State#bob_state{delegate=Delegate}}.
 
 handle_info(_Info, State = #bob_state{}) ->
   {noreply, State}.
@@ -82,6 +84,9 @@ send_quote(Quote) ->
 
 send_quit() ->
   gen_server:cast(?SERVER, quit).
+
+start_delegation(Delegate) ->
+  gen_server:cast(?SERVER, {delegate,Delegate}).
 
 send_contribute(Quote) ->
   gen_server:cast(?SERVER, {myquote, Quote}).
