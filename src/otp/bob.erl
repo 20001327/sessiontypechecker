@@ -49,6 +49,7 @@ do_interaction(inner,Quote,MyQuote) ->
       two_buyer:send_message(bob,seller,send_address,[?ADDRESS]),
       #bob_state{quote = Quote, myquote = MyQuote, buy = true};
       true ->
+        %% todo delegation
         two_buyer:send_message(bob,seller,send_quit,[]),
         two_buyer:send_message(alice,seller,send_quit,[]),
         #bob_state{quote = Quote, myquote = MyQuote, buy = false}
