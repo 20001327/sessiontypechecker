@@ -1,0 +1,2 @@
+-record(buyer_actor, {number, title, quote, myquote, buy, quit, delegate}).
+-record(message,{from,to,message}).
