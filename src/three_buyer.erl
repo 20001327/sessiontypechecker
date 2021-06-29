@@ -11,7 +11,7 @@ start_protocol()->
     alice:start(),
     bob:start(),
     seller:start(),
-    carol:start(),
+  %%  carol:start(),
     send_message("",alice,start_protocol).
 
 
