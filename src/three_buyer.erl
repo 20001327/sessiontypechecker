@@ -5,9 +5,14 @@
 -include_lib("records.hrl").
 
 %% API exports
--export([send_message/3, check/0]).
+-export([send_message/3, check/0, start_protocol/0]).
 
-
+start_protocol()->
+    alice:start(),
+    bob:start(),
+    seller:start(),
+    carol:start(),
+    send_message("",alice,start_protocol).
 
 
 send_message(From, To, Message) ->
