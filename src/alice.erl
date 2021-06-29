@@ -14,10 +14,10 @@ loop(State)->
         {message,From,_To,get_state} ->
             From ! State,
             State;
-        {message,From,_To,{quote,Quote}} ->
+        {message,_From,_To,{quote,Quote}} ->
               St = if State#buyer_actor.quote == undefined ->
                   io:format("ALICE: quote receive from seller ~p~n", [Quote]),
-                  three_buyer:send_message(?MODULE,From,{send_contribute,Quote/2}),
+                  three_buyer:send_message(alice,bob,{myquote,Quote/2}),
                   State#buyer_actor{quote = Quote};
                 true -> State
               end,
@@ -37,7 +37,7 @@ loop(State)->
             end,
             St;
         start_protocol ->
-            three_buyer:send_message(alice,seller,#message{from=alice,to=seller,message={title,"Torah"}}),
+            three_buyer:send_message(alice,seller,{title,"Torah"}),
             State#buyer_actor{title = "Torah"};
         _Message ->
             io:format("Alice received: ~p~n",[_Message]),

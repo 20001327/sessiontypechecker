@@ -33,8 +33,8 @@ loop(State)->
                            false -> exit(undef);
                            {value, {_, Quote}} ->
                              io:format("BOOK FOUND, it cost: ~p~n", [Quote]),
-                             three_buyer:send_message(seller, bob, {seller,bob,{quote,Quote}}),
-                             three_buyer:send_message(seller, alice, {seller,alice,{quote,Quote}}),
+                             three_buyer:send_message(seller, bob, {quote,Quote}),
+                             three_buyer:send_message(seller, alice, {quote,Quote}),
                              State#buyer_actor{title = Title, quote = Quote}
                          end,
                     Resp;
@@ -50,8 +50,8 @@ loop(State)->
              St;
              {message,_From,_To,quit} ->
              St = if State#buyer_actor.title =/= undefined andalso State#buyer_actor.quote =/= undefined  ->
-               three_buyer:send_message(seller,bob,{seller,bob,quit}),
-               three_buyer:send_message(seller,alice,{seller,alice,quit}),
+               three_buyer:send_message(seller,bob,quit),
+               three_buyer:send_message(seller,alice,quit),
                #buyer_actor{number = ?NO};
              true -> State
              end,
@@ -60,7 +60,7 @@ loop(State)->
              St = if State#buyer_actor.title =/= undefined andalso
              State#buyer_actor.quote =/= undefined andalso  State#buyer_actor.buy == true  ->
                io:format(" -- SELLER: received address ~p", [Address]),
-               three_buyer:send_message(seller,bob,{seller,bob,{time,{{2021,6,9},{11,2,15}}}}),
+               three_buyer:send_message(seller,bob,{time,{{2021,6,9},{11,2,15}}}),
                #buyer_actor{number = ?NO};
              true -> State
              end,

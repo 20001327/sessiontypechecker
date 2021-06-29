@@ -33,13 +33,14 @@ loop(State)->
         {message,_From,_To,Input = {quote,_Quote}} ->
             do_interaction(State, Input);
         {message,_From,_To,Input = {myquote,_MyQuote}} ->
+            io:format("BOB: receive his contr ~p~n", [_MyQuote]),
             do_interaction(State, Input);
         {message,From,_To,{time, _Time}} ->
             St = if (State#buyer_actor.quote =/= undefined) andalso
                     (State#buyer_actor.myquote =/= undefined) andalso
                     (State#buyer_actor.buy =/= undefined) ->
                       io:format("BOB: receive time from ~p: ~p~n", [From,_Time]),
-                      three_buyer:send_message(bob,alice,{bob,alice,okay}),
+                      three_buyer:send_message(bob,alice,okay),
                       #buyer_actor{number=1};
                  true -> State
             end,
@@ -52,7 +53,7 @@ loop(State)->
             end,
             St;
         start_protocol ->
-            three_buyer:send_message(alice,seller,#message{from=alice,to=seller,message={title,"Torah"}}),
+            three_buyer:send_message(alice,seller,{title,"Torah"}),
             State#buyer_actor{title = "Torah"};
         _Message ->
             io:format("Alice received: ~p~n",[_Message]),
@@ -77,13 +78,13 @@ do_interaction(State, Input) ->
 do_interaction(inner,Quote,MyQuote,State) ->
   Res = if (Quote =/= undefined) and (MyQuote =/= undefined) ->
     if Quote - MyQuote < 100 ->
-      three_buyer:send_message(bob,seller,{bob,seller,okay}),
-      three_buyer:send_message(bob,seller,{bob,seller,{address,?ADDRESS}}),
+      three_buyer:send_message(bob,seller,okay),
+      three_buyer:send_message(bob,seller,{address,?ADDRESS}),
       State#buyer_actor{quote = Quote, myquote = MyQuote, buy = true};
       true ->
         %% todo delegation
-      three_buyer:send_message(bob,seller,{bob,seller,quit}),
-      three_buyer:send_message(bob,alice,{bob,alice,quit}),
+      three_buyer:send_message(bob,seller,quit),
+      three_buyer:send_message(bob,alice,quit),
       State#buyer_actor{quote = Quote, myquote = MyQuote, buy = false}
     end;
           true ->

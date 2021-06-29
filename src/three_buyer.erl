@@ -12,13 +12,13 @@ start_protocol()->
     bob:start(),
     seller:start(),
   %%  carol:start(),
-    send_message("",alice,start_protocol).
+    alice!start_protocol.
 
 
 send_message(From, To, Message) ->
   seq_trace:set_token(label, {From, To}),
   Recipient = get_delegate(To),
-  Recipient ! Message.
+  Recipient ! #message{from = From, to = To, message = Message}.
 
 
 get_delegate(To) ->
