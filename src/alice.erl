@@ -2,12 +2,11 @@
 
 -include_lib("records.hrl").
 
--export([start/0, prova/0, loop/1]).
+-export([start/0, loop/1]).
+-define(NO,2).
 
 start()->
-    register(?MODULE, spawn(?MODULE, loop, [#buyer_actor{number=1}])).
-
-
+    register(?MODULE, spawn(?MODULE, loop, [#buyer_actor{number=?NO}])).
 
 
 loop(State)->
@@ -26,14 +25,14 @@ loop(State)->
         {message,_From,_To,okay} ->
             St = if State#buyer_actor.quote =/= undefined ->
               io:format("alice: received ok ~n"),
-              #buyer_actor{number=1};
+              #buyer_actor{number=?NO};
               true ->  State
               end,
               St;
         {message,_From,_To,quit} ->
               St = if State#buyer_actor.quote =/= undefined ->
                 exit(ok),
-              #buyer_actor{number=1};
+              #buyer_actor{number=?NO};
               true -> State
             end,
             St;
@@ -46,4 +45,3 @@ loop(State)->
     end,
     loop(NewState).
 
-prova()->ok.

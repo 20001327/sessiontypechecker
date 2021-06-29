@@ -1,0 +1,92 @@
+%%%-------------------------------------------------------------------
+%%% @author Lorenzo
+%%% @copyright (C) 2021, <COMPANY>
+%%% @doc
+%%% @end
+%%%-------------------------------------------------------------------
+-module(bob).
+-include_lib("eunit/include/eunit.hrl").
+-include_lib("records.hrl").
+
+-export([start/0, loop/1]).
+-define(NO,1).
+
+
+-define(ADDRESS, "Passo del fossato di San Barnaba").
+-define(SERVER, ?MODULE).
+
+
+%%%===================================================================
+%%% Spawning and gen_server implementation
+%%%===================================================================
+
+
+start()->
+    register(?MODULE, spawn(?MODULE, loop, [#buyer_actor{number=?NO}])).
+
+
+loop(State)->
+    NewState = receive
+        {message,From,_To,get_state} ->
+            From ! State,
+            State;
+        {message,_From,_To,Input = {quote,_Quote}} ->
+            do_interaction(State, Input);
+        {message,_From,_To,Input = {myquote,_MyQuote}} ->
+            do_interaction(State, Input);
+        {message,From,_To,{time, _Time}} ->
+            St = if (State#buyer_actor.quote =/= undefined) andalso
+                    (State#buyer_actor.myquote =/= undefined) andalso
+                    (State#buyer_actor.buy =/= undefined) ->
+                      io:format("BOB: receive time from ~p: ~p~n", [From,_Time]),
+                      three_buyer:send_message(bob,alice,{bob,alice,okay}),
+                      #buyer_actor{number=1};
+                 true -> State
+            end,
+            St;
+        {message,_From,_To,quit} ->
+              St = if State#buyer_actor.buy == false ->
+                exit(ok),
+              #buyer_actor{number=?NO};
+              true -> State
+            end,
+            St;
+        start_protocol ->
+            three_buyer:send_message(alice,seller,#message{from=alice,to=seller,message={title,"Torah"}}),
+            State#buyer_actor{title = "Torah"};
+        _Message ->
+            io:format("Alice received: ~p~n",[_Message]),
+            State
+    end,
+    loop(NewState).
+
+
+do_interaction(State, Input) ->
+  Res = case Input of
+    {quote, Num} ->
+      MyQuote = State#buyer_actor.myquote,
+      Quote = Num,
+      do_interaction(inner,Quote,MyQuote,State);
+    {myquote, Num} ->
+      Quote = State#buyer_actor.quote,
+      MyQuote = Num,
+      do_interaction(inner,Quote,MyQuote,State)
+       end,
+  Res.
+
+do_interaction(inner,Quote,MyQuote,State) ->
+  Res = if (Quote =/= undefined) and (MyQuote =/= undefined) ->
+    if Quote - MyQuote < 100 ->
+      three_buyer:send_message(bob,seller,{bob,seller,okay}),
+      three_buyer:send_message(bob,seller,{bob,seller,{address,?ADDRESS}}),
+      State#buyer_actor{quote = Quote, myquote = MyQuote, buy = true};
+      true ->
+        %% todo delegation
+      three_buyer:send_message(bob,seller,{bob,seller,quit}),
+      three_buyer:send_message(bob,alice,{bob,alice,quit}),
+      State#buyer_actor{quote = Quote, myquote = MyQuote, buy = false}
+    end;
+          true ->
+            State#buyer_actor{quote = Quote, myquote = MyQuote}
+        end,
+  Res.
