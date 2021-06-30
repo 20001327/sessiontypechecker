@@ -10,7 +10,6 @@
 -export([start/0, loop/1]).
 
 -define(SERVER, ?MODULE).
--define(NO, 3).
 -define(LIBRARY, [{"Torah", 27}, {"Bibbia", 400}, {"Corano", 90}]).
 
 %%%===================================================================
@@ -18,7 +17,7 @@
 %%%===================================================================
 
 start()->
-    register(?MODULE, spawn(?MODULE, loop, [#buyer_actor{number=?NO}])).
+    register(?MODULE, spawn(?MODULE, loop, [#buyer_actor{}])).
 
 
 loop(State)->
@@ -52,7 +51,7 @@ loop(State)->
              St = if State#buyer_actor.title =/= undefined andalso State#buyer_actor.quote =/= undefined  ->
                three_buyer:send_message(seller,bob,quit),
                three_buyer:send_message(seller,alice,quit),
-               #buyer_actor{number = ?NO};
+               #buyer_actor{};
              true -> State
              end,
              St;
@@ -61,7 +60,7 @@ loop(State)->
              State#buyer_actor.quote =/= undefined andalso  State#buyer_actor.buy == true  ->
                io:format(" -- SELLER: received address ~p", [Address]),
                three_buyer:send_message(seller,bob,{time,{{2021,6,9},{11,2,15}}}),
-               #buyer_actor{number = ?NO};
+               #buyer_actor{};
              true -> State
              end,
              St;

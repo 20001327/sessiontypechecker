@@ -8,8 +8,7 @@
 -include_lib("eunit/include/eunit.hrl").
 -include_lib("records.hrl").
 
--export([start/0, loop/1]).
--define(NO,1).
+-export([start/0, loop/1, loop_delegate/1]).
 
 
 -define(ADDRESS, "Passo del fossato di San Barnaba").
@@ -22,7 +21,7 @@
 
 
 start()->
-    register(?MODULE, spawn(?MODULE, loop, [#buyer_actor{number=?NO}])).
+    register(?MODULE, spawn(?MODULE, loop, [#buyer_actor{}])).
 
 
 loop(State)->
@@ -38,23 +37,22 @@ loop(State)->
         {message,From,_To,{time, _Time}} ->
             St = if (State#buyer_actor.quote =/= undefined) andalso
                     (State#buyer_actor.myquote =/= undefined) andalso
-                    (State#buyer_actor.buy =/= undefined) ->
+                    (State#buyer_actor.buy == true) ->
                       io:format("BOB: receive time from ~p: ~p~n", [From,_Time]),
                       three_buyer:send_message(bob,alice,okay),
-                      #buyer_actor{number=1};
+                      #buyer_actor{};
                  true -> State
             end,
             St;
+        {message,_From,_To,end_delegation} ->
+            State#buyer_actor{delegate=undefined};
         {message,_From,_To,quit} ->
               St = if State#buyer_actor.buy == false ->
                 exit(ok),
-              #buyer_actor{number=?NO};
+              #buyer_actor{};
               true -> State
             end,
             St;
-        start_protocol ->
-            three_buyer:send_message(alice,seller,{title,"Torah"}),
-            State#buyer_actor{title = "Torah"};
         _Message ->
             io:format("Alice received: ~p~n",[_Message]),
             State
@@ -81,13 +79,44 @@ do_interaction(inner,Quote,MyQuote,State) ->
       three_buyer:send_message(bob,seller,okay),
       three_buyer:send_message(bob,seller,{address,?ADDRESS}),
       State#buyer_actor{quote = Quote, myquote = MyQuote, buy = true};
-      true ->
-        %% todo delegation
-      three_buyer:send_message(bob,seller,quit),
-      three_buyer:send_message(bob,alice,quit),
-      State#buyer_actor{quote = Quote, myquote = MyQuote, buy = false}
+    true ->
+      three_buyer:send_message(bob,carol,start_delegation),
+      State#buyer_actor{delegate=carol}
     end;
           true ->
             State#buyer_actor{quote = Quote, myquote = MyQuote}
         end,
   Res.
+
+loop_delegate(State)->
+    NewState = receive
+        {message,From,_To,get_state} ->
+            From ! State,
+            State;
+        {message,From,_To,{myquote,MyQuote}} ->
+            io:format("~p receive his contribute ~p~n", [From,MyQuote]),
+            if MyQuote < 100 ->
+              three_buyer:send_message(From,seller,okay),
+              three_buyer:send_message(From,seller,{address,?ADDRESS}),
+              State#buyer_actor{myquote = MyQuote, buy = true};
+            true ->
+              three_buyer:send_message(From,seller,quit),
+              three_buyer:send_message(From,alice,quit),
+              three_buyer:send_message(From,State#buyer_actor.delegating,end_delegation),
+              #buyer_actor{buy = false}
+            end;
+        {message,From,_To,{time, _Time}} ->
+            St = if (State#buyer_actor.myquote =/= undefined) andalso
+                    (State#buyer_actor.buy == true) ->
+                      io:format("BOB: receive time from ~p: ~p~n", [From,_Time]),
+                      three_buyer:send_message(From,alice,okay),
+                      three_buyer:send_message(From,State#buyer_actor.delegating,end_delegation),
+                      #buyer_actor{};
+                 true -> State
+            end,
+            St;
+        _Message ->
+            io:format("Alice received: ~p~n",[_Message]),
+            State
+    end,
+    loop(NewState).
