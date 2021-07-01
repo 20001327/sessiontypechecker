@@ -1,1 +1,0 @@
--record(bob_state, {quote, myquote, buy, delegate}).

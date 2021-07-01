@@ -10,6 +10,9 @@ start()->
 
 loop(State)->
     NewState = receive
+        {message,From,_To,get_state} ->
+                From ! State,
+                State;
         {message,From,_To,{start_delegation,Fun}} ->
             Fun(State#buyer_actor{delegating=From});
         {message,_From,_To,quit} ->

@@ -10,7 +10,7 @@
 -export([start/0, loop/1]).
 
 -define(SERVER, ?MODULE).
--define(LIBRARY, [{"Torah", 27}, {"Bibbia", 400}, {"Corano", 90}]).
+-define(LIBRARY, [{"Torah", 27}, {"Bibbia", 400}, {"Corano", 201}]).
 
 %%%===================================================================
 %%% Spawning and gen_server implementation
@@ -41,7 +41,7 @@ loop(State)->
              end,
              St;
             {message,_From,_To,okay} ->
-             St = if State#buyer_actor.title =/= undefined andalso State#buyer_actor.quote =/= undefined  ->
+             St = if State#buyer_actor.title =/= undefined  ->
               io:format("seller: received ok ~n"),
               State#buyer_actor{buy = true};
              true -> State
@@ -58,14 +58,14 @@ loop(State)->
              {message,_From,_To,{address, Address}} ->
              St = if State#buyer_actor.title =/= undefined andalso
              State#buyer_actor.quote =/= undefined andalso  State#buyer_actor.buy == true  ->
-               io:format(" -- SELLER: received address ~p", [Address]),
+               io:format(" -- SELLER: received address ~p ~n", [Address]),
                three_buyer:send_message(seller,bob,{time,{{2021,6,9},{11,2,15}}}),
                #buyer_actor{};
              true -> State
              end,
              St;
         _Message ->
-            io:format("Alice received: ~p~n",[_Message]),
+            io:format("Seller received: ~p~n",[_Message]),
             State
     end,
     loop(NewState).

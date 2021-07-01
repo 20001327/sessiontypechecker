@@ -11,28 +11,33 @@ start_protocol()->
     alice:start(),
     bob:start(),
     seller:start(),
-  %%  carol:start(),
+    carol:start(),
     alice!start_protocol.
 
 
 send_message(From, To, Message) ->
   seq_trace:set_token(label, {From, To}),
-  Recipient = get_delegate(To),
-  Recipient ! #message{from = From, to = To, message = Message}.
+  Recipient = if Message == end_delegation -> To;
+  true-> get_delegate(To)
+  end,
+  Recipient ! #message{from = From, to = Recipient, message = Message}.
 
 
 get_delegate(To) ->
+  State = get_state(To),
+  StateName = State#buyer_actor.delegate,
+  Delegate = if StateName == undefined -> To;
+               true ->
+                 StateName
+             end,
+  Delegate.
+
+get_state(To) ->
   To ! #message{from=self(),to=To,message=get_state},
   State = receive
             Stato->Stato
            end,
-  StateName = State#buyer_actor.delegate,
-  Delegate = if StateName == undefined -> To;
-               true -> StateName
-             end,
-  io:format("Stato Trovato: ~p~n",[Delegate]),
-  Delegate.
-
+  State.
 
 top_setup() ->
   tracer:start(),

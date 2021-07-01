@@ -36,8 +36,8 @@ loop(State)->
             end,
             St;
         start_protocol ->
-            three_buyer:send_message(alice,seller,{title,"Torah"}),
-            State#buyer_actor{title = "Torah"};
+            three_buyer:send_message(alice,seller,{title,"Corano"}),
+            State#buyer_actor{title = "Corano"};
         _Message ->
             io:format("Alice received: ~p~n",[_Message]),
             State
