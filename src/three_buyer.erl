@@ -17,9 +17,11 @@ start_protocol()->
 
 send_message(From, To, Message) ->
   seq_trace:set_token(label, {From, To}),
+  %% determinano se esiste un delegato
   Recipient = if Message == end_delegation -> To;
   true-> get_delegate(To)
   end,
+  %% manda il messaggio a chi lo deve effettivamente ricevere
   Recipient ! #message{from = From, to = Recipient, message = Message}.
 
 
@@ -39,6 +41,7 @@ get_state(To) ->
            end,
   State.
 
+%%  test
 top_setup() ->
   tracer:start(),
   two_buyer:start_link().
