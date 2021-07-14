@@ -1,11 +1,9 @@
 %% A module implementing a supervisor usually has a name ending with `_sup`.
 -module(three_buyer).
 
--include_lib("eunit/include/eunit.hrl").
 -include_lib("records.hrl").
-
 %% API exports
--export([send_message/3, check/0, start_protocol/0]).
+-export([send_message/3, start_protocol/0]).
 
 start_protocol()->
     alice:start(),

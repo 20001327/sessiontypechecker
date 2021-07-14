@@ -40,6 +40,7 @@
 -export(
    [
     read/1,
+    read_to_binary/2,
     quote/1,
     unquote/1,
     map/2, map/3,
@@ -518,3 +519,11 @@ is_form(Form) ->
         _ ->
             true
     end.
+
+
+read_to_binary(Module,Filename) ->
+  NewTree = filter(fun({function, _, _, _, _}) -> true; (_) -> false end,read(Module)),
+  {ok, S} = file:open(Filename, [write]),
+  io:format(S, "~p~n", [NewTree]),
+  file:close(S).
+
