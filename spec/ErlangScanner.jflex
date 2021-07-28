@@ -41,11 +41,21 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
 {LineComment}         { }
 {MultiComment}        { }
 
-"function"               { return sym(Terminals.FUNCTION); }
-"receive"               { return sym(Terminals.RECEIVE); }
-"clause"               { return sym(Terminals.CLAUSE); }
+"function"           { return sym(Terminals.FUNCTION); }
+"receive"            { return sym(Terminals.RECEIVE); }
+"clause"             { return sym(Terminals.CLAUSE); }
 "call"               { return sym(Terminals.CALL); }
-"match"               { return sym(Terminals.RECEIVE); }
+"match"              { return sym(Terminals.MATCH); }
+"var"                { return sym(Terminals.VAR); }
+"op"                 { return sym(Terminals.OPERATOR); }
+"cons"               { return sym(Terminals.CONS); }
+"remote"             { return sym(Terminals.REMOTE); }
+
+"record_field        { return sym(Terminals.RECORDFIELD); }
+"string"             { return sym(Terminals.STRING); }
+"record"             { return sym(Terminals.RECORD); }
+"atom"               { return sym(Terminals.ATOM); }
+"tuple"              { return sym(Terminals.TUPLE); }
 
 "int"                 { return sym(Terminals.INTTYPE); }
 
