@@ -1,0 +1,39 @@
+/*  Abstract syntax for two buyer in erlang */
+
+ErlangTree ::= Form*;
+
+abstract Form ;
+Form ::= <FormType:String> <RowNumber:Integer>;
+
+Function:Form ::= <FunctionName:String> <ArgumentsNumber:Integer> Arguments:Form*;
+Receive:Form ::= Patterns:Clause*;
+Case ::= MatchingForm:Form Patterns:Clause*;
+If:Form ::= FirstClause:Clause SecondClause:Clause;
+Clause:Form ::= Patterns:Form* Conditions:Form* Actions:Form*;
+Call:Form ::= Method:MethodForm Arguments:Form*;
+Match:Form ::= LeftForm:Form RightForm:Form;
+Var:Form ::= <VarName:String> [VarValue:Form];
+Operator:Form ::= <OperatorSymbol:String> <LeftOp:Value> <RightOp:Value>;
+
+Send:OperatorSymbol;
+Equal:OperatorSymbol;
+
+List:Form ::= Nil;
+List:Form ::= Head:Form Tail:List;
+
+MethodForm:Form ::= [Library:Atom] FunctionName:Atom;
+RecordField:Form ::= RecordName:Atom RecordValueValue;
+TupleField:Form ::= TupleValue:Value;
+
+abstract Value:Form;
+
+Record:Value ::= <RecordName:String> Fields:RecordField*
+Tuple:Value ::= Fields:TupleField*;
+StringForm:Value ::= StringValue:String;
+Atom:Value ::= <AtomValue:String>;
+
+
+
+
+
+
