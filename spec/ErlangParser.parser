@@ -1,0 +1,31 @@
+%header {:
+	/* This code is inlined before the generated parser */
+	package ast;
+:};
+
+%embed {:
+	/* This code is inlined in the generated parser class */
+:};
+
+/* Just to shut up Beaver warnings */
+%goal goal;
+
+/* Productions with semantic actions building the JastAdd AST */
+
+program goal =
+	form_list 		{: return new Program(form_list); :}
+;
+
+List form_list =
+	form FORM		{: return new List().add(form);	:}
+|	form_list form FORM	{: return form_list.add(form); :}
+;
+
+Form form =
+	LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA form_list RCURLYBRACE
+		{: return new Function(FUNCTION, rowNumber, funName, numArguments, form_list); :}
+|	LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA form_list RCURLYBRACE
+ 		{: return new Function(FUNCTION, rowNumber, funName, numArguments, form_list); :}
+|	VALUE	{: return new Number(Integer.parseInt(VALUE)); :}
+;
+
