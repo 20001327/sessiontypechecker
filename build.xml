@@ -9,7 +9,7 @@
         <delete dir="build" />
         <delete dir="jar" />
         <delete dir="ast" />
-        <delete file="spec/ErlangParser.beaver" />
+        <delete file="spec/ErlangParser.example.beaver" />
     </target>
 
     <target name="scanner">
@@ -25,7 +25,7 @@
             <arg value="spec/miniErlang.beaver" />
         </java>
 
-        <beaver file="spec/ErlangParser.beaver"
+        <beaver file="spec/ErlangParser.example.beaver"
                 destdir="ast/" />
     </target>
 
