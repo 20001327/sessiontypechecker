@@ -1,6 +1,6 @@
 %header {:
 	/* This code is inlined before the generated parser */
-	package ast;
+	package miniErlang;
 :};
 
 %embed {:
@@ -22,10 +22,35 @@ List form_list =
 ;
 
 Form form =
-	LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA form_list RCURLYBRACE
-		{: return new Function(FUNCTION, rowNumber, funName, numArguments, form_list); :}
-|	LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA form_list RCURLYBRACE
- 		{: return new Function(FUNCTION, rowNumber, funName, numArguments, form_list); :}
-|	VALUE	{: return new Number(Integer.parseInt(VALUE)); :}
+	LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA form_list.arguments RCURLYBRACE
+		{: return new Function(FUNCTION, rowNumber, funName, numArguments, arguments); :}
+|	LCURLYBRACE SINGLEMARKS RECEIVE SINGLEMARKS COMMA INTEGER.rowNumber COMMA form_list.clauses RCURLYBRACE
+ 		{: return new Receive(RECEIVE, rowNumber, clauses); :}
+|   LCURLYBRACE CASE COMMA INTEGER.rowNumber COMMA form.machingForm COMMA form_list.patterns RCURLYBRACE
+        {: return new Case(CASE, rowNumber, matchingForm, patterns); :}
+|   LCURLYBRACE IF COMMA INTEGER.rowNumber COMMA form.firstClause COMMA form.secondClause RCURLYBRACE
+        {: return new If(IF, rowNumber, firstClause, secondClause); :}
+|   LCURLYBRACE CLAUSE COMMA INTEGER.rowNumber COMMA form_list.patterns COMMA form_list.conditions COMMA form_list.actions RCURLYBRACE
+        {: return new Clause(CLAUSE, rowNumber, patterns, conditions, actions); :}
+|   LCURLYBRACE CALL COMMA INTEGER.rowNumber COMMA form.method COMMA form_list.arguments RCURLYBRACE
+        {: return new Call(CALL, rowNumber, method, arguments); :}
+|   LCURLYBRACE MATCH COMMA INTEGER.rowNumber COMMA form.left COMMA form.right RCURLYBRACE
+        {: return new Match(MATCH, rowNumber, left, right); :}
+|   LCURLYBRACE VAR COMMA INTEGER.rowNumber COMMA IDENTIFIER.varName COMMA form.varValue RCURLYBRACE
+        {: return new Var(MATCH, rowNumber, varName, varValue); :}
+|   LCURLYBRACE OPERATOR COMMA  COMMA IDENTIFIER.varName COMMA form.varValue RCURLYBRACE
+        {: return new Operator(MATCH, rowNumber, varName, varValue); :}
+|   LCURLYBRACE REMOTE COMMA INTEGER.rowNumber COMMA form.library COMMA form.method RCURLYBRACE
+        {: return new Remote(MATCH, rowNumber, library, method); :}
+|   LCURLYBRACE RECORD COMMA INTEGER.rowNumber COMMA form.recordName COMMA form_list.recordFields RCURLYBRACE
+        {: return new Record(RECORD_FIELD, rowNumber, recordName, recordFields); :}
+|   LCURLYBRACE RECORD_FIELD COMMA INTEGER.rowNumber COMMA form.recordFieldName COMMA form.recordValue RCURLYBRACE
+        {: return new RecordField(RECORD_FIELD, rowNumber, recordFieldName, recordValue); :}
+|   LCURLYBRACE TUPLE COMMA INTEGER.rowNumber COMMA form_list.fields RCURLYBRACE
+        {: return new Tuple(RECORD_FIELD, rowNumber, recordFieldName, recordValue); :}
+|   LCURLYBRACE STRING COMMA INTEGER.rowNumber COMMA STRINGVALUE.stringValue RCURLYBRACE
+        {: return new StringForm(RECORD_FIELD, rowNumber, stringValue); :}
 ;
+
+
 

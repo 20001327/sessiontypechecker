@@ -1,6 +1,6 @@
 package miniErlang; // The generated parser will belong to this package
 
-import miniErlang.erlangParser.Terminals;
+import miniErlang.ErlangParser.Terminals;
 // The terminals are implicitly defined in the parser
 %%
 
@@ -32,14 +32,14 @@ import miniErlang.erlangParser.Terminals;
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 WhiteSpace     = {LineTerminator} | [ \t\f]
+StringValue    = "[a-zA-Z0-9_ ]*"
 Integer        = [1-9][0-9]* | 0
 Identifier     = [a-zA-Z][a-zA-Z0-9_]*
+
 %%
 
 // discard whitespace information and comments
 {WhiteSpace}          { }
-{LineComment}         { }
-{MultiComment}        { }
 
 "function"           { return sym(Terminals.FUNCTION); }
 "receive"            { return sym(Terminals.RECEIVE); }
@@ -50,8 +50,9 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
 "op"                 { return sym(Terminals.OPERATOR); }
 "cons"               { return sym(Terminals.CONS); }
 "remote"             { return sym(Terminals.REMOTE); }
+"string"             { return sym(Terminals.STRING); }
 
-"record_field        { return sym(Terminals.RECORDFIELD); }
+"record_field"       { return sym(Terminals.RECORDFIELD); }
 "string"             { return sym(Terminals.STRING); }
 "record"             { return sym(Terminals.RECORD); }
 "atom"               { return sym(Terminals.ATOM); }
@@ -80,6 +81,7 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
 
 {Integer}             { return sym(Terminals.INTEGER); }
 {Identifier}          { return sym(Terminals.IDENTIFIER); }
+{StringValue}         { return sym(Terminals.STRINGVALUE); }
 
 // fall through errors
 .                     { throw new beaver.Scanner.Exception("illegal character \"" + yytext() + "\" at line " + yyline + "," + yycolumn); }

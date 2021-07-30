@@ -23,7 +23,6 @@ List:Form ::= Head:Form Tail:List;
 
 MethodForm:Form ::= [Library:Atom] FunctionName:Atom;
 RecordField:Form ::= RecordName:Atom RecordValueValue;
-TupleField:Form ::= TupleValue:Value;
 
 abstract Value:Form;
 

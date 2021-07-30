@@ -1,4 +1,4 @@
-<project name="SessionTypeChecker" default="jar" basedir=".">
+<project name="Calc"  basedir=".">
     <taskdef classname="jflex.anttask.JFlexTask" name="jflex"
              classpath="tools/jflex-full-1.8.2.jar" />
 
@@ -7,13 +7,12 @@
 
     <target name="clean">
         <delete dir="build" />
-        <delete dir="jar" />
-        <delete dir="ast" />
-        <delete file="spec/ErlangParser.example.beaver" />
+        <delete dir="miniErlang" />
+        <delete file="spec/ErlangParser.beaver" />
     </target>
 
     <target name="scanner">
-        <jflex file="calc/spec/miniErlang.jflex"
+        <jflex file="spec/ErlangScanner.jflex"
                destdir="." />
     </target>
 
@@ -21,16 +20,15 @@
         <java classpath="tools/JastAddParser.jar:tools/beaver-rt.jar"
               classname="org.jastadd.jastaddparser.Main" fork="true">
             <arg value="--no-beaver-symbol" />
-            <arg value="spec/miniErlang.parser" />
-            <arg value="spec/miniErlang.beaver" />
+            <arg value="spec/ErlangParser.parser" />
+            <arg value="spec/ErlangParser.beaver" />
         </java>
 
-        <beaver file="spec/ErlangParser.example.beaver"
-                destdir="ast/" />
+        <beaver file="spec/ErlangParser.beaver" destdir="miniErlang/" />
     </target>
 
     <target name="generate" depends="scanner,parser">
-        <fileset dir="calc/spec" id="jastAddSpecs">
+        <fileset dir="spec" id="jastAddSpecs">
             <include name="*.ast" />
             <include name="*.jrag" />
             <include name="*.jadd" />
@@ -40,7 +38,7 @@
 
         <java classpath="tools/jastadd2.jar"
               classname="org.jastadd.JastAdd" fork="true">
-            <arg value="--package=ast" />
+            <arg value="--package=miniErlang" />
             <arg value="--beaver" />
             <arg value="--lineColumnNumbers" />
             <arg value="--o=." />
