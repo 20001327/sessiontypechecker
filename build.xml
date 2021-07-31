@@ -1,4 +1,4 @@
-<project name="Calc"  basedir=".">
+<project name="miniErlang"  basedir=".">
     <taskdef classname="jflex.anttask.JFlexTask" name="jflex"
              classpath="tools/jflex-full-1.8.2.jar" />
 

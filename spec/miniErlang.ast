@@ -1,9 +1,8 @@
 /*  Abstract syntax for two buyer in erlang */
 
-ErlangTree ::= Form*;
+Program ::= Form*;
 
-abstract Form ;
-Form ::= <FormType:String> <RowNumber:Integer>;
+abstract Form ::= <FormType:String> <RowNumber:Integer>;
 
 Function:Form ::= <FunctionName:String> <ArgumentsNumber:Integer> Arguments:Form*;
 Receive:Form ::= Patterns:Clause*;
@@ -14,23 +13,18 @@ Call:Form ::= Method:MethodForm Arguments:Form*;
 Match:Form ::= LeftForm:Form RightForm:Form;
 Var:Form ::= <VarName:String> [VarValue:Form];
 Operator:Form ::= <OperatorSymbol:String> <LeftOp:Value> <RightOp:Value>;
-
-Send:OperatorSymbol;
-Equal:OperatorSymbol;
-
-List:Form ::= Nil;
-List:Form ::= Head:Form Tail:List;
+Cons:Form ::= Head:Form [Tail:Form];
 
 MethodForm:Form ::= [Library:Atom] FunctionName:Atom;
-RecordField:Form ::= RecordName:Atom RecordValueValue;
+RecordField:Form ::= RecordName:Atom RecordValue:Value;
 
 abstract Value:Form;
 
-Record:Value ::= <RecordName:String> Fields:RecordField*
-Tuple:Value ::= Fields:TupleField*;
-StringForm:Value ::= StringValue:String;
+Record:Value ::= <RecordName:String> Fields:RecordField*;
+Tuple:Value ::= Fields:Form*;
+StringForm:Value ::= <StringValue:String>;
 Atom:Value ::= <AtomValue:String>;
-
+Nil:Form;
 
 
 
