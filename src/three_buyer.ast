@@ -24,6 +24,7 @@
            {call,11,{remote,11,{atom,11,seller},{atom,11,start}},[]},
            {call,12,{remote,12,{atom,12,carol},{atom,12,start}},[]},
            {op,13,'!',{atom,13,alice},{atom,13,start_protocol}}]}]},
+
  {function,16,send_message,3,
      [{clause,16,
           [{var,16,'From'},{var,16,'To'},{var,16,'Message'}],
@@ -50,6 +51,8 @@
                     {record_field,23,
                         {atom,23,message},
                         {var,23,'Message'}}]}}]}]},
+
+
  {function,26,get_delegate,1,
      [{clause,26,
           [{var,26,'To'}],

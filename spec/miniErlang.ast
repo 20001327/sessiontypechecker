@@ -1,14 +1,15 @@
 /*  Abstract syntax for two buyer in erlang */
 
-Program ::= Form*;
+Program ::= Modules:Module*;
+Module::= Functions:Function*;
 
 abstract Form ::= <FormType:String> <RowNumber:Integer>;
 
-Function:Form ::= <FunctionName:String> <ArgumentsNumber:Integer> Arguments:Form*;
+/* ancora da sistemare
+Function:Form ::= <FunctionName:String> <ArgumentsNumber:int> Arguments:Form*;
 Receive:Form ::= Patterns:Clause*;
 Case ::= MatchingForm:Form Patterns:Clause*;
 If:Form ::= FirstClause:Clause SecondClause:Clause;
-Clause:Form ::= Patterns:Form* Conditions:Form* Actions:Form*;
 Call:Form ::= Method:MethodForm Arguments:Form*;
 Match:Form ::= LeftForm:Form RightForm:Form;
 Var:Form ::= <VarName:String> [VarValue:Form];
@@ -16,16 +17,28 @@ Operator:Form ::= <OperatorSymbol:String> <LeftOp:Value> <RightOp:Value>;
 Cons:Form ::= Head:Form [Tail:Form];
 
 MethodForm:Form ::= [Library:Atom] FunctionName:Atom;
+*/
+
+abstract Clause:Form;
+Pattern:Form::= PatternVar:Variable* [GuardValues:Value*];
+Guard:Form::= PatternVar:Variable* GuardValues:Value*;
+
+Message:Form;
+
+Record:Message ::= RecordName:Id Fields:RecordField*;
+Tuple:Message ::= Fields:Value*;
+
 RecordField:Form ::= RecordName:Atom RecordValue:Value;
 
-abstract Value:Form;
+abstract Value;
+Identifier:Value::= <Identif:Id>;
+Atom:Value::= <FormType:String> <RowNumber:Integer> <AtomValue:String>;
+StringForm:Value ::= <FormType:String> <RowNumber:Integer> <StringValue:String>;
+Nil:Value;
 
-Record:Value ::= <RecordName:String> Fields:RecordField*;
-Tuple:Value ::= Fields:Form*;
-StringForm:Value ::= <StringValue:String>;
-Atom:Value ::= <AtomValue:String>;
-Nil:Form;
-
+abstract Ident;
+Variable:Ident::= <Id:String>;
+Pid:Ident::= <Pid:Integer>
 
 
 
