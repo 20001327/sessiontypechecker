@@ -13,13 +13,22 @@
 /* Productions with semantic actions building the JastAdd AST */
 
 program goal =
-	form_list 		{: return new Program(form_list); :}
+	module_list 	    	    {: return new Program(module_list); :}
 ;
 
-List form_list =
-	form FORM		{: return new List().add(form);	:}
-|	form_list form FORM	{: return form_list.add(form); :}
+List module_list =
+    module MODULE               {: return new List.add(module); :}
+    module_list module MODULE   {: return module_list.add(module); :}
+
+Module module =
+    function_list               {: return new Module(function_list); :}
+
+List function_list =
+	function FUN		        {: return new List().add(function);	:}
+|	function_list function FUN	{: return function_list.add(function); :}
 ;
+
+/* da sistemare sotto */
 
 Form form =
 	LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA form_list.arguments RCURLYBRACE
