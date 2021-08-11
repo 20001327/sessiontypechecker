@@ -8,21 +8,15 @@ abstract Form ::= <FormType:String> <RowNumber:Integer>;
 Function:Form ::= <FunctionName:String> <ArgumentsNumber:Integer> Arguments:Pattern* Expressions:Form*;
 Receive:Form ::= Patterns:Pattern* Expressions:Form*;
 Case ::= Patterns:Pattern* Expressions:Form*;
-If:Form ::=  Patterns:Guard* Expressions:Form*;
 Call:Form ::= [Library:Identifier] FunctionName:Identifier Arguments:Value*;
 Match:Form ::= LeftForm:Variable RightForm:Form; /* assign/compare */
 Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Variable;
 
 abstract Clause:Form;
 Pattern:Form::= PatternVar:Variable* [GuardValues:Value*];
-Guard:Form::= PatternVar:Variable* GuardValues:Value*;
 
 Message:Form;
-
-Record:Message ::= RecordName:Identifier Fields:RecordField*;
 Tuple:Message ::= Fields:Value*;
-
-RecordField:Form ::= RecordName:Atom RecordValue:Value;
 
 abstract Value;
 Identifier:Value::= <Identif:Ident>;
