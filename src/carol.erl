@@ -28,5 +28,4 @@ init()->
             register(?MODULE, self()),
             ReturnPid!{?MODULE,end_delegation, quit}
 end,
-unregister(?MODULE),
-exit(ok).
+unregister(?MODULE).

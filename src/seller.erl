@@ -26,6 +26,5 @@ init() ->
       %%io:format("seller: quit from bob ~n")
       end
   end,
-  unregister(?MODULE),
-  exit(ok).
+  unregister(?MODULE).
 

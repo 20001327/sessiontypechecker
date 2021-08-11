@@ -35,5 +35,4 @@ init() ->
           end
       end
   end,
-  unregister(?MODULE),
-  exit(ok).
+  unregister(?MODULE).
