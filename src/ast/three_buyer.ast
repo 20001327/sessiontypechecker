@@ -1,0 +1,5 @@
+[{function,5,start_protocol,0,
+           [{clause,5,[],[],
+                    [{call,6,{remote,6,{atom,6,seller},{atom,6,start}},[]},
+                     {call,7,{remote,7,{atom,7,bob},{atom,7,start}},[]},
+                     {call,8,{remote,8,{atom,8,alice},{atom,8,start}},[]}]}]}]

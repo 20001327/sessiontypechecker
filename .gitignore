@@ -1,5 +1,4 @@
 *.beaver
-ast/
 build/
 jar/
 
