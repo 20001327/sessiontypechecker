@@ -1,11 +1,9 @@
 -module(bob).
 
 -export([start/0, init/0]).
--define(SERVER, ?MODULE).
 
 start() ->
   register(?MODULE, spawn(?MODULE, init, [])).
-
 
 init() ->
   receive
