@@ -54,7 +54,8 @@
     %% Debug functions
     eval/1,
     from_abstract/1,
-    to_abstract/1
+    to_abstract/1,
+     get_ast/0
    ]).
 
 %% ========================================================================
@@ -521,9 +522,19 @@ is_form(Form) ->
     end.
 
 
+
+
 read_to_binary(Module,Filename) ->
   NewTree = filter(fun({function, _, _, _, _}) -> true; (_) -> false end,read(Module)),
   {ok, S} = file:open(Filename, [write]),
   io:format(S, "~p~n", [NewTree]),
   file:close(S).
+
+get_ast()->
+  read_to_binary(seller,"ast/seller.ast"),
+  read_to_binary(carol,"ast/carol.ast"),
+  read_to_binary(bob,"ast/bob.ast"),
+  read_to_binary(alice,"ast/alice.ast"),
+  read_to_binary(three_buyer,"ast/three_buyer.ast").
+
 

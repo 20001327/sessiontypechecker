@@ -5,7 +5,6 @@ Module::= Functions:Function*;
 
 abstract Form ::= <FormType:String> <RowNumber:Integer>;
 
-Cons:Form ::= Head:Form [Tail:Form];
 Function:Form ::= <FunctionName:String> <ArgumentsNumber:Integer> Arguments:Pattern* Expressions:Form*;
 Receive:Form ::= Patterns:Pattern* Expressions:Form*;
 Case ::= Patterns:Pattern* Expressions:Form*;
@@ -29,7 +28,6 @@ abstract Value;
 Identifier:Value::= <Identif:Ident>;
 Atom:Value::= <FormType:String> <RowNumber:Integer> <AtomValue:String>;
 StringForm:Value ::= <FormType:String> <RowNumber:Integer> <StringValue:String>;
-Nil:Value;
 
 abstract Ident;
 Variable:Ident::= <Id:String>;

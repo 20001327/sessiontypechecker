@@ -10,13 +10,15 @@ init() ->
   seller!{?MODULE,title,"Toy Story"},
   receive
     {seller, quote, Quote} ->
-      io:format("ALICE: quote receive from seller ~p~n", [Quote]),
+      %%io:format("ALICE: quote receive from seller ~p~n", [Quote]),
       bob ! {alice, myquote, Quote / 2},
       receive
         {bob, ok} ->
-          io:format("ALICE: ok from bob ~n");
+          ok;
+          %%io:format("ALICE: ok from bob ~n");
         {bob, quit} ->
-          io:format("ALICE: quit from bob ~n")
+          quit
+          %%io:format("ALICE: quit from bob ~n")
       end
   end,
   unregister(?MODULE),

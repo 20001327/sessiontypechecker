@@ -14,7 +14,7 @@ init()->
           seller!{Name,address, "Address"},
           receive
             {seller, date, Date}->
-              io:format("carol delegating: received Date ~n"),
+              %%io:format("carol delegating: received Date ~n"),
               unregister(Name),
               register(?MODULE, self()),
               ReturnPid!{?MODULE,end_delegation, ok}

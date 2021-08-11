@@ -10,7 +10,7 @@ start() ->
 init() ->
   receive
     {seller, quote, Quote} ->
-      io:format("BOB: received QUOTE ~n"),
+      %%io:format("BOB: received QUOTE ~n"),
       receive
         {alice, myquote, MyQuote} when Quote - MyQuote < 100 ->
           seller ! {?MODULE, ok},
@@ -18,7 +18,8 @@ init() ->
           seller ! {?MODULE, address, "Address"},
           receive
             {seller, date, Date} ->
-              io:format("BOB: received Date ~n")
+              Date
+          %%io:format("BOB: received Date ~n")
           end;
         {alice, myquote, MyQuote} when Quote - MyQuote >= 100 ->
           carol:start(),
@@ -26,10 +27,10 @@ init() ->
           carol ! {?MODULE, start_delegation, {?MODULE, self(), Quote - MyQuote - 99}},
           receive
             {carol, end_delegation, ok} ->
-              io:format("Carol received ok from end del~n~n"),
+              %%io:format("Carol received ok from end del~n~n"),
               register(?MODULE,self());
             {carol, end_delegation, quit} ->
-              io:format("bob received quit from end del~n~n"),
+              %%io:format("bob received quit from end del~n~n"),
               register(?MODULE,self())
           end
       end
