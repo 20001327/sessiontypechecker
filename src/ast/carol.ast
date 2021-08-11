@@ -83,5 +83,4 @@
                              [{atom,29,carol},
                               {atom,29,end_delegation},
                               {atom,29,quit}]}}]}]},
-           {call,31,{atom,31,unregister},[{atom,31,carol}]},
-           {call,32,{atom,32,exit},[{atom,32,ok}]}]}]}]
+           {call,31,{atom,31,unregister},[{atom,31,carol}]}]}]}]

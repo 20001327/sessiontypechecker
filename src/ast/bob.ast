@@ -66,5 +66,4 @@
                 [{call,34,
                   {atom,34,register},
                   [{atom,34,bob},{call,34,{atom,34,self},[]}]}]}]}]}]}]}]},
-     {call,38,{atom,38,unregister},[{atom,38,bob}]},
-     {call,39,{atom,39,exit},[{atom,39,ok}]}]}]}]
+     {call,38,{atom,38,unregister},[{atom,38,bob}]}]}]}]

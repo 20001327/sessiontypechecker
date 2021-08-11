@@ -32,5 +32,4 @@
                               [{tuple,19,[{atom,19,bob},{atom,19,quit}]}],
                               [],
                               [{atom,20,quit}]}]}]}]},
-           {call,24,{atom,24,unregister},[{atom,24,alice}]},
-           {call,25,{atom,25,exit},[{atom,25,ok}]}]}]}]
+           {call,24,{atom,24,unregister},[{atom,24,alice}]}]}]}]
