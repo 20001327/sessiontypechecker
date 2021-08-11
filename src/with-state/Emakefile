@@ -1,0 +1,6 @@
+{three_buyer,[debug_info]}.
+{alice,[debug_info]}.
+{bob,[debug_info]}.
+{carol,[debug_info]}.
+{seller,[debug_info]}.
+{forms,[debug_info]}.

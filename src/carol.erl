@@ -1,25 +1,32 @@
 -module(carol).
-
--include_lib("records.hrl").
-
--export([start/0, loop/1]).
-
+-export([start/0,init/0]).
 start()->
-    register(?MODULE, spawn(?MODULE, loop, [#buyer_actor{}])).
+    register(?MODULE, spawn(?MODULE, init, [])).
 
 
-loop(State)->
-    NewState = receive
-        {message,From,_To,get_state} ->
-                From ! State,
-                State;
-        {message,From,_To,{start_delegation,Fun}} ->
-            Fun(State#buyer_actor{delegating=From});
-        {message,_From,_To,quit} ->
-              exit(ok);
-        _Message ->
-            io:format("Carol received: ~p~n",[_Message]),
-            State
-    end,
-    loop(NewState).
-
+init()->
+    receive
+        {bob,start_delegation,{Name,ReturnPid,MyQuote}} when MyQuote < 100 ->
+          unregister(?MODULE),
+          register(Name,self()),
+          seller!{Name,ok},
+          alice!{Name,ok},
+          seller!{Name,address, "Address"},
+          receive
+            {seller, date, Date}->
+              io:format("carol delegating: received Date ~n"),
+              unregister(Name),
+              register(?MODULE, self()),
+              ReturnPid!{?MODULE,end_delegation, ok}
+          end;
+          {bob,start_delegation,{Name,ReturnPid,MyQuote}} when MyQuote >= 100 ->
+            unregister(?MODULE),
+            register(Name,self()),
+            alice!{Name,quit},
+            seller!{Name,quit},
+            unregister(Name),
+            register(?MODULE, self()),
+            ReturnPid!{?MODULE,end_delegation, quit}
+end,
+unregister(?MODULE),
+exit(ok).
