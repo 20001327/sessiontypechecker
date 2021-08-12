@@ -1,31 +1,36 @@
 -module(carol).
--export([start/0,init/0]).
-start()->
-    register(?MODULE, spawn(?MODULE, init, [])).
+-export([start/0, init/0]).
+start() ->
+  register(carol, spawn(carol, init, [])).
 
 
-init()->
-    receive
-        {bob,start_delegation,{Name,ReturnPid,MyQuote}} when MyQuote < 100 ->
-          unregister(?MODULE),
-          register(Name,self()),
-          seller!{Name,ok},
-          alice!{Name,ok},
-          seller!{Name,address, "Address"},
-          receive
-            {seller, date, Date}->
-              %%io:format("carol delegating: received Date ~n"),
+init() ->
+  receive
+    {bob, quote, MyQuote} ->
+      receive
+        {bob, start_delegation, {Name, ReturnPid}} ->
+          case MyQuote < 100 of
+            true -> unregister(carol),
+              register(Name, self()),
+              seller ! {Name, ok},
+              alice ! {Name, ok},
+              seller ! {Name, address, "Address"},
+              receive
+                {seller, date, Date} ->
+                  io:format("carol delegating: received Date ~n"),
+                  unregister(Name),
+                  register(carol, self()),
+                  ReturnPid ! {carol, end_delegation},
+                  ReturnPid ! {carol, ok}
+              end;
+            false ->
+              alice ! {Name, quit},
+              seller ! {Name, quit},
               unregister(Name),
-              register(?MODULE, self()),
-              ReturnPid!{?MODULE,end_delegation, ok}
-          end;
-          {bob,start_delegation,{Name,ReturnPid,MyQuote}} when MyQuote >= 100 ->
-            unregister(?MODULE),
-            register(Name,self()),
-            alice!{Name,quit},
-            seller!{Name,quit},
-            unregister(Name),
-            register(?MODULE, self()),
-            ReturnPid!{?MODULE,end_delegation, quit}
-end,
-unregister(?MODULE).
+              register(carol, self()),
+              ReturnPid ! {carol, end_delegation},
+              ReturnPid ! {carol, quit}
+          end
+      end
+  end,
+  unregister(carol).

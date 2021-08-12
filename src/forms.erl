@@ -525,7 +525,10 @@ is_form(Form) ->
 
 
 read_to_binary(Module,Filename) ->
-  NewTree = filter(fun({function, _, _, _, _}) -> true; (_) -> false end,read(Module)),
+  NewTree = filter(
+    fun({function, _, init, _, _}) -> true;
+      (_) -> true end,
+    read(Module)),
   {ok, S} = file:open(Filename, [write]),
   io:format(S, "~p~n", [NewTree]),
   file:close(S).

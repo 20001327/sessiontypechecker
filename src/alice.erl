@@ -3,11 +3,11 @@
 -export([start/0, init/0]).
 
 start() ->
-  register(?MODULE, spawn(?MODULE, init, [])).
+  register(alice, spawn(alice, init, [])).
 
-
+-spec init()->''.
 init() ->
-  seller!{?MODULE,title,"Toy Story"},
+  seller!{alice,title,"Toy Story"},
   receive
     {seller, quote, Quote} ->
       %%io:format("ALICE: quote receive from seller ~p~n", [Quote]),
@@ -21,5 +21,5 @@ init() ->
           %%io:format("ALICE: quit from bob ~n")
       end
   end,
-  unregister(?MODULE).
+  unregister(alice).
 

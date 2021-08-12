@@ -3,7 +3,7 @@
 -export([start/0, init/0]).
 
 start() ->
-  register(?MODULE, spawn(?MODULE, init, [])).
+  register(bob, spawn(bob, init, [])).
 
 init() ->
   receive
@@ -13,9 +13,9 @@ init() ->
         {alice, myquote, MyQuote} ->
           case Quote - MyQuote < 100 of
             true ->
-              seller ! {?MODULE, ok},
-              alice ! {?MODULE, ok},
-              seller ! {?MODULE, address, "Address"},
+              seller ! {bob, ok},
+              alice ! {bob, ok},
+              seller ! {bob, address, "Address"},
               receive
                 {seller, date, Date} ->
                   Date
@@ -23,17 +23,20 @@ init() ->
               end;
             false ->
               carol:start(),
-              unregister(?MODULE),
-              carol ! {?MODULE, start_delegation, {?MODULE, self(), Quote - MyQuote - 99}},
+              unregister(bob),
+              carol ! {bob, quote,Quote - MyQuote - 99},
+              carol ! {bob, start_delegation, {bob, self()}},
               receive
-                {carol, end_delegation, ok} ->
-                  %%io:format("Carol received ok from end del~n~n"),
-                  register(?MODULE, self());
-                {carol, end_delegation, quit} ->
-                  %%io:format("bob received quit from end del~n~n"),
-                  register(?MODULE, self())
+                {carol, end_delegation} ->
+                  register(bob,self()),
+                  receive
+                    {carol, quit} ->
+                      quit;
+                    {carol, ok} ->
+                      ok
+                  end
               end
           end
       end
   end,
-  unregister(?MODULE).
+  unregister(bob).
