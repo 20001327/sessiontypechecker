@@ -1,0 +1,20 @@
+/*  Abstract syntax for session types three buyer in erlang */
+/*
+abstract SessionType
+End:SessionType
+Receive ::= Partecipant:Atom p?a<T>.S
+| p!a<T>.S | ( SIn ) | ( SOut )  |  p<<.S | <<p.S | p>>.S | >>p.S
+
+SIn ::=  SIn,p?a<T>.S |  p?a<T>.S
+
+SOut ::=  SOut,p!a<T>.S |  p!a<T>.S
+
+T ::= Atom | Int | String |Pid
+
+Sintassi tipi globali
+
+Co ::= p>q:a<tipo>
+
+G ::= End | Co.G | ( ListaCo )
+
+*/

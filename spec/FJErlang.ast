@@ -6,10 +6,15 @@ Module::= Functions:Function*;
 abstract Form ::= <FormType:String> <RowNumber:Integer>;
 
 Function:Form ::= <FunctionName:String> <ArgumentsNumber:Integer> Arguments:Pattern* Expressions:Form*;
-Receive:Form ::= Patterns:Pattern* Expressions:Form*;
+
+Attribute:Form ::= <AttribType:String> <AttribValue:String>;
+Register:Form ::= Name:Atom MyPid:Pid;
+Unregister:Form ::= Name:Atom;
+Spawn:Form ::= Module:Atom Method:Atom Arguments:Variable*;
+Call:Form ::= [Library:Atom] FunctionName:Atom Arguments:Value*;
+Match:Form ::= LeftForm:Variable RightForm:Form;
 Case ::= Patterns:Pattern* Expressions:Form*;
-Call:Form ::= [Library:Identifier] FunctionName:Identifier Arguments:Value*;
-Match:Form ::= LeftForm:Variable RightForm:Form; /* assign/compare */
+Receive:Form ::= Patterns:Pattern* Expressions:Form*;
 Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Variable;
 
 abstract Clause:Form;
@@ -18,10 +23,10 @@ Pattern:Form::= PatternVar:Variable* [GuardValues:Value*];
 Message:Form;
 Tuple:Message ::= Fields:Value*;
 
-abstract Value;
-Identifier:Value::= <Identif:Ident>;
-Atom:Value::= <FormType:String> <RowNumber:Integer> <AtomValue:String>;
-StringForm:Value ::= <FormType:String> <RowNumber:Integer> <StringValue:String>;
+abstract Value:Form;
+Identifier::= <Identif:Ident>;
+Atom:Value::= <AtomValue:String>;
+StringForm:Value ::= <StringValue:String>;
 
 abstract Ident;
 Variable:Ident::= <Id:String>;

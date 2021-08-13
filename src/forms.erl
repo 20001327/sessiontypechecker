@@ -526,8 +526,14 @@ is_form(Form) ->
 
 read_to_binary(Module,Filename) ->
   NewTree = filter(
-    fun({function, _, init, _, _}) -> true;
-      (_) -> true end,
+    fun(Form) ->
+        case Form of
+          {function,_,init,_,_} ->true;
+          {attribute,_,type,_} ->true;
+          {attribute,_,module,_} ->true;
+          _ ->false
+        end ;
+      (_) -> false end,
     read(Module)),
   {ok, S} = file:open(Filename, [write]),
   io:format(S, "~p~n", [NewTree]),

@@ -51,10 +51,10 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
 "cons"               { return sym(Terminals.CONS); }
 "remote"             { return sym(Terminals.REMOTE); }
 "string"             { return sym(Terminals.STRING); }
+"attribute"          { return sym(Terminals.ATTRIBUTE); }
+"module"             { return sym(Terminals.MODULE); }
 
-"record_field"       { return sym(Terminals.RECORDFIELD); }
 "string"             { return sym(Terminals.STRING); }
-"record"             { return sym(Terminals.RECORD); }
 "atom"               { return sym(Terminals.ATOM); }
 "tuple"              { return sym(Terminals.TUPLE); }
 
