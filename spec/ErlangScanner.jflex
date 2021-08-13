@@ -35,6 +35,8 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 StringValue    = "[a-zA-Z0-9_ ]*"
 Integer        = [1-9][0-9]* | 0
 Identifier     = [a-zA-Z][a-zA-Z0-9_]*
+Atom           = '[a-z][a-zA-Z0-9_ ]*' | [a-z][a-zA-Z0-9_ ]*
+Variable       = '[A-Z][a-zA-Z0-9_]*'
 
 %%
 
@@ -53,6 +55,7 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
 "string"             { return sym(Terminals.STRING); }
 "attribute"          { return sym(Terminals.ATTRIBUTE); }
 "module"             { return sym(Terminals.MODULE); }
+"type"             { return sym(Terminals.TYPE); }
 
 "string"             { return sym(Terminals.STRING); }
 "atom"               { return sym(Terminals.ATOM); }
@@ -69,18 +72,20 @@ Identifier     = [a-zA-Z][a-zA-Z0-9_]*
 
 ","                   { return sym(Terminals.COMMA); }
 "'"                   { return sym(Terminals.SINGLEMARKS); }
-"\""                   { return sym(Terminals.DOUBLEMARKS); }
+"\""                  { return sym(Terminals.DOUBLEMARKS); }
+"\\"                  { return sym(Terminals.DIVISION); }
 "<"                   { return sym(Terminals.LESSTHAN); }
 "<"                   { return sym(Terminals.MORETHAN); }
 "!"                   { return sym(Terminals.SEND); }
 "="                   { return sym(Terminals.EQUALS); }
 
-"if"                  { return sym(Terminals.IF); }
-"else"                { return sym(Terminals.ELSE); }
-"case"               { return sym(Terminals.CASE); }
+"case"                { return sym(Terminals.CASE); }
+"->"                  { return sym(Terminals.ARROW); }
 
 {Integer}             { return sym(Terminals.INTEGER); }
 {Identifier}          { return sym(Terminals.IDENTIFIER); }
+{Atom}                { return sym(Terminals.ATOMID); }
+{Variable}          { return sym(Terminals.VARIABLEID); }
 {StringValue}         { return sym(Terminals.STRINGVALUE); }
 
 // fall through errors

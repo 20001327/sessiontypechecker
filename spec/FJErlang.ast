@@ -20,13 +20,13 @@ Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Variable;
 abstract Clause:Form;
 Pattern:Form::= PatternVar:Variable* [GuardValues:Value*];
 
-Message:Form;
-Tuple:Message ::= Fields:Value*;
+abstract Message;
+Tuple:Message ::= <FormType:String> <RowNumber:Integer> Fields:Value*;
 
-abstract Value:Form;
-Identifier::= <Identif:Ident>;
-Atom:Value::= <AtomValue:String>;
-StringForm:Value ::= <StringValue:String>;
+abstract Value;
+Identifier:Value::= <Identif:Ident>;
+Atom:Value::= <FormType:String> <RowNumber:Integer> <AtomValue:String>;
+StringForm:Value ::= <FormType:String> <RowNumber:Integer> <StringValue:String>;
 
 abstract Ident;
 Variable:Ident::= <Id:String>;

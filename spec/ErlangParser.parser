@@ -45,21 +45,39 @@ Form form =
         {: return new Call(CALL, rowNumber, method, arguments); :}
 |   LCURLYBRACE MATCH COMMA INTEGER.rowNumber COMMA form.left COMMA form.right RCURLYBRACE
         {: return new Match(MATCH, rowNumber, left, right); :}
-|   LCURLYBRACE VAR COMMA INTEGER.rowNumber COMMA IDENTIFIER.varName COMMA form.varValue RCURLYBRACE
-        {: return new Var(MATCH, rowNumber, varName, varValue); :}
+
 |   LCURLYBRACE OPERATOR COMMA  COMMA IDENTIFIER.varName COMMA form.varValue RCURLYBRACE
         {: return new Operator(MATCH, rowNumber, varName, varValue); :}
 |   LCURLYBRACE REMOTE COMMA INTEGER.rowNumber COMMA form.library COMMA form.method RCURLYBRACE
         {: return new Remote(MATCH, rowNumber, library, method); :}
-|   LCURLYBRACE RECORD COMMA INTEGER.rowNumber COMMA form.recordName COMMA form_list.recordFields RCURLYBRACE
-        {: return new Record(RECORD_FIELD, rowNumber, recordName, recordFields); :}
-|   LCURLYBRACE RECORD_FIELD COMMA INTEGER.rowNumber COMMA form.recordFieldName COMMA form.recordValue RCURLYBRACE
-        {: return new RecordField(RECORD_FIELD, rowNumber, recordFieldName, recordValue); :}
-|   LCURLYBRACE TUPLE COMMA INTEGER.rowNumber COMMA form_list.fields RCURLYBRACE
-        {: return new Tuple(RECORD_FIELD, rowNumber, recordFieldName, recordValue); :}
-|   LCURLYBRACE STRING COMMA INTEGER.rowNumber COMMA STRINGVALUE.stringValue RCURLYBRACE
-        {: return new StringForm(RECORD_FIELD, rowNumber, stringValue); :}
+
+
+
+Tuple tuple =
+ LCURLYBRACE TUPLE COMMA INTEGER.rowNumber COMMA value_list RCURLYBRACE
+        {: return new Tuple(value_list); :}
+        ;
+
+List value_list =
+    value Value                 {: return new List.add(value); :}
+    value_list value VALUE      {: return value_list.add(value); :}
+    ;
+
+
+Value value =
+    ident IDENT
+|   LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA ATOMID RCURLYBRACE
+        {: return new Atom(ATOMID); :}
+|   LCURLYBRACE STRING COMMA INTEGER.rowNumber COMMA STRINGVALUE RCURLYBRACE
+        {: return new String(STRINGVALUE); :}
 ;
+
+Ident ident =
+|   LCURLYBRACE VAR COMMA INTEGER.rowNumber COMMA VARIABLEID RCURLYBRACE
+        {: return new Variable(VARIABLEID); :}
+|   PID.id
+        {: return new Pid(id); :}
+        ;
 
 
 

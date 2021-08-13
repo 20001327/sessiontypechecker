@@ -5,7 +5,7 @@
 start() ->
   register(alice, spawn(alice, init, [])).
 
--type init() :: alice.
+-type init() :: 'alice prova'.
 init() ->
   seller!{alice,title,"Toy Story"},
   receive

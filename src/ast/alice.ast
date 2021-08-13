@@ -1,5 +1,5 @@
 [{attribute,1,module,alice},
- {attribute,8,type,{init,{atom,8,alice},[]}},
+ {attribute,8,type,{init,{atom,8,'alice prova'},[]}},
  {function,9,init,0,
      [{clause,9,[],[],
           [{op,10,'!',
