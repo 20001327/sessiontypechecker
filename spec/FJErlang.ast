@@ -4,10 +4,10 @@ Program ::= Modules:Module*;
 Module::= Functions:Function*;
 
 /* da rivedere */
-Function ::= <FunctionName:String> <ArgumentsNumber:Integer> Arguments:Pattern* Expressions:Form*;
+Function ::= <FunctionName:String> <ArgumentsNumber:Integer> Expressions:Pattern*;
 /* */
 
-abstract Form ::= <FormType:String> <RowNumber:Integer>;
+abstract Form;
 Attribute:Form ::= <AttribType:String> <AttribValue:String>;
 Register:Form ::= Name:Atom MyPid:Pid;
 Unregister:Form ::= Name:Atom;
@@ -16,26 +16,21 @@ Call:Form ::= FunctionName:Atom Arguments:Value*;
 Match:Form ::= LeftForm:Variable RightForm:Form;
 Case ::= Patterns:Pattern* Expressions:Form*;
 Receive:Form ::= Patterns:Pattern* Expressions:Form*;
+Send:Form ::= LeftOp:Value RightOp:Message;
 Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Variable;
 
-Send:Operator;
-
-abstract Clause:Form;
-Pattern:Form::= PatternVar:Variable* GuardValues:Match*;
+abstract Pattern:Form;
+Clause:Form::= PatternVar:Variable* GuardValues:Match* Forms:Form*;
 
 abstract Message;
 Tuple:Message ::= <FormType:String> <RowNumber:Integer> Fields:Value*;
 
 abstract Value;
-Identifier:Value::= <Identif:Ident>;
-Atom:Value::= <FormType:String> <RowNumber:Integer> <AtomValue:String>;
-String:Value ::= <FormType:String> <RowNumber:Integer> <StringValue:String>;
-Integer:Value ::= <FormType:String> <RowNumber:Integer> <IntegerValue:Integer>;
+Identifier:Value::= <MyId:Identificatore>;
+Atom:Value::= <AtomValue:String>;
+CharList:Value ::= <StringValue:String>;
+Number:Value ::= <IntegerValue:Integer>;
 
-abstract Ident;
-Variable:Ident::= <Id:String>;
-Pid:Ident::= <Pid:Integer>
-
-
-
-
+abstract Identificatore;
+Variable:Identificatore::= <Ident:String>;
+Pid:Identificatore::= <Pid:Integer>;

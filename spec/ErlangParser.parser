@@ -37,10 +37,9 @@ LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTE
      {: return new Function(funName, Integer.parseInt(numArguments), patterns); :}
 ;
 
-Form form =
-    match
+Form form = match
 |   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SEND COMMA value.dest COMMA tuple.message RCURLYBRACE
-        {: return new Send(dest, tuple); :}
+        {: return new Send(dest, message); :}
 |   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA MINUS COMMA value.op1 COMMA value.op2 RCURLYBRACE
         {: return new Difference(op1, op2); :}
 |   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA DIVISION COMMA value.op1 COMMA value.op2 RCURLYBRACE
@@ -93,8 +92,8 @@ List value_list =
 Value value =
     ident
 |   atom
-|   integer
-|   string
+|   number
+|   charlist
 ;
 
 Ident ident =
@@ -108,21 +107,21 @@ List variable_list =
 |   variable_list variable  {: return variable_list.add(variable); :}
 ;
 
-Integer integer =
+Number number =
     LCURLYBRACE STRING COMMA INTEGER.rowNumber COMMA INTEGER.val RCURLYBRACE
-    {: return new Integer(Integer.parseInt(val)); :}
+    {: return new Number(Integer.parseInt(val)); :}
 ;
 
-String string = LCURLYBRACE STRING COMMA INTEGER.rowNumber COMMA STRINGVALUE RCURLYBRACE
-      {: return new String(STRINGVALUE); :}
+CharList charlist = LCURLYBRACE STRING COMMA INTEGER.rowNumber COMMA STRINGVALUE RCURLYBRACE
+      {: return new CharList(STRINGVALUE); :}
 ;
 
 Atom atom = LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA ATOMID RCURLYBRACE
         {: return new Atom(ATOMID); :}
 ;
 
-Pid pid = PID.id
-     {: return new Pid(id); :}
+Pid pid = PID.mypid
+     {: return new Pid(mypid); :}
 ;
 
 Variable variable =
