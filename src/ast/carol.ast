@@ -67,5 +67,9 @@
                   {tuple,31,[{atom,31,carol},{atom,31,end_delegation}]}},
                  {op,32,'!',
                   {var,32,'ReturnPid'},
-                  {tuple,32,[{atom,32,carol},{atom,32,quit}]}}]}]}]}]}]}]},
-     {call,36,{atom,36,unregister},[{atom,36,carol}]}]}]}]
+                  {tuple,32,[{atom,32,carol},{atom,32,quit}]}}]}]}]}]}]},
+       {clause,35,
+        [{tuple,35,[{atom,35,bob},{atom,35,quit}]}],
+        [],
+        [{atom,36,ok}]}]},
+     {call,38,{atom,38,unregister},[{atom,38,carol}]}]}]}]

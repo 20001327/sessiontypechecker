@@ -22,7 +22,6 @@ init() ->
               %%io:format("BOB: received Date ~n")
               end;
             false ->
-              carol:start(),
               unregister(bob),
               carol ! {bob, quote,Quote - MyQuote - 99},
               carol ! {bob, start_delegation, {bob, self()}},
@@ -39,4 +38,5 @@ init() ->
           end
       end
   end,
+  carol!{bob,quit},
   unregister(bob).

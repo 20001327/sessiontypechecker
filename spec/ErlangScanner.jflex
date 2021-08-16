@@ -74,6 +74,7 @@ Variable       = '[A-Z][a-zA-Z0-9_]*'
 "'"                   { return sym(Terminals.SINGLEMARKS); }
 "\""                  { return sym(Terminals.DOUBLEMARKS); }
 "\\"                  { return sym(Terminals.DIVISION); }
+"-"                   { return sym(Terminals.MINUS); }
 "<"                   { return sym(Terminals.LESSTHAN); }
 "<"                   { return sym(Terminals.MORETHAN); }
 "!"                   { return sym(Terminals.SEND); }

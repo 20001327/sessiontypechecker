@@ -31,6 +31,8 @@ init() ->
               ReturnPid ! {carol, end_delegation},
               ReturnPid ! {carol, quit}
           end
-      end
+      end;
+    {bob,quit} ->
+       ok
   end,
   unregister(carol).

@@ -4,5 +4,6 @@
 
 start_protocol()->
     seller:start(),
+    carol:start(),
     bob:start(),
     alice:start().

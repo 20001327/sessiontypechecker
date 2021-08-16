@@ -3,22 +3,25 @@
 Program ::= Modules:Module*;
 Module::= Functions:Function*;
 
+/* da rivedere */
+Function ::= <FunctionName:String> <ArgumentsNumber:Integer> Arguments:Pattern* Expressions:Form*;
+/* */
+
 abstract Form ::= <FormType:String> <RowNumber:Integer>;
-
-Function:Form ::= <FunctionName:String> <ArgumentsNumber:Integer> Arguments:Pattern* Expressions:Form*;
-
 Attribute:Form ::= <AttribType:String> <AttribValue:String>;
 Register:Form ::= Name:Atom MyPid:Pid;
 Unregister:Form ::= Name:Atom;
 Spawn:Form ::= Module:Atom Method:Atom Arguments:Variable*;
-Call:Form ::= [Library:Atom] FunctionName:Atom Arguments:Value*;
+Call:Form ::= FunctionName:Atom Arguments:Value*;
 Match:Form ::= LeftForm:Variable RightForm:Form;
 Case ::= Patterns:Pattern* Expressions:Form*;
 Receive:Form ::= Patterns:Pattern* Expressions:Form*;
 Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Variable;
 
+Send:Operator;
+
 abstract Clause:Form;
-Pattern:Form::= PatternVar:Variable* [GuardValues:Value*];
+Pattern:Form::= PatternVar:Variable* GuardValues:Match*;
 
 abstract Message;
 Tuple:Message ::= <FormType:String> <RowNumber:Integer> Fields:Value*;
@@ -26,7 +29,8 @@ Tuple:Message ::= <FormType:String> <RowNumber:Integer> Fields:Value*;
 abstract Value;
 Identifier:Value::= <Identif:Ident>;
 Atom:Value::= <FormType:String> <RowNumber:Integer> <AtomValue:String>;
-StringForm:Value ::= <FormType:String> <RowNumber:Integer> <StringValue:String>;
+String:Value ::= <FormType:String> <RowNumber:Integer> <StringValue:String>;
+Integer:Value ::= <FormType:String> <RowNumber:Integer> <IntegerValue:Integer>;
 
 abstract Ident;
 Variable:Ident::= <Id:String>;
