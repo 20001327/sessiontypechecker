@@ -14,10 +14,10 @@ Unregister:Form ::= Name:Atom;
 Spawn:Form ::= Module:Atom Method:Atom Arguments:Variable*;
 Call:Form ::= FunctionName:Atom Arguments:Value*;
 Match:Form ::= LeftForm:Variable RightForm:Form;
-Case ::= Patterns:Pattern* Expressions:Form*;
-Receive:Form ::= Patterns:Pattern* Expressions:Form*;
+Case ::= MatchingForm:Form Patterns:Pattern*;
+Receive:Form ::= Patterns:Pattern*;
 Send:Form ::= LeftOp:Value RightOp:Message;
-Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Variable;
+Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Value;
 
 abstract Pattern:Form;
 Clause:Form::= PatternVar:Variable* GuardValues:Match* Forms:Form*;

@@ -40,18 +40,14 @@ LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTE
 Form form = match
 |   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SEND COMMA value.dest COMMA tuple.message RCURLYBRACE
         {: return new Send(dest, message); :}
-|   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA MINUS COMMA value.op1 COMMA value.op2 RCURLYBRACE
-        {: return new Difference(op1, op2); :}
-|   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA DIVISION COMMA value.op1 COMMA value.op2 RCURLYBRACE
-        {: return new Division(op1, op2); :}
+|   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SYMBOL.sym COMMA value.op1 COMMA value.op2 RCURLYBRACE
+        {: return new Operator(sym,op1, op2); :}
 |	LCURLYBRACE SINGLEMARKS RECEIVE SINGLEMARKS COMMA INTEGER.rowNumber COMMA clause_list.clauses RCURLYBRACE
  		{: return new Receive(clauses); :}
 |   LCURLYBRACE CASE COMMA INTEGER.rowNumber COMMA form.matchingForm COMMA clause_list.clauses RCURLYBRACE
         {: return new Case(matchingForm, clauses); :}
 |   LCURLYBRACE CALL COMMA INTEGER.rowNumber COMMA atom.method COMMA value_list.arguments RCURLYBRACE
-        {: return new Call(CALL, rowNumber, method, arguments); :}
-|   LCURLYBRACE CALL COMMA INTEGER.rowNumber COMMA atom.library COMMA atom.method COMMA value_list.arguments RCURLYBRACE
-        {: return new Call(CALL, rowNumber, library, method, arguments); :}
+        {: return new Call(method, arguments); :}
 ;
 
 List form_list =

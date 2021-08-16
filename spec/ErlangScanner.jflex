@@ -37,6 +37,7 @@ Integer        = [1-9][0-9]* | 0
 Identifier     = [a-zA-Z][a-zA-Z0-9_]*
 Atom           = '[a-z][a-zA-Z0-9_ ]*' | [a-z][a-zA-Z0-9_ ]*
 Variable       = '[A-Z][a-zA-Z0-9_]*'
+Symbol         = \=|\-|\*|\+|\/|\\
 
 %%
 
@@ -86,8 +87,9 @@ Variable       = '[A-Z][a-zA-Z0-9_]*'
 {Integer}             { return sym(Terminals.INTEGER); }
 {Identifier}          { return sym(Terminals.IDENTIFIER); }
 {Atom}                { return sym(Terminals.ATOMID); }
-{Variable}          { return sym(Terminals.VARIABLEID); }
+{Variable}            { return sym(Terminals.VARIABLEID); }
 {StringValue}         { return sym(Terminals.STRINGVALUE); }
+{Symbol}              { return sym(Terminals.SYMBOL); }
 
 // fall through errors
 .                     { throw new beaver.Scanner.Exception("illegal character \"" + yytext() + "\" at line " + yyline + "," + yycolumn); }
