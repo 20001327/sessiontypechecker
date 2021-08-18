@@ -3,17 +3,18 @@
 Program ::= Modules:Module*;
 Module::= Functions:Function*;
 
+Actor ::= <ActorName:String>;
+Type ::= <Type:String>;
 /* da rivedere */
 Function ::= <FunctionName:String> <ArgumentsNumber:Integer> Expressions:Pattern*;
 /* */
 
 abstract Form;
-Attribute:Form ::= <AttribType:String> <AttribValue:String>;
 Register:Form ::= Name:Atom MyPid:Pid;
 Unregister:Form ::= Name:Atom;
 Spawn:Form ::= Module:Atom Method:Atom Arguments:Variable*;
 Call:Form ::= FunctionName:Atom Arguments:Value*;
-Match:Form ::= LeftForm:Variable RightForm:Form;
+Match:Form ::= LeftForm:Variable RightForm:Value;
 Case ::= MatchingForm:Form Patterns:Pattern*;
 Receive:Form ::= Patterns:Pattern*;
 Send:Form ::= LeftOp:Value RightOp:Message;
@@ -23,7 +24,7 @@ abstract Pattern:Form;
 Clause:Form::= PatternVar:Variable* GuardValues:Match* Forms:Form*;
 
 abstract Message;
-Tuple:Message ::= <FormType:String> <RowNumber:Integer> Fields:Value*;
+Tuple:Message ::= Fields:Value*;
 
 abstract Value;
 Identifier:Value::= <MyId:Identificatore>;
@@ -33,4 +34,4 @@ Number:Value ::= <IntegerValue:Integer>;
 
 abstract Identificatore;
 Variable:Identificatore::= <Ident:String>;
-Pid:Identificatore::= <Pid:Integer>;
+Pid:Identificatore::= <Pid:String>;

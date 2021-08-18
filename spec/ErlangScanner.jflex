@@ -35,7 +35,7 @@ WhiteSpace     = {LineTerminator} | [ \t\f]
 StringValue    = "[a-zA-Z0-9_ ]*"
 Integer        = [1-9][0-9]* | 0
 Identifier     = [a-zA-Z][a-zA-Z0-9_]*
-Atom           = '[a-z][a-zA-Z0-9_ ]*' | [a-z][a-zA-Z0-9_ ]*
+Atom           = '[a-z][a-zA-Z0-9_ ]*' | [a-z][a-zA-Z0-9_]*
 Variable       = '[A-Z][a-zA-Z0-9_]*'
 Symbol         = \=|\-|\*|\+|\/|\\
 
@@ -51,8 +51,6 @@ Symbol         = \=|\-|\*|\+|\/|\\
 "match"              { return sym(Terminals.MATCH); }
 "var"                { return sym(Terminals.VAR); }
 "op"                 { return sym(Terminals.OPERATOR); }
-"cons"               { return sym(Terminals.CONS); }
-"remote"             { return sym(Terminals.REMOTE); }
 "string"             { return sym(Terminals.STRING); }
 "attribute"          { return sym(Terminals.ATTRIBUTE); }
 "module"             { return sym(Terminals.MODULE); }
@@ -61,11 +59,9 @@ Symbol         = \=|\-|\*|\+|\/|\\
 "string"             { return sym(Terminals.STRING); }
 "atom"               { return sym(Terminals.ATOM); }
 "tuple"              { return sym(Terminals.TUPLE); }
+"integer"            { return sym(Terminals.INTTYPE); }
 
-"int"                 { return sym(Terminals.INTTYPE); }
 
-"("                   { return sym(Terminals.LBRACE); }
-")"                   { return sym(Terminals.RBRACE); }
 "{"                   { return sym(Terminals.LCURLYBRACE); }
 "}"                   { return sym(Terminals.RCURLYBRACE); }
 "["                   { return sym(Terminals.LBRACKET); }
@@ -73,16 +69,9 @@ Symbol         = \=|\-|\*|\+|\/|\\
 
 ","                   { return sym(Terminals.COMMA); }
 "'"                   { return sym(Terminals.SINGLEMARKS); }
-"\""                  { return sym(Terminals.DOUBLEMARKS); }
-"\\"                  { return sym(Terminals.DIVISION); }
-"-"                   { return sym(Terminals.MINUS); }
-"<"                   { return sym(Terminals.LESSTHAN); }
-"<"                   { return sym(Terminals.MORETHAN); }
 "!"                   { return sym(Terminals.SEND); }
-"="                   { return sym(Terminals.EQUALS); }
 
 "case"                { return sym(Terminals.CASE); }
-"->"                  { return sym(Terminals.ARROW); }
 
 {Integer}             { return sym(Terminals.INTEGER); }
 {Identifier}          { return sym(Terminals.IDENTIFIER); }

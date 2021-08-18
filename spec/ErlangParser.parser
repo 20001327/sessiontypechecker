@@ -17,7 +17,12 @@ program goal =
 ;
 
 Module module =
-    function_list           {: return new Module(function_list); :}
+    LBRACKET actor COMMA function_list RBRACKET {: return new Module(function_list); :}
+;
+
+Actor actor =
+   LCURLYBRACE ATTRIBUTE COMMA INTEGER.rowNumber COMMA MODULE COMMA IDENTIFIER.value RCURLYBRACE
+   {: return new Actor(value); :}
 ;
 
 List module_list =
@@ -33,14 +38,20 @@ List function_list =
 
 
 Function function =
-LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA clause_list.patterns RCURLYBRACE
+type? LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA clause_list.patterns RCURLYBRACE
      {: return new Function(funName, Integer.parseInt(numArguments), patterns); :}
 ;
 
+Type type =
+   LCURLYBRACE ATTRIBUTE COMMA INTEGER.rowNumber COMMA TYPE COMMA LCURLYBRACE IDENTIFIER.funName COMMA atom COMMA LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE
+   {: return new Type(atom.getAtomValue()); :}
+ ;
+
+
 Form form = match
-|   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SEND COMMA value.dest COMMA tuple.message RCURLYBRACE
+|   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SINGLEMARKS SEND SINGLEMARKS COMMA value.dest COMMA tuple.message RCURLYBRACE
         {: return new Send(dest, message); :}
-|   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SYMBOL.sym COMMA value.op1 COMMA value.op2 RCURLYBRACE
+|   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SINGLEMARKS SYMBOL.sym SINGLEMARKS COMMA value.op1 COMMA value.op2 RCURLYBRACE
         {: return new Operator(sym,op1, op2); :}
 |	LCURLYBRACE SINGLEMARKS RECEIVE SINGLEMARKS COMMA INTEGER.rowNumber COMMA clause_list.clauses RCURLYBRACE
  		{: return new Receive(clauses); :}
@@ -58,7 +69,7 @@ List form_list =
 List match_list =
     LBRACKET RBRACKET       {: return new List(); :}
 |	match   		        {: return new List().add(match);	:}
-|	match_list match    	{: return function_list.add(match); :}
+|	match_list match    	{: return match_list.add(match); :}
  ;
 
 List clause_list =
@@ -104,7 +115,7 @@ List variable_list =
 ;
 
 Number number =
-    LCURLYBRACE STRING COMMA INTEGER.rowNumber COMMA INTEGER.val RCURLYBRACE
+    LCURLYBRACE INTTYPE COMMA INTEGER.rowNumber COMMA INTEGER.val RCURLYBRACE
     {: return new Number(Integer.parseInt(val)); :}
 ;
 
@@ -112,8 +123,8 @@ CharList charlist = LCURLYBRACE STRING COMMA INTEGER.rowNumber COMMA STRINGVALUE
       {: return new CharList(STRINGVALUE); :}
 ;
 
-Atom atom = LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA ATOMID RCURLYBRACE
-        {: return new Atom(ATOMID); :}
+Atom atom = LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA ATOMID.ident RCURLYBRACE
+        {: return new Atom(ident); :}
 ;
 
 Pid pid = PID.mypid
