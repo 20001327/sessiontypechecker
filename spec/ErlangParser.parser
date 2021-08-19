@@ -82,8 +82,15 @@ Match match = LCURLYBRACE MATCH COMMA INTEGER.rowNumber COMMA variable.left COMM
 
 Clause clause = LCURLYBRACE CLAUSE COMMA INTEGER.rowNumber COMMA LBRACKET value_list.patterns RBRACKET COMMA LBRACKET match_list.matches? RBRACKET COMMA LBRACKET form_list RBRACKET RCURLYBRACE
        {: return new Clause(patterns, matches, form_list); :}
+| LCURLYBRACE CLAUSE COMMA INTEGER.rowNumber COMMA LBRACKET tuple_list.patterns RBRACKET COMMA LBRACKET match_list.matches? RBRACKET COMMA LBRACKET form_list RBRACKET RCURLYBRACE
+       {: return new Clause(patterns, matches, form_list); :}
 ;
 
+
+List tuple_list =
+   tuple                 {: return new List().add(tuple); :}
+|  tuple_list COMMA tuple     {: return tuple_list.add(tuple); :}
+;
 
 Tuple tuple =
  LCURLYBRACE TUPLE COMMA INTEGER.rowNumber COMMA LBRACKET value_list RBRACKET RCURLYBRACE

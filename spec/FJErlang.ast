@@ -18,18 +18,16 @@ Receive:Form ::= Patterns:Clause*;
 Send:Form ::= LeftOp:Value RightOp:Tuple;
 Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Value;
 
-Clause:Form::= PatternVar:Value* GuardValues:Match* Forms:Form*;
+Clause:Form::= PatternVar:Pattern* GuardValues:Match* Forms:Form*;
 
 abstract Pattern;
 
 Tuple:Pattern ::= Fields:Value*;
 
 abstract Value:Pattern;
-Identifier:Value::= <MyId:Identificatore>;
 Atom:Value::= <AtomValue:String>;
 CharList:Value ::= <StringValue:String>;
 Number:Value ::= <IntegerValue:Integer>;
-
-abstract Identificatore;
-Variable:Identificatore::= <Ident:String>;
-Pid:Identificatore::= <Pid:String>;
+abstract Identifier:Value;
+Variable:Identifier::= <Ident:String>;
+Pid:Identifier::= <Pid:String>;
