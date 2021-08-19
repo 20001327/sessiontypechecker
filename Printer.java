@@ -3,16 +3,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
-import java.util.Collection;
 
 
 import miniErlang.*;
 
 
-public class Compiler {
+public class Printer {
 	public static void main(String[] args) {
-		new Compiler().run("./src/ast/alice.ast");
+		new Printer().run("./src/ast/alice.ast");
 	}		
 
 	public void run(String... args) {
@@ -38,16 +36,8 @@ public class Compiler {
 			ErlangScanner scanner = new ErlangScanner(new BufferedReader(reader));
 			Program p = (Program)parser.parse(scanner);
 			reader.close();
-			
-			runPreErrorCheck(p);
-	
-/*			Collection c = p.errors();
-			if (c.size() > 0) {
-				System.out.println("Errors: ");
-				for (Object o : c) {
-					System.out.println("- " + o.toString());
-				}
-			} */
+			p.print();
+
 		} catch (IOException e) {
 			System.err.println("error (PrettyPrint) : " + e.getMessage());
 			e.printStackTrace();
@@ -57,6 +47,4 @@ public class Compiler {
 		} 
 	}
 
-	public void runPreErrorCheck(Program p) {
-	}
 }

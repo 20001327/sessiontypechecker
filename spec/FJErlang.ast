@@ -11,21 +11,20 @@ Function ::= <FunctionName:String> <ArgumentsNumber:Integer> Expressions:Pattern
 abstract Form;
 Register:Form ::= Name:Atom MyPid:Pid;
 Unregister:Form ::= Name:Atom;
-Spawn:Form ::= Module:Atom Method:Atom Arguments:Variable*;
 Call:Form ::= FunctionName:Atom Arguments:Value*;
 Match:Form ::= LeftForm:Variable RightForm:Value;
 Case ::= MatchingForm:Form Patterns:Pattern*;
-Receive:Form ::= Patterns:Pattern*;
-Send:Form ::= LeftOp:Value RightOp:Message;
+Receive:Form ::= Patterns:Clause*;
+Send:Form ::= LeftOp:Value RightOp:Tuple;
 Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Value;
 
-abstract Pattern:Form;
-Clause:Form::= PatternVar:Variable* GuardValues:Match* Forms:Form*;
+Clause:Form::= PatternVar:Value* GuardValues:Match* Forms:Form*;
 
-abstract Message;
-Tuple:Message ::= Fields:Value*;
+abstract Pattern;
 
-abstract Value;
+Tuple:Pattern ::= Fields:Value*;
+
+abstract Value:Pattern;
 Identifier:Value::= <MyId:Identificatore>;
 Atom:Value::= <AtomValue:String>;
 CharList:Value ::= <StringValue:String>;

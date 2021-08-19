@@ -7,19 +7,19 @@ start() ->
 
 -type init() :: 'alice prova'.
 init() ->
-  seller!{alice,title,"Toy Story"},
+  'seller'!{'alice','title',"Toy Story"},
   receive
-    {seller, quote, Quote} ->
+    {'seller', 'quote', Quote} ->
       %%io:format("ALICE: quote receive from seller ~p~n", [Quote]),
-      bob ! {alice, myquote, Quote / 2},
+      'bob' ! {'alice', 'myquote', Quote / 2},
       receive
-        {bob, ok} ->
-          ok;
+        {'bob', 'ok'} ->
+          'ok';
           %%io:format("ALICE: ok from bob ~n");
-        {bob, quit} ->
-          quit
+        {'bob', 'quit'} ->
+          'quit'
           %%io:format("ALICE: quit from bob ~n")
       end
   end,
-  unregister(alice).
+  unregister('alice').
 

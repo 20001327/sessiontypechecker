@@ -10,6 +10,7 @@ import miniErlang.ErlangParser.Terminals;
 %class ErlangScanner
 %extends beaver.Scanner
 
+
 // the interface between the scanner and the parser is the nextToken() method
 %type beaver.Symbol
 %function nextToken
@@ -27,16 +28,18 @@ import miniErlang.ErlangParser.Terminals;
   private beaver.Symbol sym(short id) {
     return new beaver.Symbol(id, yyline + 1, yycolumn + 1, yylength(), yytext());
   }
+  private beaver.Symbol sym(short id, Object value) {
+    return new beaver.Symbol(id, yyline + 1, yycolumn + 1, yylength(), value);
+  }
 %}
 
+
 LineTerminator = \r|\n|\r\n
-InputCharacter = [^\r\n]
 WhiteSpace     = {LineTerminator} | [ \t\f]
-StringValue    = "[a-zA-Z0-9_ ]*"
+StringValue    = \"[a-zA-Z0-9_ ]*\"
 Integer        = [1-9][0-9]* | 0
+Atom           = '[a-z][a-zA-Z0-9_ ]*'
 Identifier     = [a-zA-Z][a-zA-Z0-9_]*
-Atom           = [a-z][a-zA-Z0-9_]*
-AtomWithSpace  = '[a-z][a-zA-Z0-9_ ]*'
 Variable       = '[A-Z][a-zA-Z0-9_]*'
 Symbol         = \=|\-|\*|\+|\/|\\
 
@@ -46,7 +49,7 @@ Symbol         = \=|\-|\*|\+|\/|\\
 {WhiteSpace}          { }
 
 "function"           { return sym(Terminals.FUNCTION); }
-"receive"            { return sym(Terminals.RECEIVE); }
+"'receive'"          { return sym(Terminals.RECEIVE); }
 "clause"             { return sym(Terminals.CLAUSE); }
 "call"               { return sym(Terminals.CALL); }
 "match"              { return sym(Terminals.MATCH); }
@@ -77,7 +80,6 @@ Symbol         = \=|\-|\*|\+|\/|\\
 {Integer}             { return sym(Terminals.INTEGER); }
 {Identifier}          { return sym(Terminals.IDENTIFIER); }
 {Atom}                { return sym(Terminals.ATOMID); }
-{AtomWithSpace}       { return sym(Terminals.ATOMIDWS); }
 {Variable}            { return sym(Terminals.VARIABLEID); }
 {StringValue}         { return sym(Terminals.STRINGVALUE); }
 {Symbol}              { return sym(Terminals.SYMBOL); }

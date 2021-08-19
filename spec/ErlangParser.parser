@@ -9,7 +9,7 @@
 
 /* Just to shut up Beaver warnings */
 %goal goal;
-
+%left RBRACKET;
 /* Productions with semantic actions building the JastAdd AST */
 
 program goal =
@@ -27,18 +27,18 @@ Actor actor =
 
 List module_list =
     module                  {: return new List().add(module); :}
-|   module_list module      {: return module_list.add(module); :}
+|   module_list COMMA module      {: return module_list.add(module); :}
 ;
 
 List function_list =
 	function		        {: return new List().add(function);	:}
-|	function_list function	{: return function_list.add(function); :}
+|	function_list COMMA function	{: return function_list.add(function); :}
 ;
 
 
 
 Function function =
-type? LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA clause_list.patterns RCURLYBRACE
+type? LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA LBRACKET clause_list.patterns RBRACKET RCURLYBRACE
      {: return new Function(funName, Integer.parseInt(numArguments), patterns); :}
 ;
 
@@ -48,12 +48,12 @@ Type type =
  ;
 
 
-Form form = match
-|   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SINGLEMARKS SEND SINGLEMARKS COMMA value.dest COMMA tuple.message RCURLYBRACE
+Form form =
+   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SINGLEMARKS SEND SINGLEMARKS COMMA value.dest COMMA tuple.message RCURLYBRACE
         {: return new Send(dest, message); :}
 |   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SINGLEMARKS SYMBOL.sym SINGLEMARKS COMMA value.op1 COMMA value.op2 RCURLYBRACE
         {: return new Operator(sym,op1, op2); :}
-|	LCURLYBRACE SINGLEMARKS RECEIVE SINGLEMARKS COMMA INTEGER.rowNumber COMMA clause_list.clauses RCURLYBRACE
+|	LCURLYBRACE RECEIVE COMMA INTEGER.rowNumber COMMA LBRACKET clause_list.clauses RBRACKET RCURLYBRACE
  		{: return new Receive(clauses); :}
 |   LCURLYBRACE CASE COMMA INTEGER.rowNumber COMMA form.matchingForm COMMA clause_list.clauses RCURLYBRACE
         {: return new Case(matchingForm, clauses); :}
@@ -63,37 +63,37 @@ Form form = match
 
 List form_list =
     form                    {: return new List().add(form);     :}
-|   form_list form          {: return form_list.add(form);      :}
+|   form_list COMMA form          {: return form_list.add(form);      :}
 ;
 
 List match_list =
-    LBRACKET RBRACKET       {: return new List(); :}
-|	match   		        {: return new List().add(match);	:}
-|	match_list match    	{: return match_list.add(match); :}
+	match   		        {: return new List().add(match);	:}
+|	match_list COMMA match    	{: return match_list.add(match); :}
  ;
 
 List clause_list =
 	clause   		        {: return new List().add(clause);	:}
-|	clause_list clause    	{: return clause_list.add(clause); :}
+|	clause_list COMMA clause    	{: return clause_list.add(clause); :}
  ;
 
 Match match = LCURLYBRACE MATCH COMMA INTEGER.rowNumber COMMA variable.left COMMA value.right RCURLYBRACE
         {: return new Match(left, right); :}
 ;
 
-Clause clause = LCURLYBRACE CLAUSE COMMA INTEGER.rowNumber COMMA variable_list.variables COMMA match_list.matches COMMA form_list RCURLYBRACE
-       {: return new Clause(variables, matches, form_list); :}
+Clause clause = LCURLYBRACE CLAUSE COMMA INTEGER.rowNumber COMMA LBRACKET value_list.patterns RBRACKET COMMA LBRACKET match_list.matches? RBRACKET COMMA LBRACKET form_list RBRACKET RCURLYBRACE
+       {: return new Clause(patterns, matches, form_list); :}
 ;
 
+
 Tuple tuple =
- LCURLYBRACE TUPLE COMMA INTEGER.rowNumber COMMA value_list RCURLYBRACE
+ LCURLYBRACE TUPLE COMMA INTEGER.rowNumber COMMA LBRACKET value_list RBRACKET RCURLYBRACE
         {: return new Tuple(value_list); :}
 ;
 
+
 List value_list =
-        LBRACKET RBRACKET       {: return new List(); :}
-|   value VALUE                 {: return new List().add(value); :}
-|   value_list value VALUE      {: return value_list.add(value); :}
+   value                 {: return new List().add(value); :}
+|  value_list COMMA value     {: return value_list.add(value); :}
 ;
 
 Value value =
@@ -108,12 +108,6 @@ Ident ident =
 |   pid
 ;
 
-List variable_list =
-    LBRACKET RBRACKET       {: return new List(); :}
-|   variable                {: return new List().add(variable); :}
-|   variable_list variable  {: return variable_list.add(variable); :}
-;
-
 Number number =
     LCURLYBRACE INTTYPE COMMA INTEGER.rowNumber COMMA INTEGER.val RCURLYBRACE
     {: return new Number(Integer.parseInt(val)); :}
@@ -124,10 +118,10 @@ CharList charlist = LCURLYBRACE STRING COMMA INTEGER.rowNumber COMMA STRINGVALUE
 ;
 
 Atom atom =
-LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA ATOMID.ident RCURLYBRACE
-        {: return new Atom(ident); :}
-| LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA ATOMIDWS.ident RCURLYBRACE
-        {: return new Atom(ident); :}
+LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA IDENTIFIER.i RCURLYBRACE
+        {: return new Atom(i); :}
+|LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA ATOMID RCURLYBRACE
+        {: return new Atom(ATOMID); :}
 ;
 
 Pid pid = PID.mypid
