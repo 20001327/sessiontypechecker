@@ -55,10 +55,12 @@ Form form =
         {: return new Operator(sym,op1, op2); :}
 |	LCURLYBRACE RECEIVE COMMA INTEGER.rowNumber COMMA LBRACKET clause_list.clauses RBRACKET RCURLYBRACE
  		{: return new Receive(clauses); :}
-|   LCURLYBRACE CASE COMMA INTEGER.rowNumber COMMA form.matchingForm COMMA clause_list.clauses RCURLYBRACE
+|   LCURLYBRACE CASE COMMA INTEGER.rowNumber COMMA form.matchingForm COMMA LBRACKET clause_list.clauses RBRACKET RCURLYBRACE
         {: return new Case(matchingForm, clauses); :}
-|   LCURLYBRACE CALL COMMA INTEGER.rowNumber COMMA atom.method COMMA value_list.arguments RCURLYBRACE
+|   LCURLYBRACE CALL COMMA INTEGER.rowNumber COMMA atom.method COMMA LBRACKET value_list.arguments RBRACKET RCURLYBRACE
         {: return new Call(method, arguments); :}
+|   match
+|   value
 ;
 
 List form_list =
@@ -76,7 +78,7 @@ List clause_list =
 |	clause_list COMMA clause    	{: return clause_list.add(clause); :}
  ;
 
-Match match = LCURLYBRACE MATCH COMMA INTEGER.rowNumber COMMA variable.left COMMA value.right RCURLYBRACE
+Match match = LCURLYBRACE MATCH COMMA INTEGER.rowNumber COMMA variable.left COMMA form.right RCURLYBRACE
         {: return new Match(left, right); :}
 ;
 

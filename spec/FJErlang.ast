@@ -12,15 +12,15 @@ abstract Form;
 Register:Form ::= Name:Atom MyPid:Pid;
 Unregister:Form ::= Name:Atom;
 Call:Form ::= FunctionName:Atom Arguments:Value*;
-Match:Form ::= LeftForm:Variable RightForm:Value;
-Case ::= MatchingForm:Form Patterns:Pattern*;
+Match:Form ::= LeftForm:Variable RightForm:Form;
+Case ::= MatchingForm:Form Patterns:Clause*;
 Receive:Form ::= Patterns:Clause*;
 Send:Form ::= LeftOp:Value RightOp:Tuple;
 Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Value;
 
 Clause:Form::= PatternVar:Pattern* GuardValues:Match* Forms:Form*;
 
-abstract Pattern;
+abstract Pattern:Form;
 
 Tuple:Pattern ::= Fields:Value*;
 

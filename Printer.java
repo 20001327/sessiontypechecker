@@ -36,7 +36,9 @@ public class Printer {
 			ErlangScanner scanner = new ErlangScanner(new BufferedReader(reader));
 			Program p = (Program)parser.parse(scanner);
 			reader.close();
-			p.print();
+			PrettyPrinter printer = p.print();
+			System.out.println(printer.getString());
+
 
 		} catch (IOException e) {
 			System.err.println("error (PrettyPrint) : " + e.getMessage());

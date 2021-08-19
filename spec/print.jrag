@@ -77,7 +77,7 @@ aspect PrettyPrint {
 
   public void Function.print() {
     printer().append("\""+getFunctionName()+"\": {");
-    for (Pattern p : getExpressionss()) {
+    for (Form p : getExpressionss()) {
       printer().append(indent() + PrettyPrinter.INDENT);  
       printer().append(indent() + "pattern\n");
       printer().append(";\n");
