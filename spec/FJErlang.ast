@@ -5,9 +5,8 @@ Module::= Functions:Function*;
 
 Actor ::= <ActorName:String>;
 Type ::= <Type:String>;
-/* da rivedere */
 Function ::= <FunctionName:String> <ArgumentsNumber:Integer> Expressions:Pattern*;
-/* */
+
 
 abstract Form;
 Register:Form ::= Name:Atom MyPid:Pid;
