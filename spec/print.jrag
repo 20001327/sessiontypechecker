@@ -1,5 +1,7 @@
 // Sie müssen ggf. diese Datei an ihre minijava.ast anpassen
 
+import miniErlang.Value;
+
 aspect PrettyPrint {
     public class PrettyPrinter {
         public static String INDENT = "  ";
@@ -103,19 +105,9 @@ aspect PrettyPrint {
             form.print();
             printer().append(",");
         }
-        printer().append(indent() + PrettyPrinter.INDENT);
         printer().append("}");
         printer().append(indent() + PrettyPrinter.INDENT);
         printer().append("}");
-    }
-
-    public void Pattern.print(){
-        printer().append("Pattern");
-    }
-
-    public void Form.print(){
-        printer().append(indent() + PrettyPrinter.INDENT);
-        printer().append("Form");
     }
 
     public void Register.print(){
@@ -129,13 +121,26 @@ aspect PrettyPrint {
     }
 
     public void Call.print(){
-        printer().append(indent() + PrettyPrinter.INDENT);
-        printer().append("Call");
+        printer().append(indent() + PrettyPrinter.INDENT + "\"");
+        getFunctionName().print();
+        printer().append("_call\":{ \"arguments\":[");
+        for(Value v: getArgumentss()){
+            v.print();
+        }
+        printer().append("]");
+        printer().append("}");
     }
 
     public void Match.print(){
-        printer().append(indent() + PrettyPrinter.INDENT);
-        printer().append("Match");
+        printer().append(indent() + PrettyPrinter.INDENT + "\"let\":{");
+        printer().append("\"left_side\":");
+        getLeftForm().print();
+        printer().append(",");
+        printer().append("\"right_side\":{");
+        getRightForm().print();
+        printer().append("}");
+
+        printer().append("}");
     }
 
     public void Case.print(){
@@ -144,42 +149,69 @@ aspect PrettyPrint {
     }
 
     public void Receive.print(){
-        printer().append(indent() + PrettyPrinter.INDENT);
-        printer().append("Receive");
+        printer().append(indent() + PrettyPrinter.INDENT + "\"receive\":{ ");
+        for(Clause c: getPatternss()){
+            c.print();
+        }
+        printer().append("}");
     }
 
     public void Send.print(){
-        printer().append(indent() + PrettyPrinter.INDENT);
-        printer().append("Send");
+        printer().append(indent() + PrettyPrinter.INDENT + "\"send\":{ ");
+        printer().append("\"recipient\":\"");
+        getLeftOp().print();printer().append("\",");
+        printer().append("\"message\":\"");
+        getRightOp().print();
+        printer().append("\"}");
     }
 
     public void Operator.print(){
-        printer().append(indent() + PrettyPrinter.INDENT);
-        printer().append("Operator");
+        printer().append(indent() + PrettyPrinter.INDENT +
+                "\""+getOperatorSymbol()+"\":{ ");
+        printer().append("\"left_side\":\"");
+        getLeftOp().print();printer().append("\",");
+        printer().append("\"right_side\":\"");
+        getRightOp().print();
+        printer().append("\"}");
     }
 
     public void Tuple.print(){
-        printer().append("Tuple");
+        printer().append("{");
+        for (Value value : getFieldss()){
+            value.print();
+            printer().append(",");
+        }
+        printer().append("}");
     }
 
     public void Atom.print(){
-        printer().append("Atom");
+        printer().append(getAtomValue());
     }
 
     public void CharList.print(){
-        printer().append("CharList");
+        printer().append(getStringValue());
     }
 
     public void Number.print(){
-        printer().append("Number");
+        printer().append(Integer.toString(getIntegerValue()));
     }
 
     public void Variable.print(){
-        printer().append("Variable");
+        printer().append("{\"var\":"+getIdent().replace("'","\"")+"}");
     }
 
     public void Pid.print(){
-        printer().append("Pid");
+        printer().append(getPid());
+    }
+
+    public void Pattern.print(){
+        printer().append("Pattern");
+    }
+    public void Form.print(){
+        printer().append("Form");
+    }
+    public void Value.print(){
+        printer().append("Value");
     }
 
 
