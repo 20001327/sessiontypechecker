@@ -17,7 +17,7 @@ program goal =
 ;
 
 Module module =
-    LBRACKET actor COMMA function_list RBRACKET {: return new Module(function_list); :}
+    LBRACKET actor COMMA function_list RBRACKET {: return new Module(actor.getActorName(), function_list); :}
 ;
 
 Actor actor =

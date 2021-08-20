@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 
 
 import miniErlang.*;
@@ -37,8 +33,9 @@ public class Printer {
 			Program p = (Program)parser.parse(scanner);
 			reader.close();
 			PrettyPrinter printer = p.print();
-			System.out.println(printer.getString());
-
+			try (PrintWriter out = new PrintWriter("prettyPrint.txt")) {
+				out.println(printer.getString());
+			}
 
 		} catch (IOException e) {
 			System.err.println("error (PrettyPrint) : " + e.getMessage());

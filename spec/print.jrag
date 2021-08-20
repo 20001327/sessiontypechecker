@@ -1,246 +1,187 @@
 // Sie müssen ggf. diese Datei an ihre minijava.ast anpassen
 
 aspect PrettyPrint {
-  public class PrettyPrinter {
-    public static String INDENT = "  ";
-    private StringBuilder sb;
+    public class PrettyPrinter {
+        public static String INDENT = "  ";
+        private StringBuilder sb;
 
-    public PrettyPrinter(){
-        sb = new StringBuilder();
-    }
-  
-    public void append(String s) {
-       sb.append(s);
-    }
-    
-    public String getString() {
-       return sb.toString();
-    }
-    
-    public void reset() {
-        sb.setLength(0);
-    }
-  }
+        public PrettyPrinter() {
+            sb = new StringBuilder();
+        }
 
-  //similar to JastAdd Java compiler    
-  syn String ASTNode.indent() {
+        public void append(String s) {
+            sb.append(s);
+        }
+
+        public String getString() {
+            return sb.toString();
+        }
+
+        public void reset() {
+            sb.setLength(0);
+        }
+    }
+
+    //similar to JastAdd Java compiler
+    syn String ASTNode.indent()
+
+    {
         String indent = extractIndent();
         return indent.startsWith("\n") ? indent : ("\n" + indent);
-  }
-
-  syn String ASTNode.extractIndent() {
-      if(getParent() == null)
-           return "";
-      String indent = getParent().extractIndent();
-
-      if(getParent().addsIndentationLevel())
-        indent += PrettyPrinter.INDENT;
-      return indent;
-  }
-
-  syn boolean ASTNode.addsIndentationLevel() = false;
-  eq Program.addsIndentationLevel() = true;
-  eq Module.addsIndentationLevel() = false;
-  eq Function.addsIndentationLevel() = true;
-  eq Form.addsIndentationLevel() = true;
-
-  syn lazy PrettyPrinter Program.printer() {
-    return new PrettyPrinter();
-  }
-
-  eq Program.getModules().printer() = this.printer();
-
-  inh lazy PrettyPrinter Module.printer();
-  inh lazy PrettyPrinter Function.printer();
-/*  inh lazy PrettyPrinter Form.printer();
-  inh lazy PrettyPrinter Message.printer();
-  inh lazy PrettyPrinter Value.printer();
-  inh lazy PrettyPrinter Identificatore.printer();
-  */
-
-  syn PrettyPrinter Program.print() {
-    printer().reset();
-    for (Module module : getModuless()) module.print();
-    return printer();
-  }
-  
-  public void Module.print() {
-    printer().append("{\"partecipant\": \"\" ,");
-    printer().append("\n\"process\": {\n");
-    for (Function f : getFunctionss()) {
-      printer().append(indent() + PrettyPrinter.INDENT);  
-      f.print();
-      printer().append(";\n");
     }
-    printer().append("\n}\n");
-  }
 
-  public void Function.print() {
-    printer().append("\""+getFunctionName()+"\": {");
-    for (Form p : getExpressionss()) {
-      printer().append(indent() + PrettyPrinter.INDENT);  
-      printer().append(indent() + "pattern\n");
-      printer().append(";\n");
+    syn String ASTNode.extractIndent()
+
+    {
+        if (getParent() == null)
+            return "";
+        String indent = getParent().extractIndent();
+
+        if (getParent().addsIndentationLevel())
+            indent += PrettyPrinter.INDENT;
+        return indent;
     }
-    printer().append("\n}\n");
-  }
-  /*
-  public void Pattern.print() {
-    printer.append("\npattern\n");
-  }
+
+    syn boolean ASTNode.addsIndentationLevel() =false;
+    eq Program.addsIndentationLevel() =true;
+    eq Module.addsIndentationLevel() =false;
+    eq Function.addsIndentationLevel() =true;
+    eq Form.addsIndentationLevel() =true;
+
+    syn lazy PrettyPrinter Program.printer() {
+        return new PrettyPrinter();
+    }
+
+    eq Program.getModules().printer() = this.printer();
+    inh lazy PrettyPrinter Module.printer();
+    inh lazy PrettyPrinter Function.printer();
+    inh lazy PrettyPrinter Form.printer();
 
 
-  public void TypedVar.print() {
-    getType().print();
-    printer().append(" " + getIdent());
-  }
-  
-  public abstract void TypeUse.print();
-  public void IntArray.print() {
-    printer().append("int[]");
-  }
-  public void Bool.print() {
-    printer().append("boolean");
-  }
-  public void Int.print() {
-    printer().append("int");
-  }
-  public void ClassT.print() {
-    printer().append(getName());
-  }
-  
-  public abstract void Stmt.print();
-  public void Block.print() {
-    printer().append(indent() + "{");
-    for (Stmt s : getStmtss()) s.print();
-    printer().append(indent() + "}");
-  }
-  public void Assign.print() {
-    printer().append(indent());
-    getName().print();
-    printer().append(" = ");
-    getRhs().print();
-    printer().append(";");
-  }
-  public void ArrayAssign.print() {
-    printer().append(indent());
-    getName().print();
-    printer().append("[");
-    getOffset().print();
-    printer().append("] = "); 
-    getExp().print();
-    printer().append(";");
-  }
-  public void If.print() {
-    printer().append(indent() + "if (");
-    getCond().print();
-    printer().append(")");
-    getTStmt().print();
-    printer().append(indent() + "else ");
-    getFStmt().print();
-  }
-  public void While.print() {
-    printer().append(indent() + "while (");
-    getCond().print();
-    printer().append(")");
-    getBody().print();
-  }
-  public void Print.print() {
-    printer().append(indent() + "System.out.println(");
-    getExp().print();
-    printer().append(");");
-  }
 
-  abstract void Exp.print();
-  public void And.print() {
-    printer().append("(");
-    getLeft().print();
-    printer().append(" && ");
-    getRight().print();
-    printer().append(")");
-  }
-    public void Cmp.print() {
-    printer().append("(");
-    getLeft().print();
-    printer().append(" < ");
-    getRight().print();
-    printer().append(")");
-  }
-    public void Add.print() {
-    printer().append("(");
-    getLeft().print();
-    printer().append(" + ");
-    getRight().print();
-    printer().append(")");
-  }
-  public void Sub.print() {
-    printer().append("(");
-    getLeft().print();
-    printer().append(" - ");
-    getRight().print();
-    printer().append(")");
-  }
-  public void Mult.print() {
-    printer().append("(");
-    getLeft().print();
-    printer().append(" * ");
-    getRight().print();
-    printer().append(")");
-  }
-  public void Not.print() {
-    printer().append("!(");
-    getExp().print();
-    printer().append(")");
-  }
-  public void Neg.print() {
-    printer().append("-(");
-    getExp().print();
-    printer().append(")");
-  }
-  public void IdentUse.print() {
-    printer().append(getName());
-  }  
-  public void ArrayAlloc.print() {
-    printer().append("new int[");
-    getSize().print();
-    printer().append("]");
-  }  
-  public void ObjAlloc.print() {
-    printer().append("new " + getName() + "()");
-  }  
-  public void ArrayLookup.print() {
-    getExp().print();
-    printer().append("[");
-    getOffset().print();
-    printer().append("]");
-  }  
-  public void ArrayLength.print() {
-    getExp().print();
-    printer().append(".length");
-  }  
-  public void MethodCall.print() {
-    getObj().print();
-    printer().append("." + getName() + "(");
-    if (getNumArgs() > 0) {
-      getArgs(0).print();
-      for (int i = 1; i < getNumArgs(); i++) {
-        printer().append(", ");
-        getArgs(i).print();
-      }
-    } 
-    printer().append(")");
-  }  
-  public void IntLiteral.print() {
-    printer().append(getInteger().toString());
-  } 
-  public void True.print() {
-    printer().append("true");
-  }
-  public void False.print() {
-    printer().append("false");
-  }
-  public void This.print() {
-    printer().append("this");
-  }
-  */
+    syn PrettyPrinter Program.print()
+
+    {
+        printer().reset();
+        for (Module module : getModuless()) module.print();
+        return printer();
+    }
+
+    public void Module.print() {
+        printer().append("{\n\"partecipant\": \"" + getPartecipant() + "\" ,");
+        printer().append("\n\"process\": {");
+        for (Function f : getFunctionss()) {
+            f.print();
+        }
+        printer().append("\n}");
+        printer().append("\n}");
+    }
+
+    public void Function.print() {
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("\"" + getFunctionName() + "\": {");
+        for (Form p : getExpressionss()) {
+            p.print();
+        }
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("}");
+    }
+
+    public void Clause.print(){
+        printer().append("\"clause\":{");
+        printer().append(indent() + PrettyPrinter.INDENT +
+                "\"arguments\":[");
+        for (Pattern pattern : getPatternVars()) {
+            if(pattern!=null){
+                pattern.print();
+                printer().append(",");
+            }
+        }
+        printer().append("],");
+        printer().append( "\"body\":{");
+        for (Form form : getFormss()) {
+            form.print();
+            printer().append(",");
+        }
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("}");
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("}");
+    }
+
+    public void Pattern.print(){
+        printer().append("Pattern");
+    }
+
+    public void Form.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Form");
+    }
+
+    public void Register.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Register");
+    }
+
+    public void Unregister.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Unregister");
+    }
+
+    public void Call.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Call");
+    }
+
+    public void Match.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Match");
+    }
+
+    public void Case.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Case");
+    }
+
+    public void Receive.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Receive");
+    }
+
+    public void Send.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Send");
+    }
+
+    public void Operator.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Operator");
+    }
+
+    public void Tuple.print(){
+        printer().append("Tuple");
+    }
+
+    public void Atom.print(){
+        printer().append("Atom");
+    }
+
+    public void CharList.print(){
+        printer().append("CharList");
+    }
+
+    public void Number.print(){
+        printer().append("Number");
+    }
+
+    public void Variable.print(){
+        printer().append("Variable");
+    }
+
+    public void Pid.print(){
+        printer().append("Pid");
+    }
+
+
+
 }

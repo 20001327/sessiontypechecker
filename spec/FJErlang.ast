@@ -1,7 +1,7 @@
 /*  Abstract syntax for two buyer in erlang */
 
 Program ::= Modules:Module*;
-Module::= Functions:Function*;
+Module::= <Partecipant:String> Functions:Function*;
 
 Actor ::= <ActorName:String>;
 Type ::= <Type:String>;
@@ -13,7 +13,7 @@ Register:Form ::= Name:Atom MyPid:Pid;
 Unregister:Form ::= Name:Atom;
 Call:Form ::= FunctionName:Atom Arguments:Value*;
 Match:Form ::= LeftForm:Variable RightForm:Form;
-Case ::= MatchingForm:Form Patterns:Clause*;
+Case:Form ::= MatchingForm:Form Patterns:Clause*;
 Receive:Form ::= Patterns:Clause*;
 Send:Form ::= LeftOp:Value RightOp:Tuple;
 Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Value;
