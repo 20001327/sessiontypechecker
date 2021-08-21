@@ -19,22 +19,22 @@ Unregister:Production ::= Name:Atom;
 
 Clause::= PatternVar:Pattern* GuardValues:Match* Forms:Production*;
 
-Message ::= Sender:Identifier Recipient:Atom Payload:Expression*;
-
 /*  expressions  */
 abstract Expression:Production;
 Pattern:Expression;
 Operator:Expression ::= <OperatorSymbol:String> LeftOp:Expression RightOp:Expression;
 Call:Expression ::= FunctionName:Atom Arguments:Expression*;
+Self:Expression;
 
 
 /*  litterals  */
+Message:Pattern ::= Sender:Identifier Recipient:Atom Payload:Expression*;
 abstract Litteral:Pattern;
 Pid:Litteral::= <Pid:String>;
 CharList:Litteral ::= <StringValue:String>;
 Number:Litteral ::= <IntegerValue:Integer>;
 Boolean:Litteral ::= <BooleanValue:Boolean>;
 
-abstract Identifier:Value;
+abstract Identifier:Pattern;
 Variable:Identifier::= <Ident:String>;
 Atom:Identifier::= <AtomValue:String>;

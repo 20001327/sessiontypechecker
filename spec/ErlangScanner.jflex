@@ -58,7 +58,8 @@ Symbol         = \=|\-|\*|\+|\/|\\
 "string"             { return sym(Terminals.STRING); }
 "attribute"          { return sym(Terminals.ATTRIBUTE); }
 "module"             { return sym(Terminals.MODULE); }
-"type"             { return sym(Terminals.TYPE); }
+"type"               { return sym(Terminals.TYPE); }
+"start"              { return sym(Terminals.START); }
 
 "string"             { return sym(Terminals.STRING); }
 "atom"               { return sym(Terminals.ATOM); }

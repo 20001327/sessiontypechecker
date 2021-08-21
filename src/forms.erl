@@ -528,7 +528,7 @@ read_to_binary(Module,Filename) ->
   NewTree = filter(
     fun(Form) ->
         case Form of
-          {function,_,init,_,_} ->true;
+          {function,_,_,_,_} ->true;
           {attribute,_,type,_} ->true;
           {attribute,_,module,_} ->true;
           _ ->false
