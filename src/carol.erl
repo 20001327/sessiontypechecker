@@ -18,6 +18,7 @@ init() ->
               receive
                 {seller, date, Date} ->
                   io:format("carol delegating: received Date ~n"),
+                  %% delegation tutto il codice dentro delegato
                   unregister(Name),
                   register(carol, self()),
                   ReturnPid ! {carol, end_delegation},

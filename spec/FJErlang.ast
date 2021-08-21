@@ -8,26 +8,33 @@ Type ::= <Type:String>;
 Function ::= <FunctionName:String> <ArgumentsNumber:Integer> Expressions:Pattern*;
 
 
-abstract Form;
-Register:Form ::= Name:Atom MyPid:Pid;
-Unregister:Form ::= Name:Atom;
-Call:Form ::= FunctionName:Atom Arguments:Value*;
-Match:Form ::= LeftForm:Variable RightForm:Form;
-Case:Form ::= MatchingForm:Form Patterns:Clause*;
-Receive:Form ::= Patterns:Clause*;
-Send:Form ::= LeftOp:Value RightOp:Tuple;
-Operator:Form ::= <OperatorSymbol:String> LeftOp:Value RightOp:Value;
+abstract Production;
+Send:Production ::= Recipient:Atom Message:Message;
+Receive:Production ::= Patterns:Clause*;
+Case:Production ::= MatchingForm:Expression* Patterns:Clause*;
+Let:Production ::= LeftForm:Variable RightForm:Expression;
 
-Clause:Form::= PatternVar:Pattern* GuardValues:Match* Forms:Form*;
+Register:Production ::= Name:Atom MyPid:Pid;
+Unregister:Production ::= Name:Atom;
 
-abstract Pattern:Form;
+Clause::= PatternVar:Pattern* GuardValues:Match* Forms:Production*;
 
-Tuple:Pattern ::= Fields:Value*;
+Message ::= Sender:Identifier Recipient:Atom Payload:Expression*;
 
-abstract Value:Pattern;
-Atom:Value::= <AtomValue:String>;
-CharList:Value ::= <StringValue:String>;
-Number:Value ::= <IntegerValue:Integer>;
+/*  expressions  */
+abstract Expression:Production;
+Pattern:Expression;
+Operator:Expression ::= <OperatorSymbol:String> LeftOp:Expression RightOp:Expression;
+Call:Expression ::= FunctionName:Atom Arguments:Expression*;
+
+
+/*  litterals  */
+abstract Litteral:Pattern;
+Pid:Litteral::= <Pid:String>;
+CharList:Litteral ::= <StringValue:String>;
+Number:Litteral ::= <IntegerValue:Integer>;
+Boolean:Litteral ::= <BooleanValue:Boolean>;
+
 abstract Identifier:Value;
 Variable:Identifier::= <Ident:String>;
-Pid:Identifier::= <Pid:String>;
+Atom:Identifier::= <AtomValue:String>;
