@@ -204,6 +204,8 @@ aspect PrettyPrint {
         printer().append(getPid());
     }
 
+    /* never used */
+
     public void Pattern.print(){
         printer().append("Pattern");
     }
