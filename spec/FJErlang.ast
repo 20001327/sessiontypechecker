@@ -5,7 +5,7 @@ Module::= <Partecipant:String> Functions:Function*;
 
 Actor ::= <ActorName:String>;
 Type ::= <Type:String>;
-Function ::= <FunctionName:String> <ArgumentsNumber:Integer> Expressions:Pattern*;
+Function ::= <FunctionName:String> <ArgumentsNumber:Integer> Clauses:Clause*;
 
 
 abstract Production;
@@ -17,7 +17,7 @@ Let:Production ::= LeftForm:Variable RightForm:Expression;
 Register:Production ::= Name:Atom MyPid:Pid;
 Unregister:Production ::= Name:Atom;
 
-Clause::= PatternVar:Pattern* GuardValues:Match* Forms:Production*;
+Clause::= PatternVar:Pattern* GuardValues:Let* Forms:Production*;
 
 /*  expressions  */
 abstract Expression:Production;

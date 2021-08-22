@@ -1,7 +1,6 @@
+import miniErlang.Expression;
+
 // Sie müssen ggf. diese Datei an ihre minijava.ast anpassen
-
-import miniErlang.Value;
-
 aspect PrettyPrint {
     public class PrettyPrinter {
         public static String INDENT = "  ";
@@ -48,7 +47,7 @@ aspect PrettyPrint {
     eq Program.addsIndentationLevel() =true;
     eq Module.addsIndentationLevel() =false;
     eq Function.addsIndentationLevel() =true;
-    eq Form.addsIndentationLevel() =true;
+    eq Production.addsIndentationLevel() =true;
 
     syn lazy PrettyPrinter Program.printer() {
         return new PrettyPrinter();
@@ -57,7 +56,12 @@ aspect PrettyPrint {
     eq Program.getModules().printer() = this.printer();
     inh lazy PrettyPrinter Module.printer();
     inh lazy PrettyPrinter Function.printer();
-    inh lazy PrettyPrinter Form.printer();
+    inh lazy PrettyPrinter Production.printer();
+
+    eq Function.getClauses().printer() = this.printer();
+    eq Receive.getPatterns().printer() = this.printer();
+    eq Case.getPatterns().printer() = this.printer();
+    inh lazy PrettyPrinter Clause.printer();
 
 
 
@@ -82,7 +86,7 @@ aspect PrettyPrint {
     public void Function.print() {
         printer().append(indent() + PrettyPrinter.INDENT);
         printer().append("\"" + getFunctionName() + "\": {");
-        for (Form p : getExpressionss()) {
+        for (Clause p : getClausess()) {
             p.print();
         }
         printer().append(indent() + PrettyPrinter.INDENT);
@@ -101,7 +105,7 @@ aspect PrettyPrint {
         }
         printer().append("],");
         printer().append( "\"body\":{");
-        for (Form form : getFormss()) {
+        for (Production form : getFormss()) {
             form.print();
             printer().append(",");
         }
@@ -124,14 +128,14 @@ aspect PrettyPrint {
         printer().append(indent() + PrettyPrinter.INDENT + "\"");
         getFunctionName().print();
         printer().append("_call\":{ \"arguments\":[");
-        for(Value v: getArgumentss()){
+        for(Expression v: getArgumentss()){
             v.print();
         }
         printer().append("]");
         printer().append("}");
     }
 
-    public void Match.print(){
+    public void Let.print(){
         printer().append(indent() + PrettyPrinter.INDENT + "\"let\":{");
         printer().append("\"left_side\":");
         getLeftForm().print();
@@ -159,9 +163,9 @@ aspect PrettyPrint {
     public void Send.print(){
         printer().append(indent() + PrettyPrinter.INDENT + "\"send\":{ ");
         printer().append("\"recipient\":\"");
-        getLeftOp().print();printer().append("\",");
+        getRecipient().print();printer().append("\",");
         printer().append("\"message\":\"");
-        getRightOp().print();
+        getMessage().print();
         printer().append("\"}");
     }
 
@@ -175,9 +179,9 @@ aspect PrettyPrint {
         printer().append("\"}");
     }
 
-    public void Tuple.print(){
+    public void Message.print(){
         printer().append("{");
-        for (Value value : getFieldss()){
+        for (Expression value : getPayloads()){
             value.print();
             printer().append(",");
         }
@@ -209,10 +213,13 @@ aspect PrettyPrint {
     public void Pattern.print(){
         printer().append("Pattern");
     }
-    public void Form.print(){
+    public void Production.print(){
         printer().append("Form");
     }
-    public void Value.print(){
+    public void Litteral.print(){
+        printer().append("Value");
+    }
+    public void Expression.print(){
         printer().append("Value");
     }
 

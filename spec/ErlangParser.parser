@@ -42,7 +42,8 @@ List function_list =
 ;
 
 Function function =
-type? LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA INTEGER.numArguments COMMA LBRACKET clause_list.patterns RBRACKET RCURLYBRACE
+type? LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber COMMA IDENTIFIER.funName COMMA
+INTEGER.numArguments COMMA LBRACKET clause_list.patterns RBRACKET RCURLYBRACE
      {: return new Function(funName, Integer.parseInt(numArguments), patterns); :}
 ;
 
@@ -52,8 +53,11 @@ Type type =
  ;
 
 Clause clause =
-    LCURLYBRACE CLAUSE COMMA INTEGER.rowNumber COMMA LBRACKET pattern_list.patterns RBRACKET COMMA LBRACKET let_list.matches? RBRACKET COMMA LBRACKET production_list RBRACKET RCURLYBRACE
-       {: return new Clause(patterns, matches, form_list); :}
+    LCURLYBRACE CLAUSE COMMA INTEGER.rowNumber COMMA
+    LBRACKET pattern_list.patterns RBRACKET COMMA
+    LBRACKET let_list.matches? RBRACKET COMMA
+    LBRACKET production_list RBRACKET RCURLYBRACE
+       {: return new Clause(patterns, matches, production_list); :}
 ;
 
 List clause_list =
@@ -67,7 +71,9 @@ Production production =
         {: return new Send(dest, message); :}
 |	LCURLYBRACE RECEIVE COMMA INTEGER.rowNumber COMMA LBRACKET clause_list.clauses RBRACKET RCURLYBRACE
  		{: return new Receive(clauses); :}
-|   LCURLYBRACE CASE COMMA INTEGER.rowNumber COMMA production.matchingForm COMMA LBRACKET clause_list.clauses RBRACKET RCURLYBRACE
+|   LCURLYBRACE CASE COMMA INTEGER.rowNumber COMMA
+    Expression.matchingForm COMMA
+    LBRACKET clause_list.clauses RBRACKET RCURLYBRACE
         {: return new Case(matchingForm, clauses); :}
 |   let
 ;
@@ -105,8 +111,8 @@ Expression expression =
 ;
 
 List expression_list =
-	expression   		        {: return new List().add(expression);	:}
-|	expression_list COMMA let    	{: return let_list.add(expression); :}
+	expression   		                    {: return new List().add(expression);	:}
+|	expression_list COMMA expression    	{: return let_list.add(expression); :}
  ;
 
 Pattern pattern =
@@ -117,8 +123,8 @@ Pattern pattern =
 
 
 List pattern_list =
-	pattern   		        {: return new List().add(pattern);	:}
-|	pattern_list COMMA let    	{: return let_list.add(pattern); :}
+	pattern   		                {: return new List().add(pattern);	:}
+|	pattern_list COMMA pattern    	{: return let_list.add(pattern); :}
  ;
 
 Message message =
@@ -127,13 +133,8 @@ Message message =
         {: return new Message(id,recipient,expression_list); :}
 ;
 
-List litteral_list =
-   litteral                 {: return new List().add(litteral); :}
-|  litteral_list COMMA litteral     {: return litteral_list.add(litteral); :}
-;
-
 Litteral litteral =
-|   atom
+    atom
 |   pid
 |   number
 |   charlist
