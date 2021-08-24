@@ -1,0 +1,228 @@
+import miniErlang.Expression;
+
+// Sie müssen ggf. diese Datei an ihre minijava.ast anpassen
+aspect PrettyPrint {
+    public class PrettyPrinter {
+        public static String INDENT = "  ";
+        private StringBuilder sb;
+
+        public PrettyPrinter() {
+            sb = new StringBuilder();
+        }
+
+        public void append(String s) {
+            sb.append(s);
+        }
+
+        public String getString() {
+            return sb.toString();
+        }
+
+        public void reset() {
+            sb.setLength(0);
+        }
+    }
+
+    //similar to JastAdd Java compiler
+    syn String ASTNode.indent()
+
+    {
+        String indent = extractIndent();
+        return indent.startsWith("\n") ? indent : ("\n" + indent);
+    }
+
+    syn String ASTNode.extractIndent()
+
+    {
+        if (getParent() == null)
+            return "";
+        String indent = getParent().extractIndent();
+
+        if (getParent().addsIndentationLevel())
+            indent += PrettyPrinter.INDENT;
+        return indent;
+    }
+
+    syn boolean ASTNode.addsIndentationLevel() =false;
+    eq Program.addsIndentationLevel() =true;
+    eq Module.addsIndentationLevel() =false;
+    eq Function.addsIndentationLevel() =true;
+    eq Production.addsIndentationLevel() =true;
+
+    syn lazy PrettyPrinter Program.printer() {
+        return new PrettyPrinter();
+    }
+
+    eq Program.getModules().printer() = this.printer();
+    inh lazy PrettyPrinter Module.printer();
+    inh lazy PrettyPrinter Function.printer();
+    inh lazy PrettyPrinter Production.printer();
+
+    eq Function.getClauses().printer() = this.printer();
+    eq Receive.getPatterns().printer() = this.printer();
+    eq Case.getPatterns().printer() = this.printer();
+    inh lazy PrettyPrinter Clause.printer();
+
+
+
+    syn PrettyPrinter Program.print()
+
+    {
+        printer().reset();
+        for (Module module : getModuless()) module.print();
+        return printer();
+    }
+
+    public void Module.print() {
+        printer().append("{\n\"partecipant\": \"" + getPartecipant() + "\" ,");
+        printer().append("\n\"process\": {");
+        for (Function f : getFunctionss()) {
+            f.print();
+        }
+        printer().append("\n}");
+        printer().append("\n}");
+    }
+
+    public void Function.print() {
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("\"" + getFunctionName() + "\": {");
+        for (Clause p : getClausess()) {
+            p.print();
+        }
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("}");
+    }
+
+    public void Clause.print(){
+        printer().append("\"clause\":{");
+        printer().append(indent() + PrettyPrinter.INDENT +
+                "\"arguments\":[");
+        for (Pattern pattern : getPatternVars()) {
+            if(pattern!=null){
+                pattern.print();
+                printer().append(",");
+            }
+        }
+        printer().append("],");
+        printer().append( "\"body\":{");
+        for (Production form : getFormss()) {
+            form.print();
+            printer().append(",");
+        }
+        printer().append("}");
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("}");
+    }
+
+    public void Register.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Register");
+    }
+
+    public void Unregister.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Unregister");
+    }
+
+    public void Call.print(){
+        printer().append(indent() + PrettyPrinter.INDENT + "\"");
+        getFunctionName().print();
+        printer().append("_call\":{ \"arguments\":[");
+        for(Expression v: getArgumentss()){
+            v.print();
+        }
+        printer().append("]");
+        printer().append("}");
+    }
+
+    public void Let.print(){
+        printer().append(indent() + PrettyPrinter.INDENT + "\"let\":{");
+        printer().append("\"left_side\":");
+        getLeftForm().print();
+        printer().append(",");
+        printer().append("\"right_side\":{");
+        getRightForm().print();
+        printer().append("}");
+
+        printer().append("}");
+    }
+
+    public void Case.print(){
+        printer().append(indent() + PrettyPrinter.INDENT);
+        printer().append("Case");
+    }
+
+    public void Receive.print(){
+        printer().append(indent() + PrettyPrinter.INDENT + "\"receive\":{ ");
+        for(Clause c: getPatternss()){
+            c.print();
+        }
+        printer().append("}");
+    }
+
+    public void Send.print(){
+        printer().append(indent() + PrettyPrinter.INDENT + "\"send\":{ ");
+        printer().append("\"recipient\":\"");
+        getRecipient().print();printer().append("\",");
+        printer().append("\"message\":\"");
+        getMessage().print();
+        printer().append("\"}");
+    }
+
+    public void Operator.print(){
+        printer().append(indent() + PrettyPrinter.INDENT +
+                "\""+getOperatorSymbol()+"\":{ ");
+        printer().append("\"left_side\":\"");
+        getLeftOp().print();printer().append("\",");
+        printer().append("\"right_side\":\"");
+        getRightOp().print();
+        printer().append("\"}");
+    }
+
+    public void Message.print(){
+        printer().append("{");
+        for (Expression value : getPayloads()){
+            value.print();
+            printer().append(",");
+        }
+        printer().append("}");
+    }
+
+    public void Atom.print(){
+        printer().append(getAtomValue());
+    }
+
+    public void CharList.print(){
+        printer().append(getStringValue());
+    }
+
+    public void Number.print(){
+        printer().append(Integer.toString(getIntegerValue()));
+    }
+
+    public void Variable.print(){
+        printer().append("{\"var\":"+getIdent().replace("'","\"")+"}");
+    }
+
+    public void Pid.print(){
+        printer().append(getPid());
+    }
+
+    /* never used */
+
+    public void Pattern.print(){
+        printer().append("Pattern");
+    }
+    public void Production.print(){
+        printer().append("Form");
+    }
+    public void Litteral.print(){
+        printer().append("Value");
+    }
+    public void Expression.print(){
+        printer().append("Value");
+    }
+
+
+
+}

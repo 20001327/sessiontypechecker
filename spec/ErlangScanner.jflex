@@ -60,6 +60,8 @@ Symbol         = \=|\-|\*|\+|\/|\\
 "module"             { return sym(Terminals.MODULE); }
 "type"               { return sym(Terminals.TYPE); }
 "start"              { return sym(Terminals.START); }
+"true"               { return sym(Terminals.TRUE); }
+"false"              { return sym(Terminals.FALSE); }
 
 "string"             { return sym(Terminals.STRING); }
 "atom"               { return sym(Terminals.ATOM); }

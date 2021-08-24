@@ -2,44 +2,64 @@
 
 Program ::= Modules:Module*;
 Module::= <Partecipant:String> Functions:Function*;
-/* start - function come secondo argomento */
 
-Type ::= <Type:String>;
-Function ::= <FunctionName:String> <ArgumentsNumber:Integer> Clauses:Clause*;
+Function ::= <FunType:String> <FunctionName:String> Parameters:Variable* Body:Process;
 
-abstract Term:
+Message ::= Sender:SenderId Label:Atom Payload:Expression*;
 
-abstract Process:Term;                                    // Process
-Send:Process ::= Recipient:Atom Message:Message;
-Receive:Process ::= Patterns:ReceiveClause*;
-Case:Process ::= MatchingForm:Expression* Patterns:Clause*;
-Let:Process ::= LeftForm:Variable RightForm:Expression;
+ReceiveClause ::= Sender:Atom Label:Atom Variables:Variable* Actions:Process;
+Clause ::= Patterns:Pattern* Actions:Process;
 
-Register:Production ::= Name:Atom MyPid:Pid;
-Unregister:Production ::= Name:Atom;
-
-Clause::= PatternVar:Pattern* /* GuardValues:Let* */ Forms:Production*;
-ReceiveClause::= PatternVar:Pattern* GuardValues:Let* Forms:Production*;// sender:atom label:atom payload:variables
-//receive pattern
-//case pattern
-//function pattern
+abstract Process;
+Send:Process ::= Recipient:Atom Message:Message Next:Process;
+Receive:Process ::= Clauses:ReceiveClause*;
+Case:Process ::= Matching:Expression* Clauses:CaseClause*;
+Let:Process ::= Left:Variable Right:Expression Next:Process;
+ExpressionProcess:Process ::= Expression:Expression;
 
 /*  expressions  */
-abstract Expression:Term;
-Pattern:Expression;
+abstract Expression;
 Operator:Expression ::= <OperatorSymbol:String> LeftOp:Expression RightOp:Expression;
 Call:Expression ::= FunctionName:Atom Arguments:Expression*;
 Self:Expression;
 
 
-/*  litterals  */
-Message:Pattern ::= Sender:Identifier Label:Atom Payload:Expression*;
-abstract Litteral:Pattern;
-Pid:Litteral::= <Pid:String>;
-CharList:Litteral ::= <StringValue:String>;
-Number:Litteral ::= <IntegerValue:Integer>;
-Boolean:Litteral ::= <BooleanValue:Boolean>;
+/*  literals  */
+abstract Pattern:Expression;
+abstract Literal:Pattern;
+Atom:Literal ::= <Ident:String>;
+Pid:Literal::= <Pid:String>;
+CharList:Literal ::= <StringValue:String>;
+Number:Literal ::= <IntegerValue:Integer>;
+Boolean:Literal ::= <BooleanValue:Boolean>;
 
-abstract Identifier:Pattern;
-Variable:Identifier::= <Ident:String>;
-Atom:Identifier::= <AtomValue:String>;
+Variable:Pattern::= <Ident:String>;
+
+SenderId;
+AtomSender:SenderId ::= <Ident:String>;
+VarSender:SenderId ::= <Ident:String>;
+
+/*  Abstract syntax for session types three buyer in erlang */
+S ::= T | p?a<T>.S | p!a<T>.S | /\( SIn ) | \/( SOut )  |  p<<.S | <<p.S | p>>.S | >>p.S
+
+SIn ::=  SIn,p?a<T>.S |  p?a<T>.S
+
+SOut ::=  SOut,p!a<T>.S |  p!a<T>.S
+FuntType ::= T* -> S
+*/
+
+abstract Session:
+SessionLiteral:Session ::= Literal:Literal;
+SessionSend:Session ::= Sender:Atom Label:Atom <Type:String> Next:Session;
+InternalChoice:Session ::= Sends:SessionSend*;
+ExternalChoice:Session ::= Receives:SessionReceive*;
+RequestForwardDelegation ::= Delegating:Atom Next:Session;
+RequestBackwardDelegation ::= Delegating:Atom Next:Session;
+AcceptForwardDelegation ::= Delegate:Atom Next:Session;
+AcceptBackwardDelegation ::= Delegate:Atom Next:Session;
+
+SessionReceive ::= Recipient:Atom Label:Atom <Type:String> Next:Session;
+
+
+
+
