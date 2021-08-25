@@ -67,6 +67,7 @@ Symbol         = \=|\-|\*|\+|\/|\\
 "atom"               { return sym(Terminals.ATOM); }
 "tuple"              { return sym(Terminals.TUPLE); }
 "integer"            { return sym(Terminals.INTTYPE); }
+"nil"                { return sym(Terminals.NULL); }
 
 
 "{"                   { return sym(Terminals.LCURLYBRACE); }

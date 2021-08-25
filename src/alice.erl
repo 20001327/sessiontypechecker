@@ -14,10 +14,10 @@ init() ->
       BobQuote = Quote / 2,
       bob ! {alice, myquote, BobQuote},
       receive
-        {bob, ok} ->
+        {bob, myquote, ok} ->
           ok;
           %%io:format("ALICE: ok from bob ~n");
-        {bob, quit} ->
+        {bob, quit, quit} ->
           quit
           %%io:format("ALICE: quit from bob ~n")
       end

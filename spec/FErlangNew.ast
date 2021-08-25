@@ -5,20 +5,22 @@ Module::= <Partecipant:String> Functions:Function*;
 
 Function ::= <FunType:String> <FunctionName:String> Parameters:Variable* Body:Process;
 
-Message ::= Sender:SenderId Label:Atom Payload:Expression*;
+abstract Term;
 
-ReceiveClause ::= Sender:Atom Label:Atom Variables:Variable* Actions:Process;
-Clause ::= Patterns:Pattern* Actions:Process;
+Message:Term ::= Sender:SenderId Label:Atom Payload:Expression*;
 
-abstract Process;
+ReceiveClause:Term ::= Sender:Atom Label:Atom Variables:Pattern* Actions:Process;
+CaseClause:Term ::= Patterns:Pattern* Actions:Process;
+
+abstract Process:Term;
 Send:Process ::= Recipient:Atom Message:Message Next:Process;
-Receive:Process ::= Clauses:ReceiveClause*;
+Receive:Process ::= Clauses:ReceiveClause* [Next:Process];
 Case:Process ::= Matching:Expression* Clauses:CaseClause*;
 Let:Process ::= Left:Variable Right:Expression Next:Process;
 ExpressionProcess:Process ::= Expression:Expression;
 
 /*  expressions  */
-abstract Expression;
+abstract Expression:Term;
 Operator:Expression ::= <OperatorSymbol:String> LeftOp:Expression RightOp:Expression;
 Call:Expression ::= FunctionName:Atom Arguments:Expression*;
 Self:Expression;
@@ -31,24 +33,16 @@ Atom:Literal ::= <Ident:String>;
 Pid:Literal::= <Pid:String>;
 CharList:Literal ::= <StringValue:String>;
 Number:Literal ::= <IntegerValue:Integer>;
-Boolean:Literal ::= <BooleanValue:Boolean>;
+Boolean:Literal ::= <BooleanValue:boolean>;
+Null:Literal;
 
 Variable:Pattern::= <Ident:String>;
 
-SenderId;
+SenderId:Term;
 AtomSender:SenderId ::= <Ident:String>;
 VarSender:SenderId ::= <Ident:String>;
 
-/*  Abstract syntax for session types three buyer in erlang */
-S ::= T | p?a<T>.S | p!a<T>.S | /\( SIn ) | \/( SOut )  |  p<<.S | <<p.S | p>>.S | >>p.S
-
-SIn ::=  SIn,p?a<T>.S |  p?a<T>.S
-
-SOut ::=  SOut,p!a<T>.S |  p!a<T>.S
-FuntType ::= T* -> S
-*/
-
-abstract Session:
+abstract Session:Term;
 SessionLiteral:Session ::= Literal:Literal;
 SessionSend:Session ::= Sender:Atom Label:Atom <Type:String> Next:Session;
 InternalChoice:Session ::= Sends:SessionSend*;
@@ -58,7 +52,7 @@ RequestBackwardDelegation ::= Delegating:Atom Next:Session;
 AcceptForwardDelegation ::= Delegate:Atom Next:Session;
 AcceptBackwardDelegation ::= Delegate:Atom Next:Session;
 
-SessionReceive ::= Recipient:Atom Label:Atom <Type:String> Next:Session;
+SessionReceive:Term ::= Recipient:Atom Label:Atom <Type:String> Next:Session;
 
 
 

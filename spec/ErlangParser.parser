@@ -17,18 +17,18 @@ program goal =
 ;
 
 Module module =  /* Ci mettiamo dentro anche la start */
-    LBRACKET actor COMMA
-        LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber
-            COMMA START COMMA INTEGER.numArguments COMMA LBRACKET clause_list.patterns RBRACKET
+   LBRACKET
+    LCURLYBRACE ATTRIBUTE COMMA INTEGER COMMA MODULE COMMA IDENTIFIER.value RCURLYBRACE COMMA
+        LCURLYBRACE FUNCTION COMMA INTEGER
+            COMMA START COMMA INTEGER COMMA
+            LBRACKET
+                LCURLYBRACE CLAUSE COMMA INTEGER COMMA LBRACKET RBRACKET COMMA
+                LBRACKET RBRACKET COMMA LBRACKET process RBRACKET RCURLYBRACE
+            RBRACKET
         RCURLYBRACE COMMA
     function_list
     RBRACKET
-    {: return new Module(actor.getActorName(), function_list); :}
-;
-
-Actor actor =
-   LCURLYBRACE ATTRIBUTE COMMA INTEGER.rowNumber COMMA MODULE COMMA IDENTIFIER.value RCURLYBRACE
-   {: return new Actor(value); :}
+    {: return new Module(value, function_list); :}
 ;
 
 List module_list =
@@ -37,47 +37,57 @@ List module_list =
 ;
 
 List function_list =
-	function		        {: return new List().add(function);	:}
+	function		                {: return new List().add(function);	:}
 |	function_list COMMA function	{: return function_list.add(function); :}
 ;
 
 Function function =
-type?
-LCURLYBRACE FUNCTION COMMA INTEGER.rowNumber
+LCURLYBRACE FUNCTION COMMA INTEGER COMMA IDENTIFIER.funName COMMA INTEGER COMMA
+    LBRACKET
+            LCURLYBRACE CLAUSE COMMA INTEGER COMMA
+            LBRACKET variable_list.vars RBRACKET COMMA LBRACKET RBRACKET COMMA
+            LBRACKET process RBRACKET RCURLYBRACE
+    RBRACKET
+RCURLYBRACE
+     {: return new Function("", funName, vars, process); :}
+|
+LCURLYBRACE ATTRIBUTE COMMA INTEGER COMMA TYPE COMMA LCURLYBRACE IDENTIFIER.funType COMMA atom COMMA LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
+LCURLYBRACE FUNCTION COMMA INTEGER
     COMMA IDENTIFIER.funName COMMA
     INTEGER.numArguments COMMA
-    LBRACKET clause.cl RBRACKET
+    LBRACKET
+                LCURLYBRACE CLAUSE COMMA INTEGER COMMA
+                LBRACKET variable_list.vars? RBRACKET COMMA
+                LBRACKET RBRACKET COMMA LBRACKET process RBRACKET RCURLYBRACE
+    RBRACKET
 RCURLYBRACE
-     {: return new Function(type, funName, cl.getPatternss(),cl.getProcess()); :}
+     {: return new Function(funType, funName, vars, process); :}
 ;
 
-Type type =
-   LCURLYBRACE ATTRIBUTE COMMA INTEGER.rowNumber COMMA TYPE COMMA LCURLYBRACE IDENTIFIER.funType COMMA atom COMMA LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
-   {: return funType; :}
- ;
-
-
 ReceiveClause receive_clause =
-    LCURLYBRACE CLAUSE COMMA INTEGER.rowNumber COMMA
+    LCURLYBRACE CLAUSE COMMA INTEGER COMMA
     LBRACKET
         LCURLYBRACE
-            atom.sender COMMA atom.label COMMA variable_list.vars
+            TUPLE COMMA INTEGER COMMA
+            LBRACKET
+            atom.sender COMMA atom.label COMMA pattern_list.vars
+            RBRACKET
         RCURLYBRACE
     RBRACKET COMMA LBRACKET RBRACKET COMMA
     LBRACKET process RBRACKET RCURLYBRACE
-       {: return new Clause(sende, process); :}
+       {: return new ReceiveClause(sender, label, vars, process); :}
 ;
 
-Clause receive_clause =
-    LCURLYBRACE CLAUSE COMMA INTEGER.rowNumber COMMA
+CaseClause case_clause =
+    LCURLYBRACE CLAUSE COMMA INTEGER COMMA
     LBRACKET pattern_list.patterns RBRACKET COMMA
     LBRACKET RBRACKET COMMA LBRACKET process RBRACKET RCURLYBRACE
-       {: return new Clause(patterns, process); :}
+       {: return new CaseClause(patterns, process); :}
 ;
 
-List clause_list =
-	clause   		                                {: return new List().add(clause);	:}
-|	clause_list COMMA clause    	                {: return clause_list.add(clause); :}
+List case_clause_list =
+	case_clause   		                                {: return new List().add(case_clause);	:}
+|	case_clause_list COMMA case_clause    	            {: return case_clause_list.add(case_clause); :}
 ;
 
 List receive_clause_list =
@@ -86,23 +96,27 @@ List receive_clause_list =
 ;
 
 Message message =
- LCURLYBRACE TUPLE COMMA INTEGER.rowNumber COMMA
- LBRACKET sender_id.recipient COMMA atom.label COMMA expression_list RBRACKET
- RCURLYBRACE
-        {: return new Message(id, recipient, label, expression_list); :}
+ LCURLYBRACE TUPLE COMMA INTEGER COMMA
+    LBRACKET sender_id.recipient COMMA atom.label COMMA expression_list RBRACKET RCURLYBRACE
+        {: return new Message(recipient, label, expression_list); :}
 ;
 
 Process process =
-   LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SINGLEMARKS SEND SINGLEMARKS COMMA
-        atom.dest COMMA message.message COMMA process.next RCURLYBRACE
+   LCURLYBRACE OPERATOR COMMA INTEGER COMMA SINGLEMARKS SEND SINGLEMARKS COMMA
+        atom.dest COMMA message.message RCURLYBRACE COMMA process.next
         {: return new Send(dest, message,next); :}
-|	LCURLYBRACE RECEIVE COMMA INTEGER.rowNumber COMMA LBRACKET receive_clause_list.clauses RBRACKET RCURLYBRACE
- 		{: return new Receive(clauses); :}
-|   LCURLYBRACE CASE COMMA INTEGER.rowNumber COMMA Expression.matchingForm COMMA
-    LBRACKET clause_list.clauses RBRACKET RCURLYBRACE
+|	LCURLYBRACE RECEIVE COMMA INTEGER COMMA
+    LBRACKET receive_clause_list.clauses RBRACKET RCURLYBRACE process.next?
+ 		{: return new Receive(clauses, next); :}
+|	LCURLYBRACE RECEIVE COMMA INTEGER COMMA
+    LBRACKET receive_clause_list.clauses RBRACKET RCURLYBRACE
+    COMMA process.next?
+ 		{: return new Receive(clauses, next); :}
+|   LCURLYBRACE CASE COMMA INTEGER COMMA expression_list.matchingForm COMMA
+    LBRACKET case_clause_list.clauses RBRACKET RCURLYBRACE
         {: return new Case(matchingForm, clauses); :}
-|   LCURLYBRACE MATCH COMMA INTEGER.rowNumber COMMA variable.left
-                COMMA expression.right COMMA process.next RCURLYBRACE
+|   LCURLYBRACE MATCH COMMA INTEGER COMMA variable.left
+                COMMA expression.right RCURLYBRACE COMMA process.next
             {: return new Let(left, right, next); :}
 |   expression
         {: return new ExpressionProcess(expression); :}
@@ -112,14 +126,14 @@ Process process =
 /* ***************************************************************** */
 
 Expression expression =
-    LCURLYBRACE OPERATOR COMMA INTEGER.rowNumber COMMA SINGLEMARKS SYMBOL.sym SINGLEMARKS COMMA
+    LCURLYBRACE OPERATOR COMMA INTEGER COMMA SINGLEMARKS SYMBOL.sym SINGLEMARKS COMMA
     expression.op1 COMMA expression.op2 RCURLYBRACE
     {: return new Operator(sym,op1, op2); :}
-|   LCURLYBRACE CALL COMMA INTEGER.rowNumber COMMA atom.method COMMA
+|   LCURLYBRACE CALL COMMA INTEGER COMMA atom.method COMMA
     LBRACKET expression_list.arguments RBRACKET RCURLYBRACE
        {: return new Call(method, arguments); :}
-|   LCURLYBRACE CALL COMMA INTEGER.rowNumber COMMA
-    LCURLYBRACE ATOM COMMA INTEGER.rowNumber_ COMMA SELF RCURLYBRACE
+|   LCURLYBRACE CALL COMMA INTEGER COMMA
+    LCURLYBRACE ATOM COMMA INTEGER_ COMMA SELF RCURLYBRACE
     COMMA LBRACKET RBRACKET RCURLYBRACE
        {: return new Self(); :}
 |   pattern
@@ -128,7 +142,12 @@ Expression expression =
 
 List expression_list =
 	expression   		                    {: return new List().add(expression);	:}
-|	expression_list COMMA expression    	{: return let_list.add(expression); :}
+|	expression_list COMMA expression    	{: return expression_list.add(expression); :}
+ ;
+
+List variable_list =
+	variable    		                    {: return new List().add(variable);	:}
+|	variable_list COMMA variable          	{: return variable_list.add(variable); :}
  ;
 
 Pattern pattern =
@@ -138,7 +157,7 @@ Pattern pattern =
 
 List pattern_list =
 	pattern   		                {: return new List().add(pattern);	:}
-|	pattern_list COMMA pattern    	{: return let_list.add(pattern); :}
+|	pattern_list COMMA pattern    	{: return pattern_list.add(pattern); :}
  ;
 
 
@@ -148,6 +167,7 @@ Litteral litteral =
 |   number
 |   charlist
 |   boolean
+|   null
 ;
 
 SenderId sender_id =
@@ -156,24 +176,30 @@ SenderId sender_id =
 ;
 
 Number number =
-    LCURLYBRACE INTTYPE COMMA INTEGER.rowNumber COMMA INTEGER.val RCURLYBRACE
+    LCURLYBRACE INTTYPE COMMA INTEGER COMMA INTEGER.val RCURLYBRACE
     {: return new Number(Integer.parseInt(val)); :}
 ;
 
-CharList charlist = LCURLYBRACE STRING COMMA INTEGER.rowNumber COMMA STRINGVALUE RCURLYBRACE
+Null null =
+    LCURLYBRACE NULL COMMA INTEGER RCURLYBRACE
+    {: return new Null(); :}
+;
+
+
+CharList charlist = LCURLYBRACE STRING COMMA INTEGER COMMA STRINGVALUE RCURLYBRACE
       {: return new CharList(STRINGVALUE); :}
 ;
 
 Boolean boolean =
-    LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA TRUE RCURLYBRACE
-    {: return new Boolean(Boolean.parseBoolean(true)); :}
-|   LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA FALSE RCURLYBRACE
-     {: return new Boolean(Boolean.parseBoolean(false)); :}
+    LCURLYBRACE ATOM COMMA INTEGER COMMA TRUE RCURLYBRACE
+    {: return new Boolean(true); :}
+|   LCURLYBRACE ATOM COMMA INTEGER COMMA FALSE RCURLYBRACE
+     {: return new Boolean(false); :}
 
 Atom atom =
-LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA IDENTIFIER.i RCURLYBRACE
+LCURLYBRACE ATOM COMMA INTEGER COMMA IDENTIFIER.i RCURLYBRACE
         {: return new Atom(i); :}
-|LCURLYBRACE ATOM COMMA INTEGER.rowNumber COMMA ATOMID RCURLYBRACE
+|LCURLYBRACE ATOM COMMA INTEGER COMMA ATOMID RCURLYBRACE
         {: return new Atom(ATOMID); :}
 ;
 
@@ -182,6 +208,6 @@ Pid pid = PID.mypid
 ;
 
 Variable variable =
-    LCURLYBRACE VAR COMMA INTEGER.rowNumber COMMA VARIABLEID RCURLYBRACE
+    LCURLYBRACE VAR COMMA INTEGER COMMA VARIABLEID RCURLYBRACE
     {: return new Variable(VARIABLEID); :}
 ;

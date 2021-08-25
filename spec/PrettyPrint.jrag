@@ -1,0 +1,90 @@
+import miniErlang.Expression;
+
+// Sie müssen ggf. diese Datei an ihre minijava.ast anpassen
+aspect PrettyPrint {
+    public class PrettyPrinter {
+        public static String INDENT = "  ";
+        private StringBuilder sb;
+
+        public PrettyPrinter() {
+            sb = new StringBuilder();
+        }
+
+        public void append(String s) {
+            sb.append(s);
+        }
+
+        public String getString() {
+            return sb.toString();
+        }
+
+        public void reset() {
+            sb.setLength(0);
+        }
+    }
+
+    //similar to JastAdd Java compiler
+    syn String ASTNode.indent()
+
+    {
+        String indent = extractIndent();
+        return indent.startsWith("\n") ? indent : ("\n" + indent);
+    }
+
+    syn String ASTNode.extractIndent()
+
+    {
+        if (getParent() == null)
+            return "";
+        String indent = getParent().extractIndent();
+
+        if (getParent().addsIndentationLevel())
+            indent += PrettyPrinter.INDENT;
+        return indent;
+    }
+
+    syn boolean ASTNode.addsIndentationLevel() =false;
+    eq Program.addsIndentationLevel() =true;
+    eq Module.addsIndentationLevel() =true;
+    eq Function.addsIndentationLevel() =true;
+    eq ReceiveClause.addsIndentationLevel() =true;
+    eq CaseClause.addsIndentationLevel() =true;
+
+    syn lazy PrettyPrinter Program.printer() {
+        return new PrettyPrinter();
+    }
+
+    eq Program.getModules().printer() = this.printer();
+    eq Module.getFunctions().printer() = this.printer();
+
+    inh lazy PrettyPrinter Module.printer();
+    inh lazy PrettyPrinter Function.printer();
+
+    syn PrettyPrinter Program.print()
+    {
+        printer().reset();
+        for (Module module : getModuless()) module.print();
+        return printer();
+    }
+
+    public void Module.print() {
+        printer().append("-module(" + getPartecipant() + "). \n");
+        printer().append("-export([");
+        for (int i=0; i<getFunctionss().getNumChild(); i++) {
+            Function f = getFunctions(i);
+            printer().append(f.getFunctionName() + "/");
+            printer().append(f.getNumParameters() + "");
+            if(i<getFunctionss().getNumChild()-1){
+                printer().append(",");
+            }
+        }
+        printer().append("]).\n");
+
+        for (Function f : getFunctionss()) {
+            //f.print();
+        }
+
+    }
+
+
+}
