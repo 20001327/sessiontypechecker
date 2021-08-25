@@ -9,28 +9,32 @@ init() ->
     {bob, quote, MyQuote} ->
       receive
         {bob, start_delegation, {Name, ReturnPid}} ->
+          unregister(Name),
+          unregister(carol),
+          register(Name, self()),
           case MyQuote < 100 of
-            true -> unregister(carol),
-              register(Name, self()),
+            true ->
               seller ! {Name, ok},
               alice ! {Name, ok},
               seller ! {Name, address, "Address"},
               receive
                 {seller, date, Date} ->
-                  io:format("carol delegating: received Date ~n"),
-                  %% delegation tutto il codice dentro delegato
-                  unregister(Name),
-                  register(carol, self()),
-                  ReturnPid ! {carol, end_delegation},
-                  ReturnPid ! {carol, ok}
+                    Date
               end;
             false ->
               alice ! {Name, quit},
-              seller ! {Name, quit},
-              unregister(Name),
-              register(carol, self()),
-              ReturnPid ! {carol, end_delegation},
-              ReturnPid ! {carol, quit}
+              seller ! {Name, quit}
+          end,
+          io:format("carol delegating: received Date ~n"),
+          unregister(Name),
+          register(Name,ReturnPid),
+          register(carol, self()),
+          bob ! {carol, end_delegation},
+          case MyQuote < 100 of
+            true ->
+              bob ! {carol, ok};
+            false->
+              bob ! {carol, quit}
           end
       end;
     {bob,quit} ->

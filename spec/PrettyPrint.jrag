@@ -46,7 +46,7 @@ aspect PrettyPrint {
     syn boolean ASTNode.addsIndentationLevel() =false;
     eq Program.addsIndentationLevel() =true;
     eq Module.addsIndentationLevel() =true;
-    eq Function.addsIndentationLevel() =true;
+    eq Function.addsIndentationLevel() =false;
     eq ReceiveClause.addsIndentationLevel() =true;
     eq CaseClause.addsIndentationLevel() =true;
 
@@ -56,9 +56,14 @@ aspect PrettyPrint {
 
     eq Program.getModules().printer() = this.printer();
     eq Module.getFunctions().printer() = this.printer();
+    eq Function.getBody().printer() = this.printer();
+    eq Receive.getNext().printer() = this.printer();
+    eq Send.getNext().printer() = this.printer();
+    eq Let.getNext().printer() = this.printer();
 
     inh lazy PrettyPrinter Module.printer();
     inh lazy PrettyPrinter Function.printer();
+    inh lazy PrettyPrinter Process.printer();
 
     syn PrettyPrinter Program.print()
     {
@@ -81,10 +86,35 @@ aspect PrettyPrint {
         printer().append("]).\n");
 
         for (Function f : getFunctionss()) {
-            //f.print();
+            f.print();
         }
 
     }
 
+    public void Function.print() {
+        printer().append("\n" + getFunctionName() + "(");
+        for (int i=0; i<getNumParameters(); i++) {
+            Variable var = getParameters(i);
+            printer().append(var.getIdent());
+            if(i<getNumParameters()-1){
+                printer().append(",");
+            }
+        }
+        printer().append(")->");
+        printer().append(indent() + PrettyPrinter.INDENT);
+        getBody().print();
+    }
+
+    public void Process.print() {
+        printer().append("process");
+    }
+
+    public void Send.print() {
+        printer().append("send");
+    }
+
+    public void Receive.print() {
+        printer().append("receive");
+    }
 
 }
