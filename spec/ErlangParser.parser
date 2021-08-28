@@ -209,5 +209,5 @@ Pid pid = PID.mypid
 
 Variable variable =
     LCURLYBRACE VAR COMMA INTEGER COMMA VARIABLEID RCURLYBRACE
-    {: return new Variable(VARIABLEID); :}
+    {: return new Variable(VARIABLEID.replace("'","")); :}
 ;
