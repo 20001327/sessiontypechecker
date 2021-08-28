@@ -86,7 +86,7 @@ aspect PrettyPrint {
 
     public void Module.print() {
         printer().append("-module(" + getPartecipant() + "). \n");
-        printer().append("-export([");
+        printer().append("-export([start/0,");
         for (int i=0; i<getFunctionss().getNumChild(); i++) {
             Function f = getFunctions(i);
             printer().append(f.getFunctionName() + "/");
@@ -96,6 +96,10 @@ aspect PrettyPrint {
             }
         }
         printer().append("]).\n");
+
+        printer().append("start() -> register(" + getRegisteredName() +
+                        ",spawn("+ getModuleName() +", " + getFunName() + ", []);");
+
 
         for (Function f : getFunctionss()) {
             f.print();

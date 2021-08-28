@@ -62,6 +62,8 @@ Symbol         = \=|\-|\*|\+|\/|\\
 "start"              { return sym(Terminals.START); }
 "true"               { return sym(Terminals.TRUE); }
 "false"              { return sym(Terminals.FALSE); }
+"register"           { return sym(Terminals.REGISTER); }
+"spawn"              { return sym(Terminals.SPAWN); }
 
 "string"             { return sym(Terminals.STRING); }
 "atom"               { return sym(Terminals.ATOM); }

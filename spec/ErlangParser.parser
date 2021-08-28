@@ -16,19 +16,35 @@ program goal =
 	module_list 	    	    {: return new Program(module_list); :}
 ;
 
-Module module =  /* Ci mettiamo dentro anche la start */
+Module module =
    LBRACKET
     LCURLYBRACE ATTRIBUTE COMMA INTEGER COMMA MODULE COMMA IDENTIFIER.value RCURLYBRACE COMMA
         LCURLYBRACE FUNCTION COMMA INTEGER
             COMMA START COMMA INTEGER COMMA
             LBRACKET
                 LCURLYBRACE CLAUSE COMMA INTEGER COMMA LBRACKET RBRACKET COMMA
-                LBRACKET RBRACKET COMMA LBRACKET process RBRACKET RCURLYBRACE
+                LBRACKET RBRACKET COMMA LBRACKET
+                     LCURLYBRACE CALL COMMA INTEGER COMMA
+                     LCURLYBRACE ATOM COMMA INTEGER COMMA REGISTER RCURLYBRACE
+                      COMMA
+                        LBRACKET
+                            LCURLYBRACE ATOM COMMA INTEGER COMMA IDENTIFIER.value1 RCURLYBRACE COMMA
+                            LCURLYBRACE CALL COMMA INTEGER COMMA
+                            LCURLYBRACE ATOM COMMA INTEGER COMMA SPAWN RCURLYBRACE COMMA
+                                LBRACKET
+                                LCURLYBRACE ATOM COMMA INTEGER COMMA IDENTIFIER.value2 RCURLYBRACE COMMA
+                                LCURLYBRACE ATOM COMMA INTEGER COMMA IDENTIFIER.funName RCURLYBRACE COMMA
+                                LCURLYBRACE NULL COMMA INTEGER RCURLYBRACE
+                                RBRACKET
+                                RCURLYBRACE
+                        RBRACKET
+                     RCURLYBRACE
+                RBRACKET RCURLYBRACE
             RBRACKET
         RCURLYBRACE COMMA
     function_list
     RBRACKET
-    {: return new Module(value, function_list); :}
+    {: return new Module(value, value1, value2, funName, function_list); :}
 ;
 
 List module_list =
@@ -51,7 +67,8 @@ LCURLYBRACE FUNCTION COMMA INTEGER COMMA IDENTIFIER.funName COMMA INTEGER COMMA
 RCURLYBRACE
      {: return new Function("", funName, vars, process); :}
 |
-LCURLYBRACE ATTRIBUTE COMMA INTEGER COMMA TYPE COMMA LCURLYBRACE IDENTIFIER.funType COMMA atom COMMA LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
+LCURLYBRACE ATTRIBUTE COMMA INTEGER COMMA TYPE COMMA
+    LCURLYBRACE IDENTIFIER.funType COMMA atom COMMA LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
 LCURLYBRACE FUNCTION COMMA INTEGER
     COMMA IDENTIFIER.funName COMMA
     INTEGER.numArguments COMMA
@@ -167,7 +184,6 @@ Litteral litteral =
 |   number
 |   charlist
 |   boolean
-|   null
 ;
 
 SenderId sender_id =
@@ -178,11 +194,6 @@ SenderId sender_id =
 Number number =
     LCURLYBRACE INTTYPE COMMA INTEGER COMMA INTEGER.val RCURLYBRACE
     {: return new Number(Integer.parseInt(val)); :}
-;
-
-Null null =
-    LCURLYBRACE NULL COMMA INTEGER RCURLYBRACE
-    {: return new Null(); :}
 ;
 
 

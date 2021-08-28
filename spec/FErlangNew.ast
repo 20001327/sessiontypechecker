@@ -1,7 +1,7 @@
 /*  Abstract syntax for two buyer in erlang */
 
 Program ::= Modules:Module*;
-Module::= <Partecipant:String> Functions:Function*;
+Module::= <Partecipant:String> <RegisteredName:String> <ModuleName:String> <FunName:String> Functions:Function*;
 
 Function ::= <FunType:String> <FunctionName:String> Parameters:Variable* Body:Process;
 
@@ -34,7 +34,6 @@ Pid:Literal::= <Pid:String>;
 CharList:Literal ::= <StringValue:String>;
 Number:Literal ::= <IntegerValue:Integer>;
 Boolean:Literal ::= <BooleanValue:boolean>;
-Null:Literal;
 
 Variable:Pattern::= <Ident:String>;
 
