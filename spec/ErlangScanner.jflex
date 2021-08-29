@@ -36,12 +36,12 @@ import miniErlang.ErlangParser.Terminals;
 
 LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f]
-StringValue    = \"[a-zA-Z0-9_ ]*\"
+StringValue    = \"(.[^\"]*)\"
 Integer        = [1-9][0-9]* | 0
 Atom           = '[a-z][a-zA-Z0-9_ ]*'
 Identifier     = [a-zA-Z][a-zA-Z0-9_]*
 Variable       = '[A-Z][a-zA-Z0-9_]*'
-Symbol         = \=|\-|\*|\+|\/|\\
+Symbol         = \=|\-|\*|\+|\/|\\|<
 
 %%
 
@@ -50,6 +50,7 @@ Symbol         = \=|\-|\*|\+|\/|\\
 
 "function"           { return sym(Terminals.FUNCTION); }
 "'receive'"          { return sym(Terminals.RECEIVE); }
+"'case'"             { return sym(Terminals.CASE); }
 "clause"             { return sym(Terminals.CLAUSE); }
 "call"               { return sym(Terminals.CALL); }
 "match"              { return sym(Terminals.MATCH); }

@@ -13,11 +13,11 @@ ReceiveClause:Term ::= Sender:Atom Label:Atom Variables:Pattern* Actions:Process
 CaseClause:Term ::= Patterns:Pattern* Actions:Process;
 
 abstract Process:Term;
-Send:Process ::= Recipient:Atom Message:Message Next:Process;
+Send:Process ::= Recipient:Atom Message:Message [Next:Process];
 Receive:Process ::= Clauses:ReceiveClause* [Next:Process];
-Case:Process ::= Matching:Expression* Clauses:CaseClause*;
+Case:Process ::= Matching:Expression* Clauses:CaseClause* [Next:Process];
 Let:Process ::= Left:Variable Right:Expression Next:Process;
-ExpressionProcess:Process ::= Expression:Expression;
+ExpressionProcess:Process ::= Expression:Expression [Next:Process];
 
 /*  expressions  */
 abstract Expression:Term;

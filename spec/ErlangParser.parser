@@ -87,12 +87,23 @@ ReceiveClause receive_clause =
         LCURLYBRACE
             TUPLE COMMA INTEGER COMMA
             LBRACKET
-            atom.sender COMMA atom.label COMMA pattern_list.vars
+            atom.sender COMMA atom.label COMMA pattern_list.vars?
             RBRACKET
         RCURLYBRACE
     RBRACKET COMMA LBRACKET RBRACKET COMMA
     LBRACKET process RBRACKET RCURLYBRACE
        {: return new ReceiveClause(sender, label, vars, process); :}
+|    LCURLYBRACE CLAUSE COMMA INTEGER COMMA
+     LBRACKET
+         LCURLYBRACE
+             TUPLE COMMA INTEGER COMMA
+             LBRACKET
+             atom.sender COMMA atom.label
+             RBRACKET
+         RCURLYBRACE
+     RBRACKET COMMA LBRACKET RBRACKET COMMA
+     LBRACKET process RBRACKET RCURLYBRACE
+        {: return new ReceiveClause(sender, label, new List(), process); :}
 ;
 
 CaseClause case_clause =
@@ -116,12 +127,18 @@ Message message =
  LCURLYBRACE TUPLE COMMA INTEGER COMMA
     LBRACKET sender_id.recipient COMMA atom.label COMMA expression_list RBRACKET RCURLYBRACE
         {: return new Message(recipient, label, expression_list); :}
+|  LCURLYBRACE TUPLE COMMA INTEGER COMMA
+      LBRACKET sender_id.recipient COMMA atom.label RBRACKET RCURLYBRACE
+          {: return new Message(recipient, label, new List()); :}
 ;
 
 Process process =
    LCURLYBRACE OPERATOR COMMA INTEGER COMMA SINGLEMARKS SEND SINGLEMARKS COMMA
-        atom.dest COMMA message.message RCURLYBRACE COMMA process.next
+        atom.dest COMMA message.message RCURLYBRACE COMMA process.next?
         {: return new Send(dest, message,next); :}
+|   LCURLYBRACE OPERATOR COMMA INTEGER COMMA SINGLEMARKS SEND SINGLEMARKS COMMA
+         atom.dest COMMA message.message RCURLYBRACE process.next?
+         {: return new Send(dest, message,next); :}
 |	LCURLYBRACE RECEIVE COMMA INTEGER COMMA
     LBRACKET receive_clause_list.clauses RBRACKET RCURLYBRACE process.next?
  		{: return new Receive(clauses, next); :}
@@ -130,13 +147,18 @@ Process process =
     COMMA process.next?
  		{: return new Receive(clauses, next); :}
 |   LCURLYBRACE CASE COMMA INTEGER COMMA expression_list.matchingForm COMMA
-    LBRACKET case_clause_list.clauses RBRACKET RCURLYBRACE
-        {: return new Case(matchingForm, clauses); :}
+    LBRACKET case_clause_list.clauses RBRACKET RCURLYBRACE process.next?
+        {: return new Case(matchingForm, clauses, next); :}
+|   LCURLYBRACE CASE COMMA INTEGER COMMA expression_list.matchingForm COMMA
+    LBRACKET case_clause_list.clauses RBRACKET RCURLYBRACE COMMA process.next?
+        {: return new Case(matchingForm, clauses, next); :}
 |   LCURLYBRACE MATCH COMMA INTEGER COMMA variable.left
                 COMMA expression.right RCURLYBRACE COMMA process.next
             {: return new Let(left, right, next); :}
-|   expression
-        {: return new ExpressionProcess(expression); :}
+|   expression process.next?
+        {: return new ExpressionProcess(expression, next); :}
+|   expression COMMA process.next?
+        {: return new ExpressionProcess(expression, next); :}
 ;
 
 
@@ -147,8 +169,12 @@ Expression expression =
     expression.op1 COMMA expression.op2 RCURLYBRACE
     {: return new Operator(sym,op1, op2); :}
 |   LCURLYBRACE CALL COMMA INTEGER COMMA atom.method COMMA
-    LBRACKET expression_list.arguments RBRACKET RCURLYBRACE
+    LBRACKET expression_list.arguments? RBRACKET RCURLYBRACE
        {: return new Call(method, arguments); :}
+|   LCURLYBRACE CALL COMMA INTEGER COMMA
+    LCURLYBRACE ATOM COMMA INTEGER COMMA REGISTER.reg RCURLYBRACE
+    COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE
+       {: return new Call(new Atom(reg), arguments); :}
 |   LCURLYBRACE CALL COMMA INTEGER COMMA
     LCURLYBRACE ATOM COMMA INTEGER_ COMMA SELF RCURLYBRACE
     COMMA LBRACKET RBRACKET RCURLYBRACE

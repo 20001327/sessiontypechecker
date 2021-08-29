@@ -49,6 +49,7 @@ aspect PrettyPrint {
     eq Function.addsIndentationLevel()=true;
     eq Process.addsIndentationLevel()=false;
     eq ReceiveClause.addsIndentationLevel()=true;
+    eq CaseClause.addsIndentationLevel()=true;
     eq ExpressionProcess.addsIndentationLevel()=true;
 
     syn lazy PrettyPrinter Program.printer() {
@@ -65,6 +66,7 @@ aspect PrettyPrint {
     eq Message.getSender().printer() = this.printer();
     eq Message.getPayload().printer() = this.printer();
     eq Receive.getClauses().printer() = this.printer();
+    eq Case.getClauses().printer() = this.printer();
     eq ReceiveClause.getActions().printer() = this.printer();
     eq Let.getNext().printer() = this.printer();
 
@@ -74,6 +76,7 @@ aspect PrettyPrint {
     inh lazy PrettyPrinter Expression.printer();
     inh lazy PrettyPrinter Message.printer();
     inh lazy PrettyPrinter ReceiveClause.printer();
+    inh lazy PrettyPrinter CaseClause.printer();
     inh lazy PrettyPrinter SenderId.printer();
     inh lazy PrettyPrinter Atom.printer();
 
@@ -128,8 +131,10 @@ aspect PrettyPrint {
         getRecipient().print();
         printer().append("!");
         getMessage().print();
-        printer().append(",");
-        getNext().print();
+        if(hasNext()){
+            printer().append(",");
+            getNext().print();
+        }
     }
 
     public void Operator.print() {
@@ -183,6 +188,29 @@ aspect PrettyPrint {
         }
     }
 
+    public void Case.print() {
+        printer().append(indent());
+        printer().append("case ");
+        for(int i=0; i<getNumMatching();i++){
+            getMatching(i).print();
+            if(i<getNumMatching()-1){
+                printer().append(",");
+            }
+        }
+        printer().append(" of ");
+        for(int i=0; i<getNumClauses();i++){
+            getClauses(i).print();
+            if(i<getNumClauses()-1){
+                printer().append(";");
+            }
+        }
+        printer().append(indent() + "end");
+        if(hasNext()){
+            printer().append(",");
+            getNext().print();
+        }
+    }
+
     public void ReceiveClause.print(){
        printer().append(indent() + PrettyPrinter.INDENT);
        printer().append("{");
@@ -198,6 +226,18 @@ aspect PrettyPrint {
             }
        }
        printer().append("}->");
+       getActions().print();
+    }
+
+    public void CaseClause.print(){
+       printer().append(indent() + PrettyPrinter.INDENT);
+       for(int i=0; i<getNumPatterns();i++){
+            getPatterns(i).print();
+            if(i<getNumPatterns()-1){
+                printer().append(",");
+            }
+       }
+       printer().append(" -> ");
        getActions().print();
     }
 
@@ -237,6 +277,10 @@ aspect PrettyPrint {
        printer().append(getIntegerValue() + "");
     }
 
+    public void Boolean.print(){
+       printer().append(getBooleanValue() ? "true" : "false");
+    }
+
     public void Expression.print(){
        printer().append("exp");
     }
@@ -244,6 +288,10 @@ aspect PrettyPrint {
     public void ExpressionProcess.print(){
        printer().append(indent());
        getExpression().print();
+       if(hasNext()){
+           printer().append(",");
+           getNext().print();
+       }
     }
 
     public void Process.print() {

@@ -5,6 +5,7 @@
 start() ->
   register(bob, spawn(bob, init, [])).
 
+-type init() :: 'bob prova'.
 init() ->
   receive
     {seller, quote, Quote} ->
@@ -23,7 +24,7 @@ init() ->
               end;
             false ->
               carol ! {bob, quote,Quote - MyQuote - 99},
-              carol ! {bob, start_delegation, {bob, self()}},
+              carol ! {bob, start_delegation, bob, self()},
               receive
                 {carol, end_delegation} ->
                   receive

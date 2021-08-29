@@ -3,12 +3,12 @@
 start() ->
   register(carol, spawn(carol, init, [])).
 
-
+-type init() :: 'carol prova'.
 init() ->
   receive
     {bob, quote, MyQuote} ->
       receive
-        {bob, start_delegation, {Name, ReturnPid}} ->
+        {bob, start_delegation, Name, ReturnPid} ->
           unregister(Name),
           unregister(carol),
           register(Name, self()),
@@ -25,7 +25,6 @@ init() ->
               alice ! {Name, quit},
               seller ! {Name, quit}
           end,
-          io:format("carol delegating: received Date ~n"),
           unregister(Name),
           register(Name,ReturnPid),
           register(carol, self()),

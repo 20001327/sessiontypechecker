@@ -5,7 +5,7 @@
 start() ->
   register(seller, spawn(seller, init, [])).
 
-
+-type init() :: 'seller prova'.
 init() ->
   receive
     {alice, title, Title} ->
@@ -19,7 +19,7 @@ init() ->
           receive
             {bob, address, Address} ->
               %%io:format("seller: received address ~p ~n", [Address]),
-              bob ! {seller, date, {{2021, 6, 9}, {11, 2, 15}}}
+              bob ! {seller, date, "09-09-2021"}
           end;
         {bob, quit} ->
           quit
