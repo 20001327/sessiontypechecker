@@ -4,17 +4,20 @@ import miniErlang.Expression;
 /**
  * @ast node
  * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:6
- * @astdecl Function : ASTNode ::= <FunType:String> <FunctionName:String> Parameters:Variable* Body:Process;
- * @production Function : {@link ASTNode} ::= <span class="component">&lt;FunType:{@link String}&gt;</span> <span class="component">&lt;FunctionName:{@link String}&gt;</span> <span class="component">Parameters:{@link Variable}*</span> <span class="component">Body:{@link Process}</span>;
+ * @astdecl Function : ASTNode ::= [Type:FunType] <FunctionName:String> Parameters:Variable* Body:Process;
+ * @production Function : {@link ASTNode} ::= <span class="component">[Type:{@link FunType}]</span> <span class="component">&lt;FunctionName:{@link String}&gt;</span> <span class="component">Parameters:{@link Variable}*</span> <span class="component">Body:{@link Process}</span>;
 
  */
 public class Function extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:113
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:118
    */
   public void print() {
 
+        if(hasType()){
+            getType().print();
+        }
         printer().append("\n" + getFunctionName() + "(");
         for (int i=0; i<getNumParameters(); i++) {
             Variable var = getParameters(i);
@@ -41,61 +44,62 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
    * @declaredat ASTNode:10
    */
   public void init$Children() {
-    children = new ASTNode[2];
-    setChild(new List(), 0);
+    children = new ASTNode[3];
+    setChild(new Opt(), 0);
+    setChild(new List(), 1);
   }
   /**
-   * @declaredat ASTNode:14
+   * @declaredat ASTNode:15
    */
   @ASTNodeAnnotation.Constructor(
-    name = {"FunType", "FunctionName", "Parameters", "Body"},
-    type = {"String", "String", "List<Variable>", "Process"},
-    kind = {"Token", "Token", "List", "Child"}
+    name = {"Type", "FunctionName", "Parameters", "Body"},
+    type = {"Opt<FunType>", "String", "List<Variable>", "Process"},
+    kind = {"Opt", "Token", "List", "Child"}
   )
-  public Function(String p0, String p1, List<Variable> p2, Process p3) {
-    setFunType(p0);
+  public Function(Opt<FunType> p0, String p1, List<Variable> p2, Process p3) {
+    setChild(p0, 0);
     setFunctionName(p1);
-    setChild(p2, 0);
-    setChild(p3, 1);
+    setChild(p2, 1);
+    setChild(p3, 2);
   }
   /**
-   * @declaredat ASTNode:25
+   * @declaredat ASTNode:26
    */
-  public Function(beaver.Symbol p0, beaver.Symbol p1, List<Variable> p2, Process p3) {
-    setFunType(p0);
+  public Function(Opt<FunType> p0, beaver.Symbol p1, List<Variable> p2, Process p3) {
+    setChild(p0, 0);
     setFunctionName(p1);
-    setChild(p2, 0);
-    setChild(p3, 1);
+    setChild(p2, 1);
+    setChild(p3, 2);
   }
   /** @apilevel low-level 
-   * @declaredat ASTNode:32
+   * @declaredat ASTNode:33
    */
   protected int numChildren() {
-    return 2;
+    return 3;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:36
+   * @declaredat ASTNode:37
    */
   public void flushAttrCache() {
     super.flushAttrCache();
     printer_reset();
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:41
+   * @declaredat ASTNode:42
    */
   public void flushCollectionCache() {
     super.flushCollectionCache();
 
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:46
+   * @declaredat ASTNode:47
    */
   public Function clone() throws CloneNotSupportedException {
     Function node = (Function) super.clone();
     return node;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:51
+   * @declaredat ASTNode:52
    */
   public Function copy() {
     try {
@@ -115,7 +119,7 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
    * @deprecated Please use treeCopy or treeCopyNoTransform instead
-   * @declaredat ASTNode:70
+   * @declaredat ASTNode:71
    */
   @Deprecated
   public Function fullCopy() {
@@ -126,7 +130,7 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:80
+   * @declaredat ASTNode:81
    */
   public Function treeCopyNoTransform() {
     Function tree = (Function) copy();
@@ -147,7 +151,7 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:100
+   * @declaredat ASTNode:101
    */
   public Function treeCopy() {
     Function tree = (Function) copy();
@@ -163,44 +167,57 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
     return tree;
   }
   /**
-   * Replaces the lexeme FunType.
-   * @param value The new value for the lexeme FunType.
-   * @apilevel high-level
+   * Replaces the optional node for the Type child. This is the <code>Opt</code>
+   * node containing the child Type, not the actual child!
+   * @param opt The new node to be used as the optional node for the Type child.
+   * @apilevel low-level
    */
-  public Function setFunType(String value) {
-    tokenString_FunType = value;
-    return this;
-  }
-  /** @apilevel internal 
-   */
-  protected String tokenString_FunType;
-  /**
-   */
-  public int FunTypestart;
-  /**
-   */
-  public int FunTypeend;
-  /**
-   * JastAdd-internal setter for lexeme FunType using the Beaver parser.
-   * @param symbol Symbol containing the new value for the lexeme FunType
-   * @apilevel internal
-   */
-  public Function setFunType(beaver.Symbol symbol) {
-    if (symbol.value != null && !(symbol.value instanceof String))
-    throw new UnsupportedOperationException("setFunType is only valid for String lexemes");
-    tokenString_FunType = (String)symbol.value;
-    FunTypestart = symbol.getStart();
-    FunTypeend = symbol.getEnd();
+  public Function setTypeOpt(Opt<FunType> opt) {
+    setChild(opt, 0);
     return this;
   }
   /**
-   * Retrieves the value for the lexeme FunType.
-   * @return The value for the lexeme FunType.
+   * Replaces the (optional) Type child.
+   * @param node The new node to be used as the Type child.
    * @apilevel high-level
    */
-  @ASTNodeAnnotation.Token(name="FunType")
-  public String getFunType() {
-    return tokenString_FunType != null ? tokenString_FunType : "";
+  public Function setType(FunType node) {
+    getTypeOpt().setChild(node, 0);
+    return this;
+  }
+  /**
+   * Check whether the optional Type child exists.
+   * @return {@code true} if the optional Type child exists, {@code false} if it does not.
+   * @apilevel high-level
+   */
+  public boolean hasType() {
+    return getTypeOpt().getNumChild() != 0;
+  }
+  /**
+   * Retrieves the (optional) Type child.
+   * @return The Type child, if it exists. Returns {@code null} otherwise.
+   * @apilevel low-level
+   */
+  public FunType getType() {
+    return (FunType) getTypeOpt().getChild(0);
+  }
+  /**
+   * Retrieves the optional node for the Type child. This is the <code>Opt</code> node containing the child Type, not the actual child!
+   * @return The optional node for child the Type child.
+   * @apilevel low-level
+   */
+  @ASTNodeAnnotation.OptChild(name="Type")
+  public Opt<FunType> getTypeOpt() {
+    return (Opt<FunType>) getChild(0);
+  }
+  /**
+   * Retrieves the optional node for child Type. This is the <code>Opt</code> node containing the child Type, not the actual child!
+   * <p><em>This method does not invoke AST transformations.</em></p>
+   * @return The optional node for child Type.
+   * @apilevel low-level
+   */
+  public Opt<FunType> getTypeOptNoTransform() {
+    return (Opt<FunType>) getChildNoTransform(0);
   }
   /**
    * Replaces the lexeme FunctionName.
@@ -248,7 +265,7 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
    * @apilevel high-level
    */
   public Function setParametersList(List<Variable> list) {
-    setChild(list, 0);
+    setChild(list, 1);
     return this;
   }
   /**
@@ -320,7 +337,7 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
    */
   @ASTNodeAnnotation.ListChild(name="Parameters")
   public List<Variable> getParametersList() {
-    List<Variable> list = (List<Variable>) getChild(0);
+    List<Variable> list = (List<Variable>) getChild(1);
     return list;
   }
   /**
@@ -330,7 +347,7 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
    * @apilevel low-level
    */
   public List<Variable> getParametersListNoTransform() {
-    return (List<Variable>) getChildNoTransform(0);
+    return (List<Variable>) getChildNoTransform(1);
   }
   /**
    * @return the element at index {@code i} in the Parameters list without
@@ -362,7 +379,7 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
    * @apilevel high-level
    */
   public Function setBody(Process node) {
-    setChild(node, 1);
+    setChild(node, 2);
     return this;
   }
   /**
@@ -372,7 +389,7 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
    */
   @ASTNodeAnnotation.Child(name="Body")
   public Process getBody() {
-    return (Process) getChild(1);
+    return (Process) getChild(2);
   }
   /**
    * Retrieves the Body child.
@@ -381,7 +398,7 @@ public class Function extends ASTNode<ASTNode> implements Cloneable {
    * @apilevel low-level
    */
   public Process getBodyNoTransform() {
-    return (Process) getChildNoTransform(1);
+    return (Process) getChildNoTransform(2);
   }
 /** @apilevel internal */
 protected boolean addsIndentationLevel_visited = false;
@@ -404,10 +421,10 @@ protected boolean addsIndentationLevel_visited = false;
   /**
    * @attribute inh
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:74
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:77
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.INH)
-  @ASTNodeAnnotation.Source(aspect="PrettyPrint", declaredAt="C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:74")
+  @ASTNodeAnnotation.Source(aspect="PrettyPrint", declaredAt="C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:77")
   public PrettyPrinter printer() {
     ASTState state = state();
     if (printer_computed) {
@@ -440,11 +457,15 @@ protected boolean printer_visited = false;
   protected PrettyPrinter printer_value;
 
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:80
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:78
    * @apilevel internal
    */
   public PrettyPrinter Define_printer(ASTNode _callerNode, ASTNode _childNode) {
-    if (_callerNode == getBodyNoTransform()) {
+    if (_callerNode == getTypeOptNoTransform()) {
+      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:62
+      return this.printer();
+    }
+    else if (_callerNode == getBodyNoTransform()) {
       // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:61
       return this.printer();
     }
@@ -453,7 +474,7 @@ protected boolean printer_visited = false;
     }
   }
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:80
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:78
    * @apilevel internal
    * @return {@code true} if this node has an equation for the inherited attribute printer
    */

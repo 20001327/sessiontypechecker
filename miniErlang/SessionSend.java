@@ -3,12 +3,33 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:46
- * @astdecl SessionSend : Session ::= Sender:Atom Label:Atom <Type:String> Next:Session;
- * @production SessionSend : {@link Session} ::= <span class="component">Sender:{@link Atom}</span> <span class="component">Label:{@link Atom}</span> <span class="component">&lt;Type:{@link String}&gt;</span> <span class="component">Next:{@link Session}</span>;
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:44
+ * @astdecl SessionSend : Session ::= Sender:Atom Label:Atom Type:LiteralType* Next:Session;
+ * @production SessionSend : {@link Session} ::= <span class="component">Sender:{@link Atom}</span> <span class="component">Label:{@link Atom}</span> <span class="component">Type:{@link LiteralType}*</span> <span class="component">Next:{@link Session}</span>;
 
  */
 public class SessionSend extends Session implements Cloneable {
+  /**
+   * @aspect PrettyPrint
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:151
+   */
+  public void print(){
+        getSender().print();
+        printer().append("!");
+        getLabel().print();
+        if(getNumType()>0){
+            printer().append("<");
+            for (int i=0; i<getNumType(); i++) {
+                getType(i).print();
+                if(i<getNumType()-1){
+                    printer().append(",");
+                }
+            }
+            printer().append(">");
+        }
+        printer().append(".");
+        getNext().print();
+    }
   /**
    * @declaredat ASTNode:1
    */
@@ -23,60 +44,52 @@ public class SessionSend extends Session implements Cloneable {
    * @declaredat ASTNode:10
    */
   public void init$Children() {
-    children = new ASTNode[3];
+    children = new ASTNode[4];
+    setChild(new List(), 2);
   }
   /**
-   * @declaredat ASTNode:13
+   * @declaredat ASTNode:14
    */
   @ASTNodeAnnotation.Constructor(
     name = {"Sender", "Label", "Type", "Next"},
-    type = {"Atom", "Atom", "String", "Session"},
-    kind = {"Child", "Child", "Token", "Child"}
+    type = {"Atom", "Atom", "List<LiteralType>", "Session"},
+    kind = {"Child", "Child", "List", "Child"}
   )
-  public SessionSend(Atom p0, Atom p1, String p2, Session p3) {
+  public SessionSend(Atom p0, Atom p1, List<LiteralType> p2, Session p3) {
     setChild(p0, 0);
     setChild(p1, 1);
-    setType(p2);
-    setChild(p3, 2);
-  }
-  /**
-   * @declaredat ASTNode:24
-   */
-  public SessionSend(Atom p0, Atom p1, beaver.Symbol p2, Session p3) {
-    setChild(p0, 0);
-    setChild(p1, 1);
-    setType(p2);
-    setChild(p3, 2);
+    setChild(p2, 2);
+    setChild(p3, 3);
   }
   /** @apilevel low-level 
-   * @declaredat ASTNode:31
+   * @declaredat ASTNode:26
    */
   protected int numChildren() {
-    return 3;
+    return 4;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:35
+   * @declaredat ASTNode:30
    */
   public void flushAttrCache() {
     super.flushAttrCache();
 
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:40
+   * @declaredat ASTNode:35
    */
   public void flushCollectionCache() {
     super.flushCollectionCache();
 
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:45
+   * @declaredat ASTNode:40
    */
   public SessionSend clone() throws CloneNotSupportedException {
     SessionSend node = (SessionSend) super.clone();
     return node;
   }
   /** @apilevel internal 
-   * @declaredat ASTNode:50
+   * @declaredat ASTNode:45
    */
   public SessionSend copy() {
     try {
@@ -96,7 +109,7 @@ public class SessionSend extends Session implements Cloneable {
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
    * @deprecated Please use treeCopy or treeCopyNoTransform instead
-   * @declaredat ASTNode:69
+   * @declaredat ASTNode:64
    */
   @Deprecated
   public SessionSend fullCopy() {
@@ -107,7 +120,7 @@ public class SessionSend extends Session implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:79
+   * @declaredat ASTNode:74
    */
   public SessionSend treeCopyNoTransform() {
     SessionSend tree = (SessionSend) copy();
@@ -128,7 +141,7 @@ public class SessionSend extends Session implements Cloneable {
    * The copy is dangling, i.e. has no parent.
    * @return dangling copy of the subtree at this node
    * @apilevel low-level
-   * @declaredat ASTNode:99
+   * @declaredat ASTNode:94
    */
   public SessionSend treeCopy() {
     SessionSend tree = (SessionSend) copy();
@@ -198,44 +211,118 @@ public class SessionSend extends Session implements Cloneable {
     return (Atom) getChildNoTransform(1);
   }
   /**
-   * Replaces the lexeme Type.
-   * @param value The new value for the lexeme Type.
+   * Replaces the Type list.
+   * @param list The new list node to be used as the Type list.
    * @apilevel high-level
    */
-  public SessionSend setType(String value) {
-    tokenString_Type = value;
-    return this;
-  }
-  /** @apilevel internal 
-   */
-  protected String tokenString_Type;
-  /**
-   */
-  public int Typestart;
-  /**
-   */
-  public int Typeend;
-  /**
-   * JastAdd-internal setter for lexeme Type using the Beaver parser.
-   * @param symbol Symbol containing the new value for the lexeme Type
-   * @apilevel internal
-   */
-  public SessionSend setType(beaver.Symbol symbol) {
-    if (symbol.value != null && !(symbol.value instanceof String))
-    throw new UnsupportedOperationException("setType is only valid for String lexemes");
-    tokenString_Type = (String)symbol.value;
-    Typestart = symbol.getStart();
-    Typeend = symbol.getEnd();
+  public SessionSend setTypeList(List<LiteralType> list) {
+    setChild(list, 2);
     return this;
   }
   /**
-   * Retrieves the value for the lexeme Type.
-   * @return The value for the lexeme Type.
+   * Retrieves the number of children in the Type list.
+   * @return Number of children in the Type list.
    * @apilevel high-level
    */
-  @ASTNodeAnnotation.Token(name="Type")
-  public String getType() {
-    return tokenString_Type != null ? tokenString_Type : "";
+  public int getNumType() {
+    return getTypeList().getNumChild();
+  }
+  /**
+   * Retrieves the number of children in the Type list.
+   * Calling this method will not trigger rewrites.
+   * @return Number of children in the Type list.
+   * @apilevel low-level
+   */
+  public int getNumTypeNoTransform() {
+    return getTypeListNoTransform().getNumChildNoTransform();
+  }
+  /**
+   * Retrieves the element at index {@code i} in the Type list.
+   * @param i Index of the element to return.
+   * @return The element at position {@code i} in the Type list.
+   * @apilevel high-level
+   */
+  public LiteralType getType(int i) {
+    return (LiteralType) getTypeList().getChild(i);
+  }
+  /**
+   * Check whether the Type list has any children.
+   * @return {@code true} if it has at least one child, {@code false} otherwise.
+   * @apilevel high-level
+   */
+  public boolean hasType() {
+    return getTypeList().getNumChild() != 0;
+  }
+  /**
+   * Append an element to the Type list.
+   * @param node The element to append to the Type list.
+   * @apilevel high-level
+   */
+  public SessionSend addType(LiteralType node) {
+    List<LiteralType> list = (parent == null) ? getTypeListNoTransform() : getTypeList();
+    list.addChild(node);
+    return this;
+  }
+  /** @apilevel low-level 
+   */
+  public SessionSend addTypeNoTransform(LiteralType node) {
+    List<LiteralType> list = getTypeListNoTransform();
+    list.addChild(node);
+    return this;
+  }
+  /**
+   * Replaces the Type list element at index {@code i} with the new node {@code node}.
+   * @param node The new node to replace the old list element.
+   * @param i The list index of the node to be replaced.
+   * @apilevel high-level
+   */
+  public SessionSend setType(LiteralType node, int i) {
+    List<LiteralType> list = getTypeList();
+    list.setChild(node, i);
+    return this;
+  }
+  /**
+   * Retrieves the Type list.
+   * @return The node representing the Type list.
+   * @apilevel high-level
+   */
+  @ASTNodeAnnotation.ListChild(name="Type")
+  public List<LiteralType> getTypeList() {
+    List<LiteralType> list = (List<LiteralType>) getChild(2);
+    return list;
+  }
+  /**
+   * Retrieves the Type list.
+   * <p><em>This method does not invoke AST transformations.</em></p>
+   * @return The node representing the Type list.
+   * @apilevel low-level
+   */
+  public List<LiteralType> getTypeListNoTransform() {
+    return (List<LiteralType>) getChildNoTransform(2);
+  }
+  /**
+   * @return the element at index {@code i} in the Type list without
+   * triggering rewrites.
+   */
+  public LiteralType getTypeNoTransform(int i) {
+    return (LiteralType) getTypeListNoTransform().getChildNoTransform(i);
+  }
+  /**
+   * Retrieves the Type list.
+   * @return The node representing the Type list.
+   * @apilevel high-level
+   */
+  public List<LiteralType> getTypes() {
+    return getTypeList();
+  }
+  /**
+   * Retrieves the Type list.
+   * <p><em>This method does not invoke AST transformations.</em></p>
+   * @return The node representing the Type list.
+   * @apilevel low-level
+   */
+  public List<LiteralType> getTypesNoTransform() {
+    return getTypeListNoTransform();
   }
   /**
    * Replaces the Next child.
@@ -243,7 +330,7 @@ public class SessionSend extends Session implements Cloneable {
    * @apilevel high-level
    */
   public SessionSend setNext(Session node) {
-    setChild(node, 2);
+    setChild(node, 3);
     return this;
   }
   /**
@@ -253,7 +340,7 @@ public class SessionSend extends Session implements Cloneable {
    */
   @ASTNodeAnnotation.Child(name="Next")
   public Session getNext() {
-    return (Session) getChild(2);
+    return (Session) getChild(3);
   }
   /**
    * Retrieves the Next child.
@@ -262,7 +349,7 @@ public class SessionSend extends Session implements Cloneable {
    * @apilevel low-level
    */
   public Session getNextNoTransform() {
-    return (Session) getChildNoTransform(2);
+    return (Session) getChildNoTransform(3);
   }
 
 }

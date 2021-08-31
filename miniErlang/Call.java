@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:25
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:23
  * @astdecl Call : Expression ::= FunctionName:Atom Arguments:Expression*;
  * @production Call : {@link Expression} ::= <span class="component">FunctionName:{@link Atom}</span> <span class="component">Arguments:{@link Expression}*</span>;
 
@@ -11,7 +11,7 @@ import miniErlang.Expression;
 public class Call extends Expression implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:252
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:382
    */
   public void print(){
         getFunctionName().print();

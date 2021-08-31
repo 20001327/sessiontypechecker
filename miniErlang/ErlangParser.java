@@ -19,88 +19,117 @@ public class ErlangParser extends Parser {
 		static public final short INTEGER = 5;
 		static public final short LBRACKET = 6;
 		static public final short PID = 7;
-		static public final short ATOM = 8;
-		static public final short IDENTIFIER = 9;
-		static public final short CLAUSE = 10;
-		static public final short VAR = 11;
-		static public final short CALL = 12;
-		static public final short SINGLEMARKS = 13;
-		static public final short FUNCTION = 14;
-		static public final short INTTYPE = 15;
-		static public final short STRING = 16;
-		static public final short ATOMID = 17;
-		static public final short ATTRIBUTE = 18;
-		static public final short REGISTER = 19;
-		static public final short TUPLE = 20;
-		static public final short OPERATOR = 21;
-		static public final short SYMBOL = 22;
-		static public final short MODULE = 23;
-		static public final short START = 24;
-		static public final short SPAWN = 25;
-		static public final short NULL = 26;
-		static public final short TYPE = 27;
-		static public final short INTEGER_ = 28;
-		static public final short SELF = 29;
-		static public final short SEND = 30;
-		static public final short CASE = 31;
-		static public final short RECEIVE = 32;
-		static public final short MATCH = 33;
-		static public final short STRINGVALUE = 34;
-		static public final short TRUE = 35;
-		static public final short FALSE = 36;
-		static public final short VARIABLEID = 37;
+		static public final short IDENTIFIER = 8;
+		static public final short OPENANGULAR = 9;
+		static public final short CLOSEANGULAR = 10;
+		static public final short ATOM = 11;
+		static public final short STRINGTYPE = 12;
+		static public final short INTTYPE = 13;
+		static public final short ATOMTYPE = 14;
+		static public final short INTERNALCHOICE = 15;
+		static public final short EXTERNALCHOICE = 16;
+		static public final short END = 17;
+		static public final short DOT = 18;
+		static public final short CLAUSE = 19;
+		static public final short VAR = 20;
+		static public final short CALL = 21;
+		static public final short ATOMID = 22;
+		static public final short FUNCTION = 23;
+		static public final short INT = 24;
+		static public final short STRING = 25;
+		static public final short ATTRIBUTE = 26;
+		static public final short REGISTER = 27;
+		static public final short SINGLEMARKS = 28;
+		static public final short TUPLE = 29;
+		static public final short OPERATOR = 30;
+		static public final short SYMBOL = 31;
+		static public final short DIVISION = 32;
+		static public final short LESS = 33;
+		static public final short SESSIONSEND = 34;
+		static public final short SESSIONRECEIVE = 35;
+		static public final short LQUAD = 36;
+		static public final short RQUAD = 37;
+		static public final short MODULE = 38;
+		static public final short START = 39;
+		static public final short SPAWN = 40;
+		static public final short NULL = 41;
+		static public final short TYPE = 42;
+		static public final short INTEGER_ = 43;
+		static public final short SELF = 44;
+		static public final short UNREGISTER = 45;
+		static public final short SEND = 46;
+		static public final short CASE = 47;
+		static public final short RECEIVE = 48;
+		static public final short MATCH = 49;
+		static public final short STRINGVALUE = 50;
+		static public final short TRUE = 51;
+		static public final short FALSE = 52;
 	}
 
 	static final ParsingTables PARSING_TABLES = new ParsingTables(
-		"U9pjc0UK5CKMXlzRixE9d94eABlaB4k61LG4nO2AEI42eYW6p8e9rfn1nO2AEOkO0s3E2KK" +
-		"H1GCg641K553xVTLRkyvZPs65zyvxvvqtSxw#NRTktGfT$NVFI6w5RjGDkaxNQuPkqiswHL" +
-		"ThccvDwvsQrZkzZFUDA592hwUBjluwN4cDrIjfQmUazHwKrdj86k$PQNpNb1sVJR0RzK1Pl" +
-		"yReL2tmVkkSuhzAHT7BkfRZrvffxPN1iNdPdgnD6b#lDBsFZvwtmMbYzqtZEpADxngjKX6i" +
-		"rJoOgQ$qNKnIcJglJFp3DiXoxT0o$cVAUEQKRRl#MbYXNmixIbawZLNOVVqMTdZSecDAZbK" +
-		"wKWlzMEqOc#77QHEqoB8jIu$OmV7AklWuCvfZDp2RdBY7oxLQlr6wHxEZ5xNGEaNpACLncg" +
-		"r57D#p8S7p99xx6Oqq2y#3kfYo$sOhbxB$pj8xqGjuPjb8VSXePjf0IzXGgwwrrfVHDBDgr" +
-		"aLLL6GTL3cQgq#9wCGQprObR9p3TeG3gAzgUyGrHNohXVmpMP6QqNEghZgghRggeLgghtpL" +
-		"KmDjeKPgeiPgfgPgg2tLN5jfQxLGdbggjTggbTgedTghWpghaxfg6tNJE7LK5tLNWNggXtg" +
-		"fdtghh$ghZmerKDjgW0PfiBRN4Ese7JHCb#aAxQIXsaNRQLVjhfsrcuPhJutG7jfRUsaVxQ" +
-		"S96gtzTO0Er14wI0ThfFRL8JfKeoWVfl4wMaVf61sd#tIi9ke4dQZZTP9ErYasNgVh39sfI" +
-		"JfBv#X5dQl9EbzJTA4kqANH3#PqkIxIRRf3T#bANHAz57qLBOs#jngMepjrh#ucuZ7TheUY" +
-		"bNfKZ#jfFQ5dzPpcwasze9Vqb9wt9dfLR#jblQPtkPvlwNtDjotrfJxGH$fOdsYnFjFdjfM" +
-		"#qDTQgcNwHjzhkRxL2ckX7xH4F#ed$QnVzBjMQfr#rHhzeSZCCg8LbcajetVr9rSy6RrZbQ" +
-		"ooLR6gLfDlRQjhEraTgsNrhO7LiqQsXJMsXkQigULppBDMjhNjR6EihMrZhQsTTRLkrjqAh" +
-		"8VrjgEjf$MnVj5tqRUshMrlszaEDjo6yTt5ThCzRLSxnVQslIGROVj5osqVszyEZ9RPA1jj" +
-		"Xzbu6sj7s3WxDlg6NJZUZhVZx0GxtKwqa#rKEudUJwFbH3l39jcPTgwTPUVOP2koANQsdK$" +
-		"DUNQXNM0NswLsYLrfbzb5TeLTPLDjcbrjq#rQkuwOwzbb#UopLkoqDkorudtMSJEz96Qdfe" +
-		"ysD2Z1JlrtzDkXWhvyxfrqu#lBtLNMR#XF8XopkFiwS#o#6RtxFEbNfwA#R79agv8gGnOQK" +
-		"pqc4s#TDF5DqPHcQVoRuYbPYvfXBJRU8bjLKMm$rfgid1zdFkhde#g4R7t2oXQo#bayetof" +
-		"Hwo1MQYRB#M4Y99Z3Owrc6#nfov7upmHZaqekzZdo$vhP4t4dcvnjYnqCnl5DCQL89kXdyM" +
-		"z#3O9z3WhvAW79JcAUyY8CvNqa5LQQx6$VdnMbVwC6VkvPCQUPBplSud9ZBDaXhwouvZYUf" +
-		"$RNrTZTzQAsoNnvCIsEBfoIglYQ8lZydW29F5cy2pnzJaXJqvAN4x8vqVfZmcUF1cbPIiTG" +
-		"rxSMswSELawqinuVdxiUN4RYziamwoD9wCBCwWIv$RV0dmb6P8yzJ92FpxQIiVbIqco5g#A" +
-		"ZwWRZpqZzcN6hJ92Vubu72Kz9uCloRFpBr$pE28ZvMXnxXPXrQnqJCMzTwESMph7sl6iNSe" +
-		"Log0sFvvFPiYO2AkH7po9EF$wUIsU5N6ywsQcj2#9BSdkCrKgtGE9uFTNC9EM3KEVoTAiEU" +
-		"mkesP3UoiU4p4P2F5DanH$ka1hM1pANrAN0qV0G3WIJeGfS2fS6JyTP3F1FobkWTlWThW4x" +
-		"e0xuMwu2#w5U#01k0yUXFlXOPW53y4Zy3ZCXYVysE0fU1AUXcVXKPWBpy1py1ZCW#VXHNW1" +
-		"vi3By0gy3Y$1Q$0sl0Elmdlm1io7z#5TM00Vm8Vm9dm47yD2M0IVmAUm69R0P$0vV0tBmA$" +
-		"PDx0SleEby3siW9Nm1Qo27#4d#0LMms#m5jR0ElW3$eIVuLUkHK7nDR4esAqavu1pbw3yBJ" +
-		"O9N4#N2LcG3RpGkah0TNHL8HUg4Ry5jWPKWPfG2wgJZFcwsb07wa7zi1TO6zS0VBj6K9SSG" +
-		"x4DeGaqXMRG71YRBgM#F#UD8O$o5TXyVDjZM$gS6uEuLh0bR0tiIzS2sa1Rw00ToNS870IZ" +
-		"A7U2pfoF2MlKad8tu6t35K0xO8#xhj2T#h7OdjZ3iJr2dxsW3$I5tj0Fc8SDmnR2m91xGeW" +
-		"V08CeZySoDzi1EnY60ETsB1pF#OuXVgTWXmMx6smBky3ki2luTTqZr8#0FM5lu2tGxHFy#y" +
-		"9#S01i1mS6$qXWFHphONxz3Wl#qS6E0TRCZOETOMpm#pNWFdVSuyxFPG8SJGvmny14pe$3d" +
-		"W3UdWH#NYVZvntJdHBoe0$Ebz47TpgS0MS2w#3EXdFWN3WBYe2tK7S1EOWnF$VXS27i3nV1" +
-		"P3WABWQlARuzUyjT7gu3zNP#sAFpmnZyNhiCfW4QvQR2jN0riVJbhe7f8TRh5dlPtO3rwtz" +
-		"ZyDyCCy1hcX$FhLX$BRo##VotXpYqqA5n3grpQ9ppUiLOpVU9xZdqpg5x3hrpNkiOWqF$t4" +
-		"EXlTSzlz#y5levpmv#DCsXXGujTEYWynhenuqEEg#3VZxedqCBtToKUmPzT7C0NNJegaCB7" +
-		"Pheq4U77Zfqpw693ZrqwAL36nqQwD14v#znDDAXXmxjSsYYUmlGGuSkEgyDwA933nrwwD11" +
-		"XoOwjD2XY$9ZGGiTckYM05heq4NdDMyw5brqNm4wwPQ7wtVpFz$pbX6kvUXK$$$vpy9dy5$" +
-		"dDkrVa6$u1keADYsdFHNi7Tv6KRGGbgRaBGp#bPi$VgiJxESXzz3rvZ2lOddqPh0BokbdLS" +
-		"avurwtQMFLYCsTxtyphD6WO5V$$RQkSR3vnLOZDzv64zECmLMyJqrAuyiAjcuvRKgUSKleg" +
-		"p2CUSW6#bYsWRgfQNpDWcsRleqR5#hNfBIPaL9VPatAxzyLLJJsxyBQr2o$JdTLeFrD2f$e" +
-		"T$sFV29#HqHhDx7jcWf7Bea#Hd4NH1z4xqVpe$UYLpSI$scvDL#cyV4E4Iqk9vvtZeZtcEY" +
-		"rzVoVfPo$dNB#LievxpdH6odbLpOqvX3puyPZqhRxDJxo1XLzbBP#TShvgZJrFsqa$oyfvp" +
-		"#N6xKe#cJ3UJRr4$4RDbeNySjL$LGeKsUDKXzi7oNK5ziNsqMDe9qAi0Lge6wg7l$BrfkwV" +
-		"k5Vjbwg0fNKGTMWAkI2BrU6Ak7Sm452xV6rnzTUDQ0w#F#MFGbrnNR5jiHwjeb9g1LsVNe6" +
-		"sYXBRQ5T82$GchfyBByxut#f#sFxOtjWUs3vJGcc0Vy0ZNp#cW==");
+		"U9pjcGTq5TKMXlyzPz88lNTHgb94IkWreVVUROYAYbYHOW451HjMHCM6H7g784sgI6$IEz9" +
+		"x5IdwvlrdvjoRc#JU17pwtbgkTsTziy$PPvywP$wPIG2x7hx6L$W2N#8RZCQt68CH#0oVOn" +
+		"G#bY$aI$bAFi9tQSPCm4Tfnip6fobYbden9cAUuq1XIUYMS1IdSH4$IEiqUriaRTECMIxFf" +
+		"1cpLfuB6VDQo99FqfZf9eHX7wQ7Yi814xSB6x4bPDHGPu8CTBx3TiHZTwYnI8sG9SrIRNc5" +
+		"$2Gh4I#TGzRl5RBabP0bbrEKp3Pz9lSV3#4$6S9$DeJ$V0Z$vH3#Ao7y8SOfBoRw9Ix0RwV" +
+		"mfCSSztfTnR#ajjdBmwI2B9O4cIyFUoikNyj4#H7lo1x9AtdmkBIN$DB7Yq5OO8pnsK5yau" +
+		"FumeFu8eBueeBueeFu8fECLy#rRfBPVwXt4NTvEZp6$TdJdVqIMQLdZv4iEue3#8LnyTB6t" +
+		"M$Fkl7nZ4lFytLtbGRBM9aXUv3WZ9Dho02B9R7E68cKTCvejZeDZqfMl8YCRjq4nWzYH5UM" +
+		"wFmiPC8CvhrnUlkv5uRA6Hc211xnaaF7yvY5zSvOUcQnzwswX9vzs4ERu3$Y$KS2xyzsRES" +
+		"Ejj1IolDSJ#h8xSwt4ekXB5qXptkHSg$ibgUacyIoV8mymb9TUwYyYdZ7YzWgKsMRR95rib" +
+		"b6onPabit8AkEHJMR91iPdb$Mo0raOkLqc8mToohV8XTp8Wxp8X$meY08eXjjGIARWTXJ67" +
+		"IY24YYBeYYEkt0dIg8qIk5kbC4zA8UAg83oY45bL48rr4HLL45rr4Ojr44iwc4uub033L0N" +
+		"3T48ZT4KpV4#cg4#cg0bMg4jMg0rEgCzEg0Dsg4ZEg4hkk4HF8rxSH#UmFruWES7qHrzy11" +
+		"wu4bqmSDu2i#WDvx5S#YB8NWU$J4L$V0I1k05l8nNC0W3yIe6utMyYJVmDjx2kyuPoOxtdF" +
+		"4OY$6OZm#S8yvXvpGcOYR6OOBamnHCOiJtMEYSmpmim5miay9OX1#n63zXELPXDTPY0zPW7" +
+		"JPZ9JRXPsp33kp4Nkp28Up7GHp1CHp62Pp1APp39Lp0hxY6tt13oiB1TIc7t$67Y42KX4c4" +
+		"X4j6iIHAeYM3P98iKaXoIZRdBFTHRiaikPmrpcef80NbDgaeHNWKan9odnINedANb98xfOo" +
+		"KbknoZzpDSqUf92KbHYfBLQaYrQIcz9VgKalgImDfA8saYJIMfj9SEaWBQUMSSavA9#aYtU" +
+		"L#7W$8W$AGF2ezfASy9e$Ba$AQF26zvMddX7DSNf1#qbS6oW1vMLwIrvrZJ0#LDoLUtf3qy" +
+		"fQy8zFaNNbRXibxyhuCbmzaX7medyX8#Km#bL7okVER$0p#v3llBEFaOvdEOoPpS#HxdXVA" +
+		"0jdBk$CRMIhxPQwibWCoINwGPR963if6#KLsoY7UkuVbY1oLOx9FZii9EIcdvBISaxDoNYx" +
+		"8HVcLBLsIA$8RxLNkpXZkoyhSarMvEwjp9zRapgpDlLcNkpEE#xF#tnxZY#20U1#4Rebt7E" +
+		"#tZl#54TrSpAsN#5eDHsGgCytfZykNIfJ5zpPDQKIakcgtNg9RJK$bp$YNjnowv9$cZqxXo" +
+		"SudYLvP$HnfQlPoGUfx9ABul6vgLZmJClF9KuRF0bs$2PyYPVaKyMB2ayHuliP1VAs3#AmW" +
+		"lhn1V651VCM2#2I9B#NinPrh9Arm5obtzhgUdhrNbfEpZsQPb$FE4OpJyOtTk1W#MGjp9NH" +
+		"94xRLZYKwNPvFr2vkpVRCDO9jxeKOFYaZk4eHfaLnM$J6wPrpiQGHvstnY63lEbwt4#RM5$" +
+		"Qkt19XRyfjntT4#0#B8s$kHaUulNZd3cvDVPJaipl2j1jBRritLapBbh#cZeXZEeftUnHj9" +
+		"relCYl7azMzPi8tW7GSTGHjPxvT2DynmdWEPrasDpQCgN2sLjJj8TprvQFDOSh4lHPXN2ET" +
+		"ian4c7ksEKlB7oUyYc6iPxirmesl3NqbwB7TNAGPVoGzOSONvkPjTtx9pyAt8L#KhyzmqvC" +
+		"URJQt9s$aoestJOlUzV3E5TssVEK5p7Z3pTdNliMhucl16w$obvTo#xNTj3S2Es3qOjA9vu" +
+		"fkIKKpnx20EPJprqniHwzNJjDIukYzzMl6V3OpKWaOkPv$0JDARmLYp0XLaZKHurF#MVgkl" +
+		"8xo8WBh9iRvvg9CEfRUx6uwZkT8lgdgk6WtAhzPAQy$2tKT$X3fdNdaTy$CSwT6kZwzE$Lx" +
+		"RvIxNxLk5A7LXyv7khQmVw$cSiSSbcncYYsvlTBQVFZV60ZtDvlKPtwZbvUBv31WvIEAtCt" +
+		"yQTg6f1cvb$GYFvBvP2LPGTQJgMGRsK9sagra5rbDzfBTP1$PGmuGtSz1SeWS8qV8VhAT72" +
+		"SdYExx33bApf6pv0BPGCwJouHZjlYcPPqYLyaLSetmhSkwJcwGVv5Bv7Vo1xWaH9XsQ9bH5" +
+		"k6wM2TfmqWw4awYIIJ9GDAJZ2GJoKooavma2yb1SfCy91l9ImgIN2I2t4RoaqBa3bAO52N5" +
+		"I0bo9ob9IfFRIH6EfQntJLHnprhtCrs6y9geUmYlaIf7ofAAf3ovYvGYCQGIgK8gipBNNrK" +
+		"bjKWrKflK8JNPRX$QkgG2YILnPYzympJtXkBRekBrboze6vCcX7j1DISjM9$Z1g#jQaIQCg" +
+		"$xRCLulMwjTLkt0kkq8TL9IzAEj2STI2VIXNHb7zr8F$84yss9plStwwJNcFjKtKSU8Dt9W" +
+		"wGpotIR3v4U9dQGwLElxIFClqpRapGWZnBT$cFaSTBBn3x9qopQfyZJf3VhlKQ6CFsCYNcM" +
+		"l42Ue$yDyYRJpvkoliRsCxO$6K1UOaPVCux1UeUMnTQxjA#Ok47C3wVLVRr7#whn3sR#VTh" +
+		"NQJ#X7MByx5SD9SE8xlzjut#BwFPr6m#JuSR$8T7jVCHsYjD#RFmZZFsCV40#9tfSdnh$AA" +
+		"BtXkxxI$8r6SqsE2uLJ$YLPUdr64l6aF5a99b0lwuxqRJp5PbC9f4fX7gYfXEz3$bbfcOGw" +
+		"fNIQvz0#9scvh8DrhFq7Xb7g4bg7bb45f0Vo5Aoc35w$4l8CdFjzHZ7c7G5CuRbX7gcLX5g" +
+		"dA9sgJL4wvoUorgopiHgpQjDkv5MxxDDnazjKdE8ra7ENMaTr7jGQwEUttOJznEXFghDHDy" +
+		"$ErW#ZUXvKYCLDLJf#$O0qRgfvqrzL0TD$L$eq$Uhrb6zPuyOFxLJKIyLzLDfFTCQgjUB#g" +
+		"YqbkgnKKULrbskdpeVSEzHOnNrLL5J5R#H5JLJKKyLTLPHMnLrLL5hbTPGQgkjwr2xHRT3l" +
+		"LNKMLlhANNLPg5DNRMffpOrq8xqzMFweYxRr5XhffUteuoV6crJVotz7Rx6b56hRUgljSZa" +
+		"CnXBVRQfoHQlkMmrFkgpJKssgT6ot$Yo4kgoJSsM4#QQKsjjwhETGt#b1uujSOmszTocnii" +
+		"VNbvqlMNqKUkj2DDEZwHrBEg6nMjhynbWPGbeYtfjynbW5o9y7jZKVPlF0PjwRLEtRUgwJI" +
+		"srgUSsdm4szTYcpjlKSfiwBzpxDlN1ffxRr7kREcjJ9stgkiLzQLFNxHg46c$NJZaNIymSH" +
+		"WIRw$$vty3h4fMObi5$GNkvGvUXwossPJJDMgWjNr7NaBq1xVKq$dF$wRYJzYiZFQl2JJzz" +
+		"afMhuFLKWO2noLyvfe1sXwLIDkfFp3MJiVcI#SrxdvHFvgzbR9E$Otv$1$hRmRCgvDuCNLU" +
+		"rDxQJcNVljEjWQagVdBtvFh4WY2#xiSL2r5bb#kcWtq$DcBk7xaFwfjB$dY2#oiOs3bx7zn" +
+		"udtGFgd4WMCpbKdpUBre0$Kq#$gmUCOqQGTWDqnHeG49iG93Q5tY1edocl5SmwXXwdjxuSm" +
+		"y00d#$TVLMoEGqEY0cf2xUAxzilnFYkf5vNRi3ydD$n3$avVAzqhl$9kjTkAkgGSz0vuEnp" +
+		"jZW$EnkT3SvwPvsprbcMHgtjGRryCtTs12tPdyApDqcEx$qElpkSvK7gxWv8xmf8xmn8hmf" +
+		"8hmn8yttKMH6GNnfiTCdwEvzsJD1wLzpp9h8vQFcl0UaBGSelfj7#vO3qfLJYjZhRKcyfI9" +
+		"qbpc9daKdpsz6PvI#PO#n2CitldUbFBV2dvljJyvpldQdE56UooS$rb$0RpvdeJ7Ac#pq9p" +
+		"knR7Qs$xbNdXiClCdH35twYD4OFjADj1uNsyFvotmJvIG4qH1uqPxevyg8PCgCjozkol8Fv" +
+		"kteRP23Hg4DR1#b9EX9jqXbCMeX556emNOC#pseokxOMig0sgSao7msW$#Ueq8As1MqbMar" +
+		"J5uNAjCbfRQYA25GZrGqL3LLO5aDRZpOHsn2M3Eylix68H2Ve$m8en34VntndvZipNvVMHq" +
+		"iNfVy#IWGTQJlIDg9jHDkAjXLjrty3tf3DJm==");
  // Generated from spec/ErlangParser.parser
 /* This code is inlined in the generated parser class */
 
@@ -275,7 +304,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [6] function = LCURLYBRACE.LCURLYBRACE FUNCTION.FUNCTION COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ IDENTIFIER.funName COMMA.COMMA__ INTEGER.INTEGER_ COMMA.COMMA___ LBRACKET.LBRACKET LCURLYBRACE.LCURLYBRACE_ CLAUSE.CLAUSE COMMA.COMMA____ INTEGER.INTEGER__ COMMA.COMMA_____ LBRACKET.LBRACKET_ variable_list.vars RBRACKET.RBRACKET COMMA.COMMA______ LBRACKET.LBRACKET__ RBRACKET.RBRACKET_ COMMA.COMMA_______ LBRACKET.LBRACKET___ process.process RBRACKET.RBRACKET__ RCURLYBRACE.RCURLYBRACE RBRACKET.RBRACKET___ RCURLYBRACE.RCURLYBRACE_
+			new Action() {	// [6] function = LCURLYBRACE.LCURLYBRACE FUNCTION.FUNCTION COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ IDENTIFIER.funName COMMA.COMMA__ INTEGER.numArguments COMMA.COMMA___ LBRACKET.LBRACKET LCURLYBRACE.LCURLYBRACE_ CLAUSE.CLAUSE COMMA.COMMA____ INTEGER.INTEGER_ COMMA.COMMA_____ LBRACKET.LBRACKET_ variable_list_opt.vars RBRACKET.RBRACKET COMMA.COMMA______ LBRACKET.LBRACKET__ RBRACKET.RBRACKET_ COMMA.COMMA_______ LBRACKET.LBRACKET___ process.process RBRACKET.RBRACKET__ RCURLYBRACE.RCURLYBRACE RBRACKET.RBRACKET___ RCURLYBRACE.RCURLYBRACE_
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol FUNCTION = _symbols[offset + 2];
@@ -284,13 +313,13 @@ public class ErlangParser extends Parser {
 					final Symbol COMMA_ = _symbols[offset + 5];
 					final Symbol funName = _symbols[offset + 6];
 					final Symbol COMMA__ = _symbols[offset + 7];
-					final Symbol INTEGER_ = _symbols[offset + 8];
+					final Symbol numArguments = _symbols[offset + 8];
 					final Symbol COMMA___ = _symbols[offset + 9];
 					final Symbol LBRACKET = _symbols[offset + 10];
 					final Symbol LCURLYBRACE_ = _symbols[offset + 11];
 					final Symbol CLAUSE = _symbols[offset + 12];
 					final Symbol COMMA____ = _symbols[offset + 13];
-					final Symbol INTEGER__ = _symbols[offset + 14];
+					final Symbol INTEGER_ = _symbols[offset + 14];
 					final Symbol COMMA_____ = _symbols[offset + 15];
 					final Symbol LBRACKET_ = _symbols[offset + 16];
 					final Symbol _symbol_vars = _symbols[offset + 17];
@@ -307,13 +336,53 @@ public class ErlangParser extends Parser {
 					final Symbol RCURLYBRACE = _symbols[offset + 26];
 					final Symbol RBRACKET___ = _symbols[offset + 27];
 					final Symbol RCURLYBRACE_ = _symbols[offset + 28];
-					 ASTNode _node_ = new Function("", ((String)funName.value), vars, process);
+					 ASTNode _node_ = new Function(new Opt(), ((String)funName.value), vars, process);
       _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
       _node_.setEnd(Symbol.getLine(RCURLYBRACE_.getEnd()), (short) Symbol.getColumn(RCURLYBRACE_.getEnd()));
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [7] function = LCURLYBRACE.LCURLYBRACE ATTRIBUTE.ATTRIBUTE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ TYPE.TYPE COMMA.COMMA__ LCURLYBRACE.LCURLYBRACE_ IDENTIFIER.funType COMMA.COMMA___ atom.atom COMMA.COMMA____ LBRACKET.LBRACKET RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE RCURLYBRACE.RCURLYBRACE_ COMMA.COMMA_____ LCURLYBRACE.LCURLYBRACE__ FUNCTION.FUNCTION COMMA.COMMA______ INTEGER.INTEGER_ COMMA.COMMA_______ IDENTIFIER.funName COMMA.COMMA________ INTEGER.numArguments COMMA.COMMA_________ LBRACKET.LBRACKET_ LCURLYBRACE.LCURLYBRACE___ CLAUSE.CLAUSE COMMA.COMMA__________ INTEGER.INTEGER__ COMMA.COMMA___________ LBRACKET.LBRACKET__ variable_list_opt.vars RBRACKET.RBRACKET_ COMMA.COMMA____________ LBRACKET.LBRACKET___ RBRACKET.RBRACKET__ COMMA.COMMA_____________ LBRACKET.LBRACKET____ process.process RBRACKET.RBRACKET___ RCURLYBRACE.RCURLYBRACE__ RBRACKET.RBRACKET____ RCURLYBRACE.RCURLYBRACE___
+			new Action() {	// [7] function = funtype.funtype LCURLYBRACE.LCURLYBRACE FUNCTION.FUNCTION COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ IDENTIFIER.funName COMMA.COMMA__ INTEGER.numArguments COMMA.COMMA___ LBRACKET.LBRACKET LCURLYBRACE.LCURLYBRACE_ CLAUSE.CLAUSE COMMA.COMMA____ INTEGER.INTEGER_ COMMA.COMMA_____ LBRACKET.LBRACKET_ variable_list_opt.vars RBRACKET.RBRACKET COMMA.COMMA______ LBRACKET.LBRACKET__ RBRACKET.RBRACKET_ COMMA.COMMA_______ LBRACKET.LBRACKET___ process.process RBRACKET.RBRACKET__ RCURLYBRACE.RCURLYBRACE RBRACKET.RBRACKET___ RCURLYBRACE.RCURLYBRACE_
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_funtype = _symbols[offset + 1];
+					final FunType funtype = (FunType) _symbol_funtype.value;
+					final Symbol LCURLYBRACE = _symbols[offset + 2];
+					final Symbol FUNCTION = _symbols[offset + 3];
+					final Symbol COMMA = _symbols[offset + 4];
+					final Symbol INTEGER = _symbols[offset + 5];
+					final Symbol COMMA_ = _symbols[offset + 6];
+					final Symbol funName = _symbols[offset + 7];
+					final Symbol COMMA__ = _symbols[offset + 8];
+					final Symbol numArguments = _symbols[offset + 9];
+					final Symbol COMMA___ = _symbols[offset + 10];
+					final Symbol LBRACKET = _symbols[offset + 11];
+					final Symbol LCURLYBRACE_ = _symbols[offset + 12];
+					final Symbol CLAUSE = _symbols[offset + 13];
+					final Symbol COMMA____ = _symbols[offset + 14];
+					final Symbol INTEGER_ = _symbols[offset + 15];
+					final Symbol COMMA_____ = _symbols[offset + 16];
+					final Symbol LBRACKET_ = _symbols[offset + 17];
+					final Symbol _symbol_vars = _symbols[offset + 18];
+					final List vars = (List) _symbol_vars.value;
+					final Symbol RBRACKET = _symbols[offset + 19];
+					final Symbol COMMA______ = _symbols[offset + 20];
+					final Symbol LBRACKET__ = _symbols[offset + 21];
+					final Symbol RBRACKET_ = _symbols[offset + 22];
+					final Symbol COMMA_______ = _symbols[offset + 23];
+					final Symbol LBRACKET___ = _symbols[offset + 24];
+					final Symbol _symbol_process = _symbols[offset + 25];
+					final Process process = (Process) _symbol_process.value;
+					final Symbol RBRACKET__ = _symbols[offset + 26];
+					final Symbol RCURLYBRACE = _symbols[offset + 27];
+					final Symbol RBRACKET___ = _symbols[offset + 28];
+					final Symbol RCURLYBRACE_ = _symbols[offset + 29];
+					 ASTNode _node_ = new Function(new Opt(funtype), ((String)funName.value), vars, process);
+      _node_.setStart(Symbol.getLine(_symbol_funtype.getStart()), (short) Symbol.getColumn(_symbol_funtype.getStart()));
+      _node_.setEnd(Symbol.getLine(RCURLYBRACE_.getEnd()), (short) Symbol.getColumn(RCURLYBRACE_.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [8] funtype = LCURLYBRACE.LCURLYBRACE ATTRIBUTE.ATTRIBUTE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ TYPE.TYPE COMMA.COMMA__ LCURLYBRACE.LCURLYBRACE_ IDENTIFIER.fun COMMA.COMMA___ LCURLYBRACE.LCURLYBRACE__ ATOM.ATOM COMMA.COMMA____ INTEGER.INTEGER_ COMMA.COMMA_____ SINGLEMARKS.SINGLEMARKS session.session SINGLEMARKS.SINGLEMARKS_ RCURLYBRACE.RCURLYBRACE COMMA.COMMA______ LBRACKET.LBRACKET RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE_ RCURLYBRACE.RCURLYBRACE__ COMMA.COMMA_______
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol ATTRIBUTE = _symbols[offset + 2];
@@ -323,53 +392,31 @@ public class ErlangParser extends Parser {
 					final Symbol TYPE = _symbols[offset + 6];
 					final Symbol COMMA__ = _symbols[offset + 7];
 					final Symbol LCURLYBRACE_ = _symbols[offset + 8];
-					final Symbol funType = _symbols[offset + 9];
+					final Symbol fun = _symbols[offset + 9];
 					final Symbol COMMA___ = _symbols[offset + 10];
-					final Symbol _symbol_atom = _symbols[offset + 11];
-					final Atom atom = (Atom) _symbol_atom.value;
-					final Symbol COMMA____ = _symbols[offset + 12];
-					final Symbol LBRACKET = _symbols[offset + 13];
-					final Symbol RBRACKET = _symbols[offset + 14];
-					final Symbol RCURLYBRACE = _symbols[offset + 15];
-					final Symbol RCURLYBRACE_ = _symbols[offset + 16];
-					final Symbol COMMA_____ = _symbols[offset + 17];
-					final Symbol LCURLYBRACE__ = _symbols[offset + 18];
-					final Symbol FUNCTION = _symbols[offset + 19];
+					final Symbol LCURLYBRACE__ = _symbols[offset + 11];
+					final Symbol ATOM = _symbols[offset + 12];
+					final Symbol COMMA____ = _symbols[offset + 13];
+					final Symbol INTEGER_ = _symbols[offset + 14];
+					final Symbol COMMA_____ = _symbols[offset + 15];
+					final Symbol SINGLEMARKS = _symbols[offset + 16];
+					final Symbol _symbol_session = _symbols[offset + 17];
+					final Session session = (Session) _symbol_session.value;
+					final Symbol SINGLEMARKS_ = _symbols[offset + 18];
+					final Symbol RCURLYBRACE = _symbols[offset + 19];
 					final Symbol COMMA______ = _symbols[offset + 20];
-					final Symbol INTEGER_ = _symbols[offset + 21];
-					final Symbol COMMA_______ = _symbols[offset + 22];
-					final Symbol funName = _symbols[offset + 23];
-					final Symbol COMMA________ = _symbols[offset + 24];
-					final Symbol numArguments = _symbols[offset + 25];
-					final Symbol COMMA_________ = _symbols[offset + 26];
-					final Symbol LBRACKET_ = _symbols[offset + 27];
-					final Symbol LCURLYBRACE___ = _symbols[offset + 28];
-					final Symbol CLAUSE = _symbols[offset + 29];
-					final Symbol COMMA__________ = _symbols[offset + 30];
-					final Symbol INTEGER__ = _symbols[offset + 31];
-					final Symbol COMMA___________ = _symbols[offset + 32];
-					final Symbol LBRACKET__ = _symbols[offset + 33];
-					final Symbol _symbol_vars = _symbols[offset + 34];
-					final List vars = (List) _symbol_vars.value;
-					final Symbol RBRACKET_ = _symbols[offset + 35];
-					final Symbol COMMA____________ = _symbols[offset + 36];
-					final Symbol LBRACKET___ = _symbols[offset + 37];
-					final Symbol RBRACKET__ = _symbols[offset + 38];
-					final Symbol COMMA_____________ = _symbols[offset + 39];
-					final Symbol LBRACKET____ = _symbols[offset + 40];
-					final Symbol _symbol_process = _symbols[offset + 41];
-					final Process process = (Process) _symbol_process.value;
-					final Symbol RBRACKET___ = _symbols[offset + 42];
-					final Symbol RCURLYBRACE__ = _symbols[offset + 43];
-					final Symbol RBRACKET____ = _symbols[offset + 44];
-					final Symbol RCURLYBRACE___ = _symbols[offset + 45];
-					 ASTNode _node_ = new Function(((String)funType.value), ((String)funName.value), vars, process);
+					final Symbol LBRACKET = _symbols[offset + 21];
+					final Symbol RBRACKET = _symbols[offset + 22];
+					final Symbol RCURLYBRACE_ = _symbols[offset + 23];
+					final Symbol RCURLYBRACE__ = _symbols[offset + 24];
+					final Symbol COMMA_______ = _symbols[offset + 25];
+					 ASTNode _node_ = new FunType(((String)fun.value), new List(), session );
       _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
-      _node_.setEnd(Symbol.getLine(RCURLYBRACE___.getEnd()), (short) Symbol.getColumn(RCURLYBRACE___.getEnd()));
+      _node_.setEnd(Symbol.getLine(COMMA_______.getEnd()), (short) Symbol.getColumn(COMMA_______.getEnd()));
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [8] receive_clause = LCURLYBRACE.LCURLYBRACE CLAUSE.CLAUSE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET LCURLYBRACE.LCURLYBRACE_ TUPLE.TUPLE COMMA.COMMA__ INTEGER.INTEGER_ COMMA.COMMA___ LBRACKET.LBRACKET_ atom.sender COMMA.COMMA____ atom.label COMMA.COMMA_____ pattern_list_opt.vars RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE RBRACKET.RBRACKET_ COMMA.COMMA______ LBRACKET.LBRACKET__ RBRACKET.RBRACKET__ COMMA.COMMA_______ LBRACKET.LBRACKET___ process.process RBRACKET.RBRACKET___ RCURLYBRACE.RCURLYBRACE_
+			new Action() {	// [9] receive_clause = LCURLYBRACE.LCURLYBRACE CLAUSE.CLAUSE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET LCURLYBRACE.LCURLYBRACE_ TUPLE.TUPLE COMMA.COMMA__ INTEGER.INTEGER_ COMMA.COMMA___ LBRACKET.LBRACKET_ atom.sender COMMA.COMMA____ atom.label COMMA.COMMA_____ pattern_list_opt.vars RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE RBRACKET.RBRACKET_ COMMA.COMMA______ LBRACKET.LBRACKET__ RBRACKET.RBRACKET__ COMMA.COMMA_______ LBRACKET.LBRACKET___ process.process RBRACKET.RBRACKET___ RCURLYBRACE.RCURLYBRACE_
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol CLAUSE = _symbols[offset + 2];
@@ -409,7 +456,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [9] receive_clause = LCURLYBRACE.LCURLYBRACE CLAUSE.CLAUSE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET LCURLYBRACE.LCURLYBRACE_ TUPLE.TUPLE COMMA.COMMA__ INTEGER.INTEGER_ COMMA.COMMA___ LBRACKET.LBRACKET_ atom.sender COMMA.COMMA____ atom.label RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE RBRACKET.RBRACKET_ COMMA.COMMA_____ LBRACKET.LBRACKET__ RBRACKET.RBRACKET__ COMMA.COMMA______ LBRACKET.LBRACKET___ process.process RBRACKET.RBRACKET___ RCURLYBRACE.RCURLYBRACE_
+			new Action() {	// [10] receive_clause = LCURLYBRACE.LCURLYBRACE CLAUSE.CLAUSE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET LCURLYBRACE.LCURLYBRACE_ TUPLE.TUPLE COMMA.COMMA__ INTEGER.INTEGER_ COMMA.COMMA___ LBRACKET.LBRACKET_ atom.sender COMMA.COMMA____ atom.label RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE RBRACKET.RBRACKET_ COMMA.COMMA_____ LBRACKET.LBRACKET__ RBRACKET.RBRACKET__ COMMA.COMMA______ LBRACKET.LBRACKET___ process.process RBRACKET.RBRACKET___ RCURLYBRACE.RCURLYBRACE_
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol CLAUSE = _symbols[offset + 2];
@@ -446,7 +493,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [10] case_clause = LCURLYBRACE.LCURLYBRACE CLAUSE.CLAUSE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET pattern_list.patterns RBRACKET.RBRACKET COMMA.COMMA__ LBRACKET.LBRACKET_ RBRACKET.RBRACKET_ COMMA.COMMA___ LBRACKET.LBRACKET__ process.process RBRACKET.RBRACKET__ RCURLYBRACE.RCURLYBRACE
+			new Action() {	// [11] case_clause = LCURLYBRACE.LCURLYBRACE CLAUSE.CLAUSE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET pattern_list.patterns RBRACKET.RBRACKET COMMA.COMMA__ LBRACKET.LBRACKET_ RBRACKET.RBRACKET_ COMMA.COMMA___ LBRACKET.LBRACKET__ process.process RBRACKET.RBRACKET__ RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol CLAUSE = _symbols[offset + 2];
@@ -472,7 +519,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [11] case_clause_list = case_clause.case_clause
+			new Action() {	// [12] case_clause_list = case_clause.case_clause
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_case_clause = _symbols[offset + 1];
 					final CaseClause case_clause = (CaseClause) _symbol_case_clause.value;
@@ -482,7 +529,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [12] case_clause_list = case_clause_list.case_clause_list COMMA.COMMA case_clause.case_clause
+			new Action() {	// [13] case_clause_list = case_clause_list.case_clause_list COMMA.COMMA case_clause.case_clause
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_case_clause_list = _symbols[offset + 1];
 					final List case_clause_list = (List) _symbol_case_clause_list.value;
@@ -495,7 +542,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [13] receive_clause_list = receive_clause.receive_clause
+			new Action() {	// [14] receive_clause_list = receive_clause.receive_clause
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_receive_clause = _symbols[offset + 1];
 					final ReceiveClause receive_clause = (ReceiveClause) _symbol_receive_clause.value;
@@ -505,7 +552,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [14] receive_clause_list = receive_clause_list.receive_clause_list COMMA.COMMA receive_clause.receive_clause
+			new Action() {	// [15] receive_clause_list = receive_clause_list.receive_clause_list COMMA.COMMA receive_clause.receive_clause
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_receive_clause_list = _symbols[offset + 1];
 					final List receive_clause_list = (List) _symbol_receive_clause_list.value;
@@ -518,7 +565,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [15] message = LCURLYBRACE.LCURLYBRACE TUPLE.TUPLE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET sender_id.recipient COMMA.COMMA__ atom.label COMMA.COMMA___ expression_list.expression_list RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE
+			new Action() {	// [16] message = LCURLYBRACE.LCURLYBRACE TUPLE.TUPLE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET sender_id.recipient COMMA.COMMA__ atom.label COMMA.COMMA___ expression_list.expression_list RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol TUPLE = _symbols[offset + 2];
@@ -542,7 +589,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [16] message = LCURLYBRACE.LCURLYBRACE TUPLE.TUPLE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET sender_id.recipient COMMA.COMMA__ atom.label RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE
+			new Action() {	// [17] message = LCURLYBRACE.LCURLYBRACE TUPLE.TUPLE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET sender_id.recipient COMMA.COMMA__ atom.label RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol TUPLE = _symbols[offset + 2];
@@ -563,25 +610,23 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [17] process = LCURLYBRACE.LCURLYBRACE OPERATOR.OPERATOR COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ SINGLEMARKS.SINGLEMARKS SEND.SEND SINGLEMARKS.SINGLEMARKS_ COMMA.COMMA__ atom.dest COMMA.COMMA___ message.message RCURLYBRACE.RCURLYBRACE COMMA.COMMA____ process_opt.next
+			new Action() {	// [18] process = LCURLYBRACE.LCURLYBRACE OPERATOR.OPERATOR COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ SEND.SEND COMMA.COMMA__ atom.dest COMMA.COMMA___ message.message RCURLYBRACE.RCURLYBRACE COMMA.COMMA____ process_opt.next
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol OPERATOR = _symbols[offset + 2];
 					final Symbol COMMA = _symbols[offset + 3];
 					final Symbol INTEGER = _symbols[offset + 4];
 					final Symbol COMMA_ = _symbols[offset + 5];
-					final Symbol SINGLEMARKS = _symbols[offset + 6];
-					final Symbol SEND = _symbols[offset + 7];
-					final Symbol SINGLEMARKS_ = _symbols[offset + 8];
-					final Symbol COMMA__ = _symbols[offset + 9];
-					final Symbol _symbol_dest = _symbols[offset + 10];
+					final Symbol SEND = _symbols[offset + 6];
+					final Symbol COMMA__ = _symbols[offset + 7];
+					final Symbol _symbol_dest = _symbols[offset + 8];
 					final Atom dest = (Atom) _symbol_dest.value;
-					final Symbol COMMA___ = _symbols[offset + 11];
-					final Symbol _symbol_message = _symbols[offset + 12];
+					final Symbol COMMA___ = _symbols[offset + 9];
+					final Symbol _symbol_message = _symbols[offset + 10];
 					final Message message = (Message) _symbol_message.value;
-					final Symbol RCURLYBRACE = _symbols[offset + 13];
-					final Symbol COMMA____ = _symbols[offset + 14];
-					final Symbol _symbol_next = _symbols[offset + 15];
+					final Symbol RCURLYBRACE = _symbols[offset + 11];
+					final Symbol COMMA____ = _symbols[offset + 12];
+					final Symbol _symbol_next = _symbols[offset + 13];
 					final Opt next = (Opt) _symbol_next.value;
 					 ASTNode _node_ = new Send(dest, message,next);
       _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
@@ -589,24 +634,22 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [18] process = LCURLYBRACE.LCURLYBRACE OPERATOR.OPERATOR COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ SINGLEMARKS.SINGLEMARKS SEND.SEND SINGLEMARKS.SINGLEMARKS_ COMMA.COMMA__ atom.dest COMMA.COMMA___ message.message RCURLYBRACE.RCURLYBRACE process_opt.next
+			new Action() {	// [19] process = LCURLYBRACE.LCURLYBRACE OPERATOR.OPERATOR COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ SEND.SEND COMMA.COMMA__ atom.dest COMMA.COMMA___ message.message RCURLYBRACE.RCURLYBRACE process_opt.next
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol OPERATOR = _symbols[offset + 2];
 					final Symbol COMMA = _symbols[offset + 3];
 					final Symbol INTEGER = _symbols[offset + 4];
 					final Symbol COMMA_ = _symbols[offset + 5];
-					final Symbol SINGLEMARKS = _symbols[offset + 6];
-					final Symbol SEND = _symbols[offset + 7];
-					final Symbol SINGLEMARKS_ = _symbols[offset + 8];
-					final Symbol COMMA__ = _symbols[offset + 9];
-					final Symbol _symbol_dest = _symbols[offset + 10];
+					final Symbol SEND = _symbols[offset + 6];
+					final Symbol COMMA__ = _symbols[offset + 7];
+					final Symbol _symbol_dest = _symbols[offset + 8];
 					final Atom dest = (Atom) _symbol_dest.value;
-					final Symbol COMMA___ = _symbols[offset + 11];
-					final Symbol _symbol_message = _symbols[offset + 12];
+					final Symbol COMMA___ = _symbols[offset + 9];
+					final Symbol _symbol_message = _symbols[offset + 10];
 					final Message message = (Message) _symbol_message.value;
-					final Symbol RCURLYBRACE = _symbols[offset + 13];
-					final Symbol _symbol_next = _symbols[offset + 14];
+					final Symbol RCURLYBRACE = _symbols[offset + 11];
+					final Symbol _symbol_next = _symbols[offset + 12];
 					final Opt next = (Opt) _symbol_next.value;
 					 ASTNode _node_ = new Send(dest, message,next);
       _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
@@ -614,7 +657,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [19] process = LCURLYBRACE.LCURLYBRACE RECEIVE.RECEIVE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET receive_clause_list.clauses RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE process_opt.next
+			new Action() {	// [20] process = LCURLYBRACE.LCURLYBRACE RECEIVE.RECEIVE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET receive_clause_list.clauses RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE process_opt.next
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol RECEIVE = _symbols[offset + 2];
@@ -634,7 +677,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [20] process = LCURLYBRACE.LCURLYBRACE RECEIVE.RECEIVE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET receive_clause_list.clauses RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE COMMA.COMMA__ process_opt.next
+			new Action() {	// [21] process = LCURLYBRACE.LCURLYBRACE RECEIVE.RECEIVE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LBRACKET.LBRACKET receive_clause_list.clauses RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE COMMA.COMMA__ process_opt.next
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol RECEIVE = _symbols[offset + 2];
@@ -655,7 +698,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [21] process = LCURLYBRACE.LCURLYBRACE CASE.CASE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ expression_list.matchingForm COMMA.COMMA__ LBRACKET.LBRACKET case_clause_list.clauses RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE process_opt.next
+			new Action() {	// [22] process = LCURLYBRACE.LCURLYBRACE CASE.CASE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ expression_list.matchingForm COMMA.COMMA__ LBRACKET.LBRACKET case_clause_list.clauses RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE process_opt.next
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol CASE = _symbols[offset + 2];
@@ -678,7 +721,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [22] process = LCURLYBRACE.LCURLYBRACE CASE.CASE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ expression_list.matchingForm COMMA.COMMA__ LBRACKET.LBRACKET case_clause_list.clauses RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE COMMA.COMMA___ process_opt.next
+			new Action() {	// [23] process = LCURLYBRACE.LCURLYBRACE CASE.CASE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ expression_list.matchingForm COMMA.COMMA__ LBRACKET.LBRACKET case_clause_list.clauses RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE COMMA.COMMA___ process_opt.next
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol CASE = _symbols[offset + 2];
@@ -702,7 +745,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [23] process = LCURLYBRACE.LCURLYBRACE MATCH.MATCH COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ variable.left COMMA.COMMA__ expression.right RCURLYBRACE.RCURLYBRACE COMMA.COMMA___ process.next
+			new Action() {	// [24] process = LCURLYBRACE.LCURLYBRACE MATCH.MATCH COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ variable.left COMMA.COMMA__ expression.right RCURLYBRACE.RCURLYBRACE COMMA.COMMA___ process.next
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol MATCH = _symbols[offset + 2];
@@ -724,7 +767,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [24] process = expression.expression
+			new Action() {	// [25] process = expression.expression
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_expression = _symbols[offset + 1];
 					final Expression expression = (Expression) _symbol_expression.value;
@@ -734,7 +777,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [25] process = expression.expression process.next
+			new Action() {	// [26] process = expression.expression process.next
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_expression = _symbols[offset + 1];
 					final Expression expression = (Expression) _symbol_expression.value;
@@ -746,7 +789,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [26] process = expression.expression COMMA.COMMA process_opt.next
+			new Action() {	// [27] process = expression.expression COMMA.COMMA process_opt.next
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_expression = _symbols[offset + 1];
 					final Expression expression = (Expression) _symbol_expression.value;
@@ -759,30 +802,8 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [27] expression = LCURLYBRACE.LCURLYBRACE OPERATOR.OPERATOR COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ SINGLEMARKS.SINGLEMARKS SYMBOL.sym SINGLEMARKS.SINGLEMARKS_ COMMA.COMMA__ expression.op1 COMMA.COMMA___ expression.op2 RCURLYBRACE.RCURLYBRACE
-				public Symbol reduce(Symbol[] _symbols, int offset) {
-					final Symbol LCURLYBRACE = _symbols[offset + 1];
-					final Symbol OPERATOR = _symbols[offset + 2];
-					final Symbol COMMA = _symbols[offset + 3];
-					final Symbol INTEGER = _symbols[offset + 4];
-					final Symbol COMMA_ = _symbols[offset + 5];
-					final Symbol SINGLEMARKS = _symbols[offset + 6];
-					final Symbol sym = _symbols[offset + 7];
-					final Symbol SINGLEMARKS_ = _symbols[offset + 8];
-					final Symbol COMMA__ = _symbols[offset + 9];
-					final Symbol _symbol_op1 = _symbols[offset + 10];
-					final Expression op1 = (Expression) _symbol_op1.value;
-					final Symbol COMMA___ = _symbols[offset + 11];
-					final Symbol _symbol_op2 = _symbols[offset + 12];
-					final Expression op2 = (Expression) _symbol_op2.value;
-					final Symbol RCURLYBRACE = _symbols[offset + 13];
-					 ASTNode _node_ = new Operator(((String)sym.value),op1, op2);
-      _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
-      _node_.setEnd(Symbol.getLine(RCURLYBRACE.getEnd()), (short) Symbol.getColumn(RCURLYBRACE.getEnd()));
-      return new Symbol(_node_);
-				}
-			},
-			new Action() {	// [28] expression = LCURLYBRACE.LCURLYBRACE CALL.CALL COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ atom.method COMMA.COMMA__ LBRACKET.LBRACKET expression_list_opt.arguments RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE
+			Action.RETURN,	// [28] expression = operator.operator
+			new Action() {	// [29] expression = LCURLYBRACE.LCURLYBRACE CALL.CALL COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ atom.method COMMA.COMMA__ LBRACKET.LBRACKET expression_list_opt.arguments RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol CALL = _symbols[offset + 2];
@@ -803,7 +824,34 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [29] expression = LCURLYBRACE.LCURLYBRACE CALL.CALL COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LCURLYBRACE.LCURLYBRACE_ ATOM.ATOM COMMA.COMMA__ INTEGER.INTEGER_ COMMA.COMMA___ REGISTER.reg RCURLYBRACE.RCURLYBRACE COMMA.COMMA____ LBRACKET.LBRACKET expression_list.arguments RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE_
+			Action.RETURN,	// [30] expression = register.register
+			Action.RETURN,	// [31] expression = unregister.unregister
+			new Action() {	// [32] expression = LCURLYBRACE.LCURLYBRACE CALL.CALL COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LCURLYBRACE.LCURLYBRACE_ ATOM.ATOM COMMA.COMMA__ INTEGER_.INTEGER_ COMMA.COMMA___ SELF.SELF RCURLYBRACE.RCURLYBRACE COMMA.COMMA____ LBRACKET.LBRACKET RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE_
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol LCURLYBRACE = _symbols[offset + 1];
+					final Symbol CALL = _symbols[offset + 2];
+					final Symbol COMMA = _symbols[offset + 3];
+					final Symbol INTEGER = _symbols[offset + 4];
+					final Symbol COMMA_ = _symbols[offset + 5];
+					final Symbol LCURLYBRACE_ = _symbols[offset + 6];
+					final Symbol ATOM = _symbols[offset + 7];
+					final Symbol COMMA__ = _symbols[offset + 8];
+					final Symbol INTEGER_ = _symbols[offset + 9];
+					final Symbol COMMA___ = _symbols[offset + 10];
+					final Symbol SELF = _symbols[offset + 11];
+					final Symbol RCURLYBRACE = _symbols[offset + 12];
+					final Symbol COMMA____ = _symbols[offset + 13];
+					final Symbol LBRACKET = _symbols[offset + 14];
+					final Symbol RBRACKET = _symbols[offset + 15];
+					final Symbol RCURLYBRACE_ = _symbols[offset + 16];
+					 ASTNode _node_ = new Self();
+      _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
+      _node_.setEnd(Symbol.getLine(RCURLYBRACE_.getEnd()), (short) Symbol.getColumn(RCURLYBRACE_.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			Action.RETURN,	// [33] expression = pattern.pattern
+			new Action() {	// [34] register = LCURLYBRACE.LCURLYBRACE CALL.CALL COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LCURLYBRACE.LCURLYBRACE_ ATOM.ATOM COMMA.COMMA__ INTEGER.INTEGER_ COMMA.COMMA___ REGISTER.reg RCURLYBRACE.RCURLYBRACE COMMA.COMMA____ LBRACKET.LBRACKET expression_list.arguments RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE_
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol CALL = _symbols[offset + 2];
@@ -829,7 +877,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [30] expression = LCURLYBRACE.LCURLYBRACE CALL.CALL COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LCURLYBRACE.LCURLYBRACE_ ATOM.ATOM COMMA.COMMA__ INTEGER_.INTEGER_ COMMA.COMMA___ SELF.SELF RCURLYBRACE.RCURLYBRACE COMMA.COMMA____ LBRACKET.LBRACKET RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE_
+			new Action() {	// [35] unregister = LCURLYBRACE.LCURLYBRACE CALL.CALL COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LCURLYBRACE.LCURLYBRACE_ ATOM.ATOM COMMA.COMMA__ INTEGER.INTEGER_ COMMA.COMMA___ UNREGISTER.reg RCURLYBRACE.RCURLYBRACE COMMA.COMMA____ LBRACKET.LBRACKET expression_list.arguments RBRACKET.RBRACKET RCURLYBRACE.RCURLYBRACE_
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol CALL = _symbols[offset + 2];
@@ -841,20 +889,84 @@ public class ErlangParser extends Parser {
 					final Symbol COMMA__ = _symbols[offset + 8];
 					final Symbol INTEGER_ = _symbols[offset + 9];
 					final Symbol COMMA___ = _symbols[offset + 10];
-					final Symbol SELF = _symbols[offset + 11];
+					final Symbol reg = _symbols[offset + 11];
 					final Symbol RCURLYBRACE = _symbols[offset + 12];
 					final Symbol COMMA____ = _symbols[offset + 13];
 					final Symbol LBRACKET = _symbols[offset + 14];
-					final Symbol RBRACKET = _symbols[offset + 15];
-					final Symbol RCURLYBRACE_ = _symbols[offset + 16];
-					 ASTNode _node_ = new Self();
+					final Symbol _symbol_arguments = _symbols[offset + 15];
+					final List arguments = (List) _symbol_arguments.value;
+					final Symbol RBRACKET = _symbols[offset + 16];
+					final Symbol RCURLYBRACE_ = _symbols[offset + 17];
+					 ASTNode _node_ = new Call(new Atom(((String)reg.value)), arguments);
       _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
       _node_.setEnd(Symbol.getLine(RCURLYBRACE_.getEnd()), (short) Symbol.getColumn(RCURLYBRACE_.getEnd()));
       return new Symbol(_node_);
 				}
 			},
-			Action.RETURN,	// [31] expression = pattern.pattern
-			new Action() {	// [32] expression_list = expression.expression
+			new Action() {	// [36] operator = LCURLYBRACE.LCURLYBRACE OPERATOR.OPERATOR COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ SYMBOL.sym COMMA.COMMA__ expression.op1 COMMA.COMMA___ expression.op2 RCURLYBRACE.RCURLYBRACE
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol LCURLYBRACE = _symbols[offset + 1];
+					final Symbol OPERATOR = _symbols[offset + 2];
+					final Symbol COMMA = _symbols[offset + 3];
+					final Symbol INTEGER = _symbols[offset + 4];
+					final Symbol COMMA_ = _symbols[offset + 5];
+					final Symbol sym = _symbols[offset + 6];
+					final Symbol COMMA__ = _symbols[offset + 7];
+					final Symbol _symbol_op1 = _symbols[offset + 8];
+					final Expression op1 = (Expression) _symbol_op1.value;
+					final Symbol COMMA___ = _symbols[offset + 9];
+					final Symbol _symbol_op2 = _symbols[offset + 10];
+					final Expression op2 = (Expression) _symbol_op2.value;
+					final Symbol RCURLYBRACE = _symbols[offset + 11];
+					 ASTNode _node_ = new Operator(((String)sym.value),op1, op2);
+      _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
+      _node_.setEnd(Symbol.getLine(RCURLYBRACE.getEnd()), (short) Symbol.getColumn(RCURLYBRACE.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [37] operator = LCURLYBRACE.LCURLYBRACE OPERATOR.OPERATOR COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ DIVISION.sym COMMA.COMMA__ expression.op1 COMMA.COMMA___ expression.op2 RCURLYBRACE.RCURLYBRACE
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol LCURLYBRACE = _symbols[offset + 1];
+					final Symbol OPERATOR = _symbols[offset + 2];
+					final Symbol COMMA = _symbols[offset + 3];
+					final Symbol INTEGER = _symbols[offset + 4];
+					final Symbol COMMA_ = _symbols[offset + 5];
+					final Symbol sym = _symbols[offset + 6];
+					final Symbol COMMA__ = _symbols[offset + 7];
+					final Symbol _symbol_op1 = _symbols[offset + 8];
+					final Expression op1 = (Expression) _symbol_op1.value;
+					final Symbol COMMA___ = _symbols[offset + 9];
+					final Symbol _symbol_op2 = _symbols[offset + 10];
+					final Expression op2 = (Expression) _symbol_op2.value;
+					final Symbol RCURLYBRACE = _symbols[offset + 11];
+					 ASTNode _node_ = new Operator(((String)sym.value),op1, op2);
+      _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
+      _node_.setEnd(Symbol.getLine(RCURLYBRACE.getEnd()), (short) Symbol.getColumn(RCURLYBRACE.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [38] operator = LCURLYBRACE.LCURLYBRACE OPERATOR.OPERATOR COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ LESS.sym COMMA.COMMA__ expression.op1 COMMA.COMMA___ expression.op2 RCURLYBRACE.RCURLYBRACE
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol LCURLYBRACE = _symbols[offset + 1];
+					final Symbol OPERATOR = _symbols[offset + 2];
+					final Symbol COMMA = _symbols[offset + 3];
+					final Symbol INTEGER = _symbols[offset + 4];
+					final Symbol COMMA_ = _symbols[offset + 5];
+					final Symbol sym = _symbols[offset + 6];
+					final Symbol COMMA__ = _symbols[offset + 7];
+					final Symbol _symbol_op1 = _symbols[offset + 8];
+					final Expression op1 = (Expression) _symbol_op1.value;
+					final Symbol COMMA___ = _symbols[offset + 9];
+					final Symbol _symbol_op2 = _symbols[offset + 10];
+					final Expression op2 = (Expression) _symbol_op2.value;
+					final Symbol RCURLYBRACE = _symbols[offset + 11];
+					 ASTNode _node_ = new Operator(((String)sym.value),op1, op2);
+      _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
+      _node_.setEnd(Symbol.getLine(RCURLYBRACE.getEnd()), (short) Symbol.getColumn(RCURLYBRACE.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [39] expression_list = expression.expression
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_expression = _symbols[offset + 1];
 					final Expression expression = (Expression) _symbol_expression.value;
@@ -864,7 +976,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [33] expression_list = expression_list.expression_list COMMA.COMMA expression.expression
+			new Action() {	// [40] expression_list = expression_list.expression_list COMMA.COMMA expression.expression
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_expression_list = _symbols[offset + 1];
 					final List expression_list = (List) _symbol_expression_list.value;
@@ -877,7 +989,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [34] variable_list = variable.variable
+			new Action() {	// [41] variable_list = variable.variable
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_variable = _symbols[offset + 1];
 					final Variable variable = (Variable) _symbol_variable.value;
@@ -887,7 +999,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [35] variable_list = variable_list.variable_list COMMA.COMMA variable.variable
+			new Action() {	// [42] variable_list = variable_list.variable_list COMMA.COMMA variable.variable
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_variable_list = _symbols[offset + 1];
 					final List variable_list = (List) _symbol_variable_list.value;
@@ -900,9 +1012,9 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			Action.RETURN,	// [36] pattern = litteral.litteral
-			Action.RETURN,	// [37] pattern = variable.variable
-			new Action() {	// [38] pattern_list = pattern.pattern
+			Action.RETURN,	// [43] pattern = litteral.litteral
+			Action.RETURN,	// [44] pattern = variable.variable
+			new Action() {	// [45] pattern_list = pattern.pattern
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_pattern = _symbols[offset + 1];
 					final Pattern pattern = (Pattern) _symbol_pattern.value;
@@ -912,7 +1024,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [39] pattern_list = pattern_list.pattern_list COMMA.COMMA pattern.pattern
+			new Action() {	// [46] pattern_list = pattern_list.pattern_list COMMA.COMMA pattern.pattern
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_pattern_list = _symbols[offset + 1];
 					final List pattern_list = (List) _symbol_pattern_list.value;
@@ -925,12 +1037,12 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			Action.RETURN,	// [40] litteral = atom.atom
-			Action.RETURN,	// [41] litteral = pid.pid
-			Action.RETURN,	// [42] litteral = number.number
-			Action.RETURN,	// [43] litteral = charlist.charlist
-			Action.RETURN,	// [44] litteral = boolean.boolean
-			new Action() {	// [45] sender_id = variable.var
+			Action.RETURN,	// [47] litteral = atom.atom
+			Action.RETURN,	// [48] litteral = pid.pid
+			Action.RETURN,	// [49] litteral = number.number
+			Action.RETURN,	// [50] litteral = charlist.charlist
+			Action.RETURN,	// [51] litteral = boolean.boolean
+			new Action() {	// [52] sender_id = variable.var
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_var = _symbols[offset + 1];
 					final Variable var = (Variable) _symbol_var.value;
@@ -940,7 +1052,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [46] sender_id = atom.at
+			new Action() {	// [53] sender_id = atom.at
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_at = _symbols[offset + 1];
 					final Atom at = (Atom) _symbol_at.value;
@@ -950,10 +1062,10 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [47] number = LCURLYBRACE.LCURLYBRACE INTTYPE.INTTYPE COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ INTEGER.val RCURLYBRACE.RCURLYBRACE
+			new Action() {	// [54] number = LCURLYBRACE.LCURLYBRACE INT.INT COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ INTEGER.val RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
-					final Symbol INTTYPE = _symbols[offset + 2];
+					final Symbol INT = _symbols[offset + 2];
 					final Symbol COMMA = _symbols[offset + 3];
 					final Symbol INTEGER = _symbols[offset + 4];
 					final Symbol COMMA_ = _symbols[offset + 5];
@@ -965,7 +1077,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [48] charlist = LCURLYBRACE.LCURLYBRACE STRING.STRING COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ STRINGVALUE.STRINGVALUE RCURLYBRACE.RCURLYBRACE
+			new Action() {	// [55] charlist = LCURLYBRACE.LCURLYBRACE STRING.STRING COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ STRINGVALUE.STRINGVALUE RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol STRING = _symbols[offset + 2];
@@ -980,7 +1092,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [49] boolean = LCURLYBRACE.LCURLYBRACE ATOM.ATOM COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ TRUE.TRUE RCURLYBRACE.RCURLYBRACE
+			new Action() {	// [56] boolean = LCURLYBRACE.LCURLYBRACE ATOM.ATOM COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ TRUE.TRUE RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol ATOM = _symbols[offset + 2];
@@ -995,7 +1107,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [50] boolean = LCURLYBRACE.LCURLYBRACE ATOM.ATOM COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ FALSE.FALSE RCURLYBRACE.RCURLYBRACE
+			new Action() {	// [57] boolean = LCURLYBRACE.LCURLYBRACE ATOM.ATOM COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ FALSE.FALSE RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol ATOM = _symbols[offset + 2];
@@ -1010,7 +1122,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [51] atom = LCURLYBRACE.LCURLYBRACE ATOM.ATOM COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ IDENTIFIER.i RCURLYBRACE.RCURLYBRACE
+			new Action() {	// [58] atom = LCURLYBRACE.LCURLYBRACE ATOM.ATOM COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ IDENTIFIER.i RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol ATOM = _symbols[offset + 2];
@@ -1025,7 +1137,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [52] atom = LCURLYBRACE.LCURLYBRACE ATOM.ATOM COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ ATOMID.ATOMID RCURLYBRACE.RCURLYBRACE
+			new Action() {	// [59] atom = LCURLYBRACE.LCURLYBRACE ATOM.ATOM COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ ATOMID.ATOMID RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol ATOM = _symbols[offset + 2];
@@ -1040,7 +1152,7 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [53] pid = PID.mypid
+			new Action() {	// [60] pid = PID.mypid
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol mypid = _symbols[offset + 1];
 					 ASTNode _node_ = new Pid(((String)mypid.value));
@@ -1049,27 +1161,281 @@ public class ErlangParser extends Parser {
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [54] variable = LCURLYBRACE.LCURLYBRACE VAR.VAR COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ VARIABLEID.VARIABLEID RCURLYBRACE.RCURLYBRACE
+			new Action() {	// [61] variable = LCURLYBRACE.LCURLYBRACE VAR.VAR COMMA.COMMA INTEGER.INTEGER COMMA.COMMA_ ATOMID.ATOMID RCURLYBRACE.RCURLYBRACE
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol LCURLYBRACE = _symbols[offset + 1];
 					final Symbol VAR = _symbols[offset + 2];
 					final Symbol COMMA = _symbols[offset + 3];
 					final Symbol INTEGER = _symbols[offset + 4];
 					final Symbol COMMA_ = _symbols[offset + 5];
-					final Symbol VARIABLEID = _symbols[offset + 6];
+					final Symbol ATOMID = _symbols[offset + 6];
 					final Symbol RCURLYBRACE = _symbols[offset + 7];
-					 ASTNode _node_ = new Variable(((String)VARIABLEID.value).replace("'",""));
+					 ASTNode _node_ = new Variable(((String)ATOMID.value).replace("'",""));
       _node_.setStart(Symbol.getLine(LCURLYBRACE.getStart()), (short) Symbol.getColumn(LCURLYBRACE.getStart()));
       _node_.setEnd(Symbol.getLine(RCURLYBRACE.getEnd()), (short) Symbol.getColumn(RCURLYBRACE.getEnd()));
       return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [55] process_opt = 
+			Action.RETURN,	// [62] session = literaltype.literaltype
+			Action.RETURN,	// [63] session = sessionsend.sessionsend
+			Action.RETURN,	// [64] session = sessionreceive.sessionreceive
+			new Action() {	// [65] session = INTERNALCHOICE.INTERNALCHOICE LQUAD.LQUAD session_send_list.list RQUAD.RQUAD
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol INTERNALCHOICE = _symbols[offset + 1];
+					final Symbol LQUAD = _symbols[offset + 2];
+					final Symbol _symbol_list = _symbols[offset + 3];
+					final List list = (List) _symbol_list.value;
+					final Symbol RQUAD = _symbols[offset + 4];
+					 ASTNode _node_ = new InternalChoice(list);
+      _node_.setStart(Symbol.getLine(INTERNALCHOICE.getStart()), (short) Symbol.getColumn(INTERNALCHOICE.getStart()));
+      _node_.setEnd(Symbol.getLine(RQUAD.getEnd()), (short) Symbol.getColumn(RQUAD.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [66] session = EXTERNALCHOICE.EXTERNALCHOICE LQUAD.LQUAD session_receive_list.list RQUAD.RQUAD
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol EXTERNALCHOICE = _symbols[offset + 1];
+					final Symbol LQUAD = _symbols[offset + 2];
+					final Symbol _symbol_list = _symbols[offset + 3];
+					final List list = (List) _symbol_list.value;
+					final Symbol RQUAD = _symbols[offset + 4];
+					 ASTNode _node_ = new ExternalChoice(list);
+      _node_.setStart(Symbol.getLine(EXTERNALCHOICE.getStart()), (short) Symbol.getColumn(EXTERNALCHOICE.getStart()));
+      _node_.setEnd(Symbol.getLine(RQUAD.getEnd()), (short) Symbol.getColumn(RQUAD.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [67] session = OPENANGULAR.OPENANGULAR OPENANGULAR.OPENANGULAR_ IDENTIFIER.i DOT.DOT session.next
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol OPENANGULAR = _symbols[offset + 1];
+					final Symbol OPENANGULAR_ = _symbols[offset + 2];
+					final Symbol i = _symbols[offset + 3];
+					final Symbol DOT = _symbols[offset + 4];
+					final Symbol _symbol_next = _symbols[offset + 5];
+					final Session next = (Session) _symbol_next.value;
+					 ASTNode _node_ =  new RequestForwardDelegation(new Atom(((String)i.value)), next);
+      _node_.setStart(Symbol.getLine(OPENANGULAR.getStart()), (short) Symbol.getColumn(OPENANGULAR.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_next.getEnd()), (short) Symbol.getColumn(_symbol_next.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [68] session = CLOSEANGULAR.CLOSEANGULAR CLOSEANGULAR.CLOSEANGULAR_ IDENTIFIER.i DOT.DOT session.next
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol CLOSEANGULAR = _symbols[offset + 1];
+					final Symbol CLOSEANGULAR_ = _symbols[offset + 2];
+					final Symbol i = _symbols[offset + 3];
+					final Symbol DOT = _symbols[offset + 4];
+					final Symbol _symbol_next = _symbols[offset + 5];
+					final Session next = (Session) _symbol_next.value;
+					 ASTNode _node_ =  new RequestBackwardDelegation(new Atom(((String)i.value)), next);
+      _node_.setStart(Symbol.getLine(CLOSEANGULAR.getStart()), (short) Symbol.getColumn(CLOSEANGULAR.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_next.getEnd()), (short) Symbol.getColumn(_symbol_next.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [69] session = IDENTIFIER.i OPENANGULAR.OPENANGULAR OPENANGULAR.OPENANGULAR_ DOT.DOT session.next
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol i = _symbols[offset + 1];
+					final Symbol OPENANGULAR = _symbols[offset + 2];
+					final Symbol OPENANGULAR_ = _symbols[offset + 3];
+					final Symbol DOT = _symbols[offset + 4];
+					final Symbol _symbol_next = _symbols[offset + 5];
+					final Session next = (Session) _symbol_next.value;
+					 ASTNode _node_ =  new AcceptForwardDelegation(new Atom(((String)i.value)), next);
+      _node_.setStart(Symbol.getLine(i.getStart()), (short) Symbol.getColumn(i.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_next.getEnd()), (short) Symbol.getColumn(_symbol_next.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [70] session = IDENTIFIER.i CLOSEANGULAR.CLOSEANGULAR CLOSEANGULAR.CLOSEANGULAR_ DOT.DOT session.next
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol i = _symbols[offset + 1];
+					final Symbol CLOSEANGULAR = _symbols[offset + 2];
+					final Symbol CLOSEANGULAR_ = _symbols[offset + 3];
+					final Symbol DOT = _symbols[offset + 4];
+					final Symbol _symbol_next = _symbols[offset + 5];
+					final Session next = (Session) _symbol_next.value;
+					 ASTNode _node_ =  new AcceptBackwardDelegation(new Atom(((String)i.value)), next);
+      _node_.setStart(Symbol.getLine(i.getStart()), (short) Symbol.getColumn(i.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_next.getEnd()), (short) Symbol.getColumn(_symbol_next.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [71] session = END.END
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol END = _symbols[offset + 1];
+					 ASTNode _node_ = new End();
+      _node_.setStart(Symbol.getLine(END.getStart()), (short) Symbol.getColumn(END.getStart()));
+      _node_.setEnd(Symbol.getLine(END.getEnd()), (short) Symbol.getColumn(END.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [72] sessionsend = IDENTIFIER.sender SESSIONSEND.SESSIONSEND IDENTIFIER.label DOT.DOT session.next
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol sender = _symbols[offset + 1];
+					final Symbol SESSIONSEND = _symbols[offset + 2];
+					final Symbol label = _symbols[offset + 3];
+					final Symbol DOT = _symbols[offset + 4];
+					final Symbol _symbol_next = _symbols[offset + 5];
+					final Session next = (Session) _symbol_next.value;
+					 ASTNode _node_ = new SessionSend(new Atom(((String)sender.value)), new Atom(((String)label.value)), new List(), next);
+      _node_.setStart(Symbol.getLine(sender.getStart()), (short) Symbol.getColumn(sender.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_next.getEnd()), (short) Symbol.getColumn(_symbol_next.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [73] sessionsend = IDENTIFIER.sender SESSIONSEND.SESSIONSEND IDENTIFIER.label OPENANGULAR.OPENANGULAR literal_type_list.l CLOSEANGULAR.CLOSEANGULAR DOT.DOT session.next
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol sender = _symbols[offset + 1];
+					final Symbol SESSIONSEND = _symbols[offset + 2];
+					final Symbol label = _symbols[offset + 3];
+					final Symbol OPENANGULAR = _symbols[offset + 4];
+					final Symbol _symbol_l = _symbols[offset + 5];
+					final List l = (List) _symbol_l.value;
+					final Symbol CLOSEANGULAR = _symbols[offset + 6];
+					final Symbol DOT = _symbols[offset + 7];
+					final Symbol _symbol_next = _symbols[offset + 8];
+					final Session next = (Session) _symbol_next.value;
+					 ASTNode _node_ = new SessionSend(new Atom(((String)sender.value)), new Atom(((String)label.value)), l, next);
+      _node_.setStart(Symbol.getLine(sender.getStart()), (short) Symbol.getColumn(sender.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_next.getEnd()), (short) Symbol.getColumn(_symbol_next.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [74] session_send_list = sessionsend.sessionsend
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_sessionsend = _symbols[offset + 1];
+					final SessionSend sessionsend = (SessionSend) _symbol_sessionsend.value;
+					 ASTNode _node_ = new List(sessionsend);
+      _node_.setStart(Symbol.getLine(_symbol_sessionsend.getStart()), (short) Symbol.getColumn(_symbol_sessionsend.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_sessionsend.getEnd()), (short) Symbol.getColumn(_symbol_sessionsend.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [75] session_send_list = session_send_list.session_send_list COMMA.COMMA sessionsend.sessionsend
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_session_send_list = _symbols[offset + 1];
+					final List session_send_list = (List) _symbol_session_send_list.value;
+					final Symbol COMMA = _symbols[offset + 2];
+					final Symbol _symbol_sessionsend = _symbols[offset + 3];
+					final SessionSend sessionsend = (SessionSend) _symbol_sessionsend.value;
+					 ASTNode _node_ = session_send_list.add(sessionsend);
+      _node_.setStart(Symbol.getLine(_symbol_session_send_list.getStart()), (short) Symbol.getColumn(_symbol_session_send_list.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_sessionsend.getEnd()), (short) Symbol.getColumn(_symbol_sessionsend.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [76] sessionreceive = IDENTIFIER.recipient SESSIONRECEIVE.SESSIONRECEIVE IDENTIFIER.label DOT.DOT session.next
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol recipient = _symbols[offset + 1];
+					final Symbol SESSIONRECEIVE = _symbols[offset + 2];
+					final Symbol label = _symbols[offset + 3];
+					final Symbol DOT = _symbols[offset + 4];
+					final Symbol _symbol_next = _symbols[offset + 5];
+					final Session next = (Session) _symbol_next.value;
+					 ASTNode _node_ = new SessionReceive(new Atom(((String)recipient.value)), new Atom(((String)label.value)), new List(), next);
+      _node_.setStart(Symbol.getLine(recipient.getStart()), (short) Symbol.getColumn(recipient.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_next.getEnd()), (short) Symbol.getColumn(_symbol_next.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [77] sessionreceive = IDENTIFIER.recipient SESSIONRECEIVE.SESSIONRECEIVE IDENTIFIER.label OPENANGULAR.OPENANGULAR literal_type_list.l CLOSEANGULAR.CLOSEANGULAR DOT.DOT session.next
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol recipient = _symbols[offset + 1];
+					final Symbol SESSIONRECEIVE = _symbols[offset + 2];
+					final Symbol label = _symbols[offset + 3];
+					final Symbol OPENANGULAR = _symbols[offset + 4];
+					final Symbol _symbol_l = _symbols[offset + 5];
+					final List l = (List) _symbol_l.value;
+					final Symbol CLOSEANGULAR = _symbols[offset + 6];
+					final Symbol DOT = _symbols[offset + 7];
+					final Symbol _symbol_next = _symbols[offset + 8];
+					final Session next = (Session) _symbol_next.value;
+					 ASTNode _node_ = new SessionReceive(new Atom(((String)recipient.value)), new Atom(((String)label.value)), l, next);
+      _node_.setStart(Symbol.getLine(recipient.getStart()), (short) Symbol.getColumn(recipient.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_next.getEnd()), (short) Symbol.getColumn(_symbol_next.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [78] session_receive_list = sessionreceive.sessionreceive
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_sessionreceive = _symbols[offset + 1];
+					final SessionReceive sessionreceive = (SessionReceive) _symbol_sessionreceive.value;
+					 ASTNode _node_ = new List(sessionreceive);
+      _node_.setStart(Symbol.getLine(_symbol_sessionreceive.getStart()), (short) Symbol.getColumn(_symbol_sessionreceive.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_sessionreceive.getEnd()), (short) Symbol.getColumn(_symbol_sessionreceive.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [79] session_receive_list = session_receive_list.session_receive_list COMMA.COMMA sessionreceive.sessionreceive
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_session_receive_list = _symbols[offset + 1];
+					final List session_receive_list = (List) _symbol_session_receive_list.value;
+					final Symbol COMMA = _symbols[offset + 2];
+					final Symbol _symbol_sessionreceive = _symbols[offset + 3];
+					final SessionReceive sessionreceive = (SessionReceive) _symbol_sessionreceive.value;
+					 ASTNode _node_ = session_receive_list.add(sessionreceive);
+      _node_.setStart(Symbol.getLine(_symbol_session_receive_list.getStart()), (short) Symbol.getColumn(_symbol_session_receive_list.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_sessionreceive.getEnd()), (short) Symbol.getColumn(_symbol_sessionreceive.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [80] literaltype = STRINGTYPE.STRINGTYPE
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol STRINGTYPE = _symbols[offset + 1];
+					 ASTNode _node_ = new StringType();
+      _node_.setStart(Symbol.getLine(STRINGTYPE.getStart()), (short) Symbol.getColumn(STRINGTYPE.getStart()));
+      _node_.setEnd(Symbol.getLine(STRINGTYPE.getEnd()), (short) Symbol.getColumn(STRINGTYPE.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [81] literaltype = INTTYPE.INTTYPE
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol INTTYPE = _symbols[offset + 1];
+					 ASTNode _node_ = new IntType();
+      _node_.setStart(Symbol.getLine(INTTYPE.getStart()), (short) Symbol.getColumn(INTTYPE.getStart()));
+      _node_.setEnd(Symbol.getLine(INTTYPE.getEnd()), (short) Symbol.getColumn(INTTYPE.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [82] literaltype = ATOMTYPE.ATOMTYPE
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol ATOMTYPE = _symbols[offset + 1];
+					 ASTNode _node_ = new AtomType();
+      _node_.setStart(Symbol.getLine(ATOMTYPE.getStart()), (short) Symbol.getColumn(ATOMTYPE.getStart()));
+      _node_.setEnd(Symbol.getLine(ATOMTYPE.getEnd()), (short) Symbol.getColumn(ATOMTYPE.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [83] literal_type_list = literaltype.literaltype
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_literaltype = _symbols[offset + 1];
+					final LiteralType literaltype = (LiteralType) _symbol_literaltype.value;
+					 ASTNode _node_ = new List(literaltype);
+      _node_.setStart(Symbol.getLine(_symbol_literaltype.getStart()), (short) Symbol.getColumn(_symbol_literaltype.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_literaltype.getEnd()), (short) Symbol.getColumn(_symbol_literaltype.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [84] literal_type_list = literal_type_list.literal_type_list COMMA.COMMA literaltype.literaltype
+				public Symbol reduce(Symbol[] _symbols, int offset) {
+					final Symbol _symbol_literal_type_list = _symbols[offset + 1];
+					final List literal_type_list = (List) _symbol_literal_type_list.value;
+					final Symbol COMMA = _symbols[offset + 2];
+					final Symbol _symbol_literaltype = _symbols[offset + 3];
+					final LiteralType literaltype = (LiteralType) _symbol_literaltype.value;
+					 ASTNode _node_ = literal_type_list.add(literaltype);
+      _node_.setStart(Symbol.getLine(_symbol_literal_type_list.getStart()), (short) Symbol.getColumn(_symbol_literal_type_list.getStart()));
+      _node_.setEnd(Symbol.getLine(_symbol_literaltype.getEnd()), (short) Symbol.getColumn(_symbol_literaltype.getEnd()));
+      return new Symbol(_node_);
+				}
+			},
+			new Action() {	// [85] process_opt = 
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new Symbol(new Opt());
 				}
 			},
-			new Action() {	// [56] process_opt = process.n
+			new Action() {	// [86] process_opt = process.n
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 1];
 					final Process n = (Process) _symbol_n.value;
@@ -1079,12 +1445,12 @@ public class ErlangParser extends Parser {
    return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [57] expression_list_opt = 
+			new Action() {	// [87] expression_list_opt = 
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new Symbol(new List());
 				}
 			},
-			new Action() {	// [58] expression_list_opt = expression_list.n
+			new Action() {	// [88] expression_list_opt = expression_list.n
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 1];
 					final List n = (List) _symbol_n.value;
@@ -1094,12 +1460,12 @@ public class ErlangParser extends Parser {
    return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [59] variable_list_opt = 
+			new Action() {	// [89] variable_list_opt = 
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new Symbol(new List());
 				}
 			},
-			new Action() {	// [60] variable_list_opt = variable_list.n
+			new Action() {	// [90] variable_list_opt = variable_list.n
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 1];
 					final List n = (List) _symbol_n.value;
@@ -1109,12 +1475,12 @@ public class ErlangParser extends Parser {
    return new Symbol(_node_);
 				}
 			},
-			new Action() {	// [61] pattern_list_opt = 
+			new Action() {	// [91] pattern_list_opt = 
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					 return new Symbol(new List());
 				}
 			},
-			new Action() {	// [62] pattern_list_opt = pattern_list.n
+			new Action() {	// [92] pattern_list_opt = pattern_list.n
 				public Symbol reduce(Symbol[] _symbols, int offset) {
 					final Symbol _symbol_n = _symbols[offset + 1];
 					final List n = (List) _symbol_n.value;

@@ -3,12 +3,19 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:44
- * @astdecl Session : Term;
- * @production Session : {@link Term};
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:43
+ * @astdecl Session : ASTNode;
+ * @production Session : {@link ASTNode};
 
  */
-public abstract class Session extends Term implements Cloneable {
+public abstract class Session extends ASTNode<ASTNode> implements Cloneable {
+  /**
+   * @aspect PrettyPrint
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:431
+   */
+  public void print(){
+       printer().append("session");
+    }
   /**
    * @declaredat ASTNode:1
    */
@@ -35,7 +42,7 @@ public abstract class Session extends Term implements Cloneable {
    */
   public void flushAttrCache() {
     super.flushAttrCache();
-
+    printer_reset();
   }
   /** @apilevel internal 
    * @declaredat ASTNode:22
@@ -78,5 +85,43 @@ public abstract class Session extends Term implements Cloneable {
    * @declaredat ASTNode:54
    */
   public abstract Session treeCopy();
+  /**
+   * @attribute inh
+   * @aspect PrettyPrint
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:81
+   */
+  @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.INH)
+  @ASTNodeAnnotation.Source(aspect="PrettyPrint", declaredAt="C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:81")
+  public PrettyPrinter printer() {
+    ASTState state = state();
+    if (printer_computed) {
+      return printer_value;
+    }
+    if (printer_visited) {
+      throw new RuntimeException("Circular definition of attribute Session.printer().");
+    }
+    printer_visited = true;
+    state().enterLazyAttribute();
+    printer_value = getParent().Define_printer(this, null);
+    printer_computed = true;
+    state().leaveLazyAttribute();
+    printer_visited = false;
+    return printer_value;
+  }
+/** @apilevel internal */
+protected boolean printer_visited = false;
+  /** @apilevel internal */
+  private void printer_reset() {
+    printer_computed = false;
+    
+    printer_value = null;
+    printer_visited = false;
+  }
+  /** @apilevel internal */
+  protected boolean printer_computed = false;
+
+  /** @apilevel internal */
+  protected PrettyPrinter printer_value;
+
 
 }

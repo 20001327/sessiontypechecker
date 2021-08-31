@@ -6,7 +6,7 @@ import miniErlang.*;
 
 public class Printer {
 	public static void main(String[] args) {
-		new Printer().run("./src/ast/carol.ast");
+		new Printer().run("./src/ast/alice.ast");
 	}		
 
 	public void run(String... args) {

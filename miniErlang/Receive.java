@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:17
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:15
  * @astdecl Receive : Process ::= Clauses:ReceiveClause* [Next:Process];
  * @production Receive : {@link Process} ::= <span class="component">Clauses:{@link ReceiveClause}*</span> <span class="component">[Next:{@link Process}]</span>;
 
@@ -11,7 +11,7 @@ import miniErlang.Expression;
 public class Receive extends Process implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:175
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:305
    */
   public void print() {
         printer().append(indent());
@@ -321,17 +321,17 @@ public class Receive extends Process implements Cloneable {
     return (Opt<Process>) getChildNoTransform(1);
   }
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:80
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:78
    * @apilevel internal
    */
   public PrettyPrinter Define_printer(ASTNode _callerNode, ASTNode _childNode) {
     if (_callerNode == getClausesListNoTransform()) {
-      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:68
+      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:71
       int childIndex = _callerNode.getIndexOfChild(_childNode);
       return this.printer();
     }
     else if (_callerNode == getNextOptNoTransform()) {
-      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:62
+      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:65
       return this.printer();
     }
     else {
@@ -339,7 +339,7 @@ public class Receive extends Process implements Cloneable {
     }
   }
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:80
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:78
    * @apilevel internal
    * @return {@code true} if this node has an equation for the inherited attribute printer
    */

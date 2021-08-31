@@ -11,7 +11,7 @@ import miniErlang.Expression;
 public class Module extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:90
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:95
    */
   public void print() {
         printer().append("-module(" + getPartecipant() + "). \n");
@@ -467,10 +467,10 @@ protected boolean addsIndentationLevel_visited = false;
   /**
    * @attribute inh
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:73
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:76
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.INH)
-  @ASTNodeAnnotation.Source(aspect="PrettyPrint", declaredAt="C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:73")
+  @ASTNodeAnnotation.Source(aspect="PrettyPrint", declaredAt="C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:76")
   public PrettyPrinter printer() {
     ASTState state = state();
     if (printer_computed) {
@@ -503,7 +503,7 @@ protected boolean printer_visited = false;
   protected PrettyPrinter printer_value;
 
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:80
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:78
    * @apilevel internal
    */
   public PrettyPrinter Define_printer(ASTNode _callerNode, ASTNode _childNode) {
@@ -517,7 +517,7 @@ protected boolean printer_visited = false;
     }
   }
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:80
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:78
    * @apilevel internal
    * @return {@code true} if this node has an equation for the inherited attribute printer
    */

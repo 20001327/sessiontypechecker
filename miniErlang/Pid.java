@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:33
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:31
  * @astdecl Pid : Literal ::= <Pid:String>;
  * @production Pid : {@link Literal} ::= <span class="component">&lt;Pid:{@link String}&gt;</span>;
 

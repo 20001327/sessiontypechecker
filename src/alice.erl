@@ -5,7 +5,13 @@
 start() ->
   register(alice, spawn(alice, init, [])).
 
--type init() :: 'alice prova'.
+-type init() :: 'seller!title<String>.
+                 seller?quote<Int>.
+                 bob!myquote<Int>.
+                 &(
+                    bob?ok<Atom>.End,
+                    bob?quit<Atom>.End
+                 )'.
 init() ->
   seller!{alice,title,"Toy Story"},
   receive
@@ -14,10 +20,10 @@ init() ->
       BobQuote = Quote / 2,
       bob ! {alice, myquote, BobQuote},
       receive
-        {bob, myquote, ok} ->
+        {bob, ok} ->
           ok;
           %%io:format("ALICE: ok from bob ~n");
-        {bob, quit, quit} ->
+        {bob, quit} ->
           quit
           %%io:format("ALICE: quit from bob ~n")
       end

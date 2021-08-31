@@ -3,15 +3,15 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:13
- * @astdecl CaseClause : Term ::= Patterns:Pattern* Actions:Process;
- * @production CaseClause : {@link Term} ::= <span class="component">Patterns:{@link Pattern}*</span> <span class="component">Actions:{@link Process}</span>;
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:11
+ * @astdecl CaseClause : ASTNode ::= Patterns:Pattern* Actions:Process;
+ * @production CaseClause : {@link ASTNode} ::= <span class="component">Patterns:{@link Pattern}*</span> <span class="component">Actions:{@link Process}</span>;
 
  */
-public class CaseClause extends Term implements Cloneable {
+public class CaseClause extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:232
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:362
    */
   public void print(){
        printer().append(indent() + PrettyPrinter.INDENT);
@@ -310,10 +310,10 @@ protected boolean addsIndentationLevel_visited = false;
   /**
    * @attribute inh
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:79
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:84
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.INH)
-  @ASTNodeAnnotation.Source(aspect="PrettyPrint", declaredAt="C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:79")
+  @ASTNodeAnnotation.Source(aspect="PrettyPrint", declaredAt="C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:84")
   public PrettyPrinter printer() {
     ASTState state = state();
     if (printer_computed) {

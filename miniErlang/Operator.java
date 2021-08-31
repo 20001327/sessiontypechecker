@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:24
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:22
  * @astdecl Operator : Expression ::= <OperatorSymbol:String> LeftOp:Expression RightOp:Expression;
  * @production Operator : {@link Expression} ::= <span class="component">&lt;OperatorSymbol:{@link String}&gt;</span> <span class="component">LeftOp:{@link Expression}</span> <span class="component">RightOp:{@link Expression}</span>;
 
@@ -11,11 +11,11 @@ import miniErlang.Expression;
 public class Operator extends Expression implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:140
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:270
    */
   public void print() {
         getLeftOp().print();
-        printer().append(getOperatorSymbol());
+        printer().append(getOperatorSymbol().replace("'",""));
         getRightOp().print();
     }
   /**

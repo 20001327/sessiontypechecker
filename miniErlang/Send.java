@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:16
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:14
  * @astdecl Send : Process ::= Recipient:Atom Message:Message [Next:Process];
  * @production Send : {@link Process} ::= <span class="component">Recipient:{@link Atom}</span> <span class="component">Message:{@link Message}</span> <span class="component">[Next:{@link Process}]</span>;
 
@@ -11,7 +11,7 @@ import miniErlang.Expression;
 public class Send extends Process implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:129
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:248
    */
   public void print() {
         printer().append(indent());
@@ -256,20 +256,20 @@ public class Send extends Process implements Cloneable {
     return (Opt<Process>) getChildNoTransform(2);
   }
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:80
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:78
    * @apilevel internal
    */
   public PrettyPrinter Define_printer(ASTNode _callerNode, ASTNode _childNode) {
     if (_callerNode == getMessageNoTransform()) {
-      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:65
+      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:68
       return this.printer();
     }
     else if (_callerNode == getRecipientNoTransform()) {
-      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:64
+      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:67
       return this.printer();
     }
     else if (_callerNode == getNextOptNoTransform()) {
-      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:63
+      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:66
       return this.printer();
     }
     else {
@@ -277,7 +277,7 @@ public class Send extends Process implements Cloneable {
     }
   }
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:80
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:78
    * @apilevel internal
    * @return {@code true} if this node has an equation for the inherited attribute printer
    */

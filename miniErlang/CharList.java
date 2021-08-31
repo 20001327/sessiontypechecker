@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:34
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:32
  * @astdecl CharList : Literal ::= <StringValue:String>;
  * @production CharList : {@link Literal} ::= <span class="component">&lt;StringValue:{@link String}&gt;</span>;
 
@@ -11,7 +11,7 @@ import miniErlang.Expression;
 public class CharList extends Literal implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:167
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:297
    */
   public void print() {
         printer().append(getStringValue());

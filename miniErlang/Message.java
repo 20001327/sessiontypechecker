@@ -3,15 +3,15 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:10
- * @astdecl Message : Term ::= Sender:SenderId Label:Atom Payload:Expression*;
- * @production Message : {@link Term} ::= <span class="component">Sender:{@link SenderId}</span> <span class="component">Label:{@link Atom}</span> <span class="component">Payload:{@link Expression}*</span>;
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:8
+ * @astdecl Message : ASTNode ::= Sender:SenderId Label:Atom Payload:Expression*;
+ * @production Message : {@link ASTNode} ::= <span class="component">Sender:{@link SenderId}</span> <span class="component">Label:{@link Atom}</span> <span class="component">Payload:{@link Expression}*</span>;
 
  */
-public class Message extends Term implements Cloneable {
+public class Message extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:146
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:276
    */
   public void print() {
         printer().append("{");
@@ -325,10 +325,10 @@ public class Message extends Term implements Cloneable {
   /**
    * @attribute inh
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:77
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:82
    */
   @ASTNodeAnnotation.Attribute(kind=ASTNodeAnnotation.Kind.INH)
-  @ASTNodeAnnotation.Source(aspect="PrettyPrint", declaredAt="C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:77")
+  @ASTNodeAnnotation.Source(aspect="PrettyPrint", declaredAt="C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:82")
   public PrettyPrinter printer() {
     ASTState state = state();
     if (printer_computed) {
@@ -361,17 +361,17 @@ protected boolean printer_visited = false;
   protected PrettyPrinter printer_value;
 
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:80
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:78
    * @apilevel internal
    */
   public PrettyPrinter Define_printer(ASTNode _callerNode, ASTNode _childNode) {
     if (_callerNode == getPayloadListNoTransform()) {
-      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:67
+      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:70
       int childIndex = _callerNode.getIndexOfChild(_childNode);
       return this.printer();
     }
     else if (_callerNode == getSenderNoTransform()) {
-      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:66
+      // @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:69
       return this.printer();
     }
     else {
@@ -379,7 +379,7 @@ protected boolean printer_visited = false;
     }
   }
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:80
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:78
    * @apilevel internal
    * @return {@code true} if this node has an equation for the inherited attribute printer
    */

@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:38
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:36
  * @astdecl Variable : Pattern ::= <Ident:String>;
  * @production Variable : {@link Pattern} ::= <span class="component">&lt;Ident:{@link String}&gt;</span>;
 
@@ -11,7 +11,7 @@ import miniErlang.Expression;
 public class Variable extends Pattern implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:272
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:402
    */
   public void print(){
        printer().append(getIdent());

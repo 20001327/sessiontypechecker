@@ -10,6 +10,7 @@
 /* Just to shut up Beaver warnings */
 %goal goal;
 %left RBRACKET;
+%left SINGLEMARKS;
 /* Productions with semantic actions building the JastAdd AST */
 
 program goal =
@@ -58,18 +59,8 @@ List function_list =
 ;
 
 Function function =
-LCURLYBRACE FUNCTION COMMA INTEGER COMMA IDENTIFIER.funName COMMA INTEGER COMMA
-    LBRACKET
-            LCURLYBRACE CLAUSE COMMA INTEGER COMMA
-            LBRACKET variable_list.vars RBRACKET COMMA LBRACKET RBRACKET COMMA
-            LBRACKET process RBRACKET RCURLYBRACE
-    RBRACKET
-RCURLYBRACE
-     {: return new Function("", funName, vars, process); :}
-|
-LCURLYBRACE ATTRIBUTE COMMA INTEGER COMMA TYPE COMMA
-    LCURLYBRACE IDENTIFIER.funType COMMA atom COMMA LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
-LCURLYBRACE FUNCTION COMMA INTEGER
+    funtype?
+    LCURLYBRACE FUNCTION COMMA INTEGER
     COMMA IDENTIFIER.funName COMMA
     INTEGER.numArguments COMMA
     LBRACKET
@@ -78,7 +69,17 @@ LCURLYBRACE FUNCTION COMMA INTEGER
                 LBRACKET RBRACKET COMMA LBRACKET process RBRACKET RCURLYBRACE
     RBRACKET
 RCURLYBRACE
-     {: return new Function(funType, funName, vars, process); :}
+     {: return new Function(funtype, funName, vars, process); :}
+;
+
+FunType funtype =
+LCURLYBRACE ATTRIBUTE COMMA INTEGER COMMA TYPE COMMA
+    LCURLYBRACE IDENTIFIER.fun
+    COMMA
+    LCURLYBRACE ATOM COMMA INTEGER COMMA SINGLEMARKS session SINGLEMARKS RCURLYBRACE
+    COMMA
+    LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
+{: return new FunType(fun, new List(), session ); :}
 ;
 
 ReceiveClause receive_clause =
@@ -133,10 +134,10 @@ Message message =
 ;
 
 Process process =
-   LCURLYBRACE OPERATOR COMMA INTEGER COMMA SINGLEMARKS SEND SINGLEMARKS COMMA
+   LCURLYBRACE OPERATOR COMMA INTEGER COMMA SEND COMMA
         atom.dest COMMA message.message RCURLYBRACE COMMA process.next?
         {: return new Send(dest, message,next); :}
-|   LCURLYBRACE OPERATOR COMMA INTEGER COMMA SINGLEMARKS SEND SINGLEMARKS COMMA
+|   LCURLYBRACE OPERATOR COMMA INTEGER COMMA SEND COMMA
          atom.dest COMMA message.message RCURLYBRACE process.next?
          {: return new Send(dest, message,next); :}
 |	LCURLYBRACE RECEIVE COMMA INTEGER COMMA
@@ -165,22 +166,43 @@ Process process =
 /* ***************************************************************** */
 
 Expression expression =
-    LCURLYBRACE OPERATOR COMMA INTEGER COMMA SINGLEMARKS SYMBOL.sym SINGLEMARKS COMMA
-    expression.op1 COMMA expression.op2 RCURLYBRACE
-    {: return new Operator(sym,op1, op2); :}
+operator
 |   LCURLYBRACE CALL COMMA INTEGER COMMA atom.method COMMA
     LBRACKET expression_list.arguments? RBRACKET RCURLYBRACE
        {: return new Call(method, arguments); :}
-|   LCURLYBRACE CALL COMMA INTEGER COMMA
-    LCURLYBRACE ATOM COMMA INTEGER COMMA REGISTER.reg RCURLYBRACE
-    COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE
-       {: return new Call(new Atom(reg), arguments); :}
+|   register
+|   unregister
 |   LCURLYBRACE CALL COMMA INTEGER COMMA
     LCURLYBRACE ATOM COMMA INTEGER_ COMMA SELF RCURLYBRACE
     COMMA LBRACKET RBRACKET RCURLYBRACE
        {: return new Self(); :}
 |   pattern
 
+;
+
+Register register =
+   LCURLYBRACE CALL COMMA INTEGER COMMA
+    LCURLYBRACE ATOM COMMA INTEGER COMMA REGISTER.reg RCURLYBRACE
+    COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE
+       {: return new Call(new Atom(reg), arguments); :};
+
+Unregister unregister =
+  LCURLYBRACE CALL COMMA INTEGER COMMA
+           LCURLYBRACE ATOM COMMA INTEGER COMMA UNREGISTER.reg RCURLYBRACE
+           COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE
+              {: return new Call(new Atom(reg), arguments); :}
+;
+
+Operator operator =
+    LCURLYBRACE OPERATOR COMMA INTEGER COMMA SYMBOL.sym COMMA
+    expression.op1 COMMA expression.op2 RCURLYBRACE
+    {: return new Operator(sym,op1, op2); :}
+|    LCURLYBRACE OPERATOR COMMA INTEGER COMMA DIVISION.sym COMMA
+     expression.op1 COMMA expression.op2 RCURLYBRACE
+     {: return new Operator(sym,op1, op2); :}
+|    LCURLYBRACE OPERATOR COMMA INTEGER COMMA LESS.sym COMMA
+     expression.op1 COMMA expression.op2 RCURLYBRACE
+     {: return new Operator(sym,op1, op2); :}
 ;
 
 List expression_list =
@@ -218,7 +240,7 @@ SenderId sender_id =
 ;
 
 Number number =
-    LCURLYBRACE INTTYPE COMMA INTEGER COMMA INTEGER.val RCURLYBRACE
+    LCURLYBRACE INT COMMA INTEGER COMMA INTEGER.val RCURLYBRACE
     {: return new Number(Integer.parseInt(val)); :}
 ;
 
@@ -232,6 +254,7 @@ Boolean boolean =
     {: return new Boolean(true); :}
 |   LCURLYBRACE ATOM COMMA INTEGER COMMA FALSE RCURLYBRACE
      {: return new Boolean(false); :}
+;
 
 Atom atom =
 LCURLYBRACE ATOM COMMA INTEGER COMMA IDENTIFIER.i RCURLYBRACE
@@ -245,6 +268,63 @@ Pid pid = PID.mypid
 ;
 
 Variable variable =
-    LCURLYBRACE VAR COMMA INTEGER COMMA VARIABLEID RCURLYBRACE
-    {: return new Variable(VARIABLEID.replace("'","")); :}
+    LCURLYBRACE VAR COMMA INTEGER COMMA ATOMID RCURLYBRACE
+    {: return new Variable(ATOMID.replace("'","")); :}
+;
+
+
+
+Session session =
+    literaltype
+|   sessionsend
+|   sessionreceive
+|   INTERNALCHOICE LQUAD session_send_list.list RQUAD
+    {: return new InternalChoice(list); :}
+|   EXTERNALCHOICE LQUAD session_receive_list.list RQUAD
+     {: return new ExternalChoice(list); :}
+|   OPENANGULAR OPENANGULAR IDENTIFIER.i DOT session.next
+     {: return  new RequestForwardDelegation(new Atom(i), next); :}
+|   CLOSEANGULAR CLOSEANGULAR IDENTIFIER.i DOT session.next
+     {: return  new RequestBackwardDelegation(new Atom(i), next); :}
+|   IDENTIFIER.i OPENANGULAR OPENANGULAR DOT session.next
+     {: return  new AcceptForwardDelegation(new Atom(i), next); :}
+|   IDENTIFIER.i CLOSEANGULAR CLOSEANGULAR DOT session.next
+     {: return  new AcceptBackwardDelegation(new Atom(i), next); :}
+|   END
+     {: return new End(); :}
+;
+
+SessionSend sessionsend =
+    IDENTIFIER.sender SESSIONSEND IDENTIFIER.label DOT session.next
+    {: return new SessionSend(new Atom(sender), new Atom(label), new List(), next); :}
+|   IDENTIFIER.sender SESSIONSEND IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR DOT session.next
+    {: return new SessionSend(new Atom(sender), new Atom(label), l, next); :}
+;
+
+List session_send_list =
+    sessionsend                             {: return new List(sessionsend); :}
+|   session_send_list COMMA sessionsend     {: return session_send_list.add(sessionsend); :}
+;
+
+SessionReceive sessionreceive =
+    IDENTIFIER.recipient SESSIONRECEIVE IDENTIFIER.label DOT session.next
+     {: return new SessionReceive(new Atom(recipient), new Atom(label), new List(), next); :}
+|   IDENTIFIER.recipient SESSIONRECEIVE IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR DOT session.next
+     {: return new SessionReceive(new Atom(recipient), new Atom(label), l, next); :}
+;
+
+List session_receive_list =
+    sessionreceive                             {: return new List(sessionreceive); :}
+|   session_receive_list COMMA sessionreceive  {: return session_receive_list.add(sessionreceive); :}
+;
+
+LiteralType literaltype =
+    STRINGTYPE  {: return new StringType(); :}
+    INTTYPE     {: return new IntType(); :}
+    ATOMTYPE    {: return new AtomType(); :}
+;
+
+List literal_type_list =
+    literaltype                             {: return new List(literaltype); :}
+|   literal_type_list COMMA literaltype     {: return literal_type_list.add(literaltype); :}
 ;

@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:20
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:18
  * @astdecl ExpressionProcess : Process ::= Expression:Expression [Next:Process];
  * @production ExpressionProcess : {@link Process} ::= <span class="component">Expression:{@link Expression}</span> <span class="component">[Next:{@link Process}]</span>;
 
@@ -11,7 +11,7 @@ import miniErlang.Expression;
 public class ExpressionProcess extends Process implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:288
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:418
    */
   public void print(){
        printer().append(indent());

@@ -3,12 +3,28 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:47
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:46
  * @astdecl InternalChoice : Session ::= Sends:SessionSend*;
  * @production InternalChoice : {@link Session} ::= <span class="component">Sends:{@link SessionSend}*</span>;
 
  */
 public class InternalChoice extends Session implements Cloneable {
+  /**
+   * @aspect PrettyPrint
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:187
+   */
+  public void print(){
+        printer().append("@(");
+        if(getNumSends()>0){
+            for (int i=0; i<getNumSends(); i++) {
+                getSends(i).print();
+                if(i<getNumSends()-1){
+                    printer().append(",");
+                }
+            }
+        }
+        printer().append(")");
+    }
   /**
    * @declaredat ASTNode:1
    */

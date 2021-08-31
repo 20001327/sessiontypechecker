@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:35
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:33
  * @astdecl Number : Literal ::= <IntegerValue:Integer>;
  * @production Number : {@link Literal} ::= <span class="component">&lt;IntegerValue:{@link Integer}&gt;</span>;
 
@@ -11,7 +11,7 @@ import miniErlang.Expression;
 public class Number extends Literal implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:276
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:406
    */
   public void print(){
        printer().append(getIntegerValue() + "");

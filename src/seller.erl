@@ -5,7 +5,8 @@
 start() ->
   register(seller, spawn(seller, init, [])).
 
--type init() :: 'seller prova'.
+-type init() :: 'alice?title<String>.alice!price<Int>.bob!price<Int>.
+                 &(bob?ok.bob?address<String>.bob!End,bob?quit.End)'.
 init() ->
   receive
     {alice, title, Title} ->

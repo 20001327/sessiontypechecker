@@ -510,7 +510,7 @@ protected boolean addsIndentationLevel_visited = false;
   }
 
   /**
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:71
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:64
    * @apilevel internal
    * @return {@code true} if this node has an equation for the inherited attribute printer
    */

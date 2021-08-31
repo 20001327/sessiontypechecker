@@ -59,6 +59,9 @@ aspect PrettyPrint {
     eq Program.getModules().printer() = this.printer();
     eq Module.getFunctions().printer() = this.printer();
     eq Function.getBody().printer() = this.printer();
+    eq Function.getType().printer() = this.printer();
+    eq FunType.getArguments().printer() = this.printer();
+    eq FunType.getSessionType().printer() = this.printer();
     eq Receive.getNext().printer() = this.printer();
     eq Send.getNext().printer() = this.printer();
     eq Send.getRecipient().printer() = this.printer();
@@ -72,8 +75,10 @@ aspect PrettyPrint {
 
     inh lazy PrettyPrinter Module.printer();
     inh lazy PrettyPrinter Function.printer();
+    inh lazy PrettyPrinter FunType.printer();
     inh lazy PrettyPrinter Process.printer();
     inh lazy PrettyPrinter Expression.printer();
+    inh lazy PrettyPrinter Session.printer();
     inh lazy PrettyPrinter Message.printer();
     inh lazy PrettyPrinter ReceiveClause.printer();
     inh lazy PrettyPrinter CaseClause.printer();
@@ -112,6 +117,9 @@ aspect PrettyPrint {
 
     public void Function.print() {
 
+        if(hasType()){
+            getType().print();
+        }
         printer().append("\n" + getFunctionName() + "(");
         for (int i=0; i<getNumParameters(); i++) {
             Variable var = getParameters(i);
@@ -125,6 +133,117 @@ aspect PrettyPrint {
         printer().append(".");
     }
 
+    public void FunType.print(){
+       printer().append("\n");
+       printer().append("-type " + getFunName() + "(");
+       for (int i=0; i<getNumArguments(); i++) {
+           LiteralType var = getArguments(i);
+           printer().append(var.getClass().getName());
+           if(i<getNumArguments()-1){
+               printer().append(",");
+           }
+       }
+       printer().append(") :: '");
+       getSessionType().print();
+       printer().append("'");
+    }
+
+    public void SessionSend.print(){
+        getSender().print();
+        printer().append("!");
+        getLabel().print();
+        if(getNumType()>0){
+            printer().append("<");
+            for (int i=0; i<getNumType(); i++) {
+                getType(i).print();
+                if(i<getNumType()-1){
+                    printer().append(",");
+                }
+            }
+            printer().append(">");
+        }
+        printer().append(".");
+        getNext().print();
+    }
+
+    public void SessionReceive.print(){
+        getRecipient().print();
+        printer().append("?");
+        getLabel().print();
+        if(getNumType()>0){
+        printer().append("<");
+            for (int i=0; i<getNumType(); i++) {
+                getType(i).print();
+                if(i<getNumType()-1){
+                    printer().append(",");
+                }
+            }
+        printer().append(">");
+        }
+        printer().append(".");
+        getNext().print();
+    }
+
+    public void InternalChoice.print(){
+        printer().append("@(");
+        if(getNumSends()>0){
+            for (int i=0; i<getNumSends(); i++) {
+                getSends(i).print();
+                if(i<getNumSends()-1){
+                    printer().append(",");
+                }
+            }
+        }
+        printer().append(")");
+    }
+
+    public void ExternalChoice.print(){
+        printer().append("&(");
+        if(getNumReceives()>0){
+            for (int i=0; i<getNumReceives(); i++) {
+                getReceives(i).print();
+                if(i<getNumReceives()-1){
+                    printer().append(",");
+                }
+            }
+        }
+        printer().append(")");
+    }
+
+    public void RequestForwardDelegation.print(){
+        printer().append("<<");
+        getDelegating().print();
+        printer().append(".");
+        getNext().print();
+    }
+
+    public void RequestBackwardDelegation.print(){
+        printer().append(">>");
+        getDelegating().print();
+        printer().append(".");
+        getNext().print();
+    }
+
+    public void AcceptForwardDelegation.print(){
+        getDelegate().print();
+        printer().append("<<");
+        printer().append(".");
+        getNext().print();
+    }
+
+    public void AcceptBackwardDelegation.print(){
+        getDelegate().print();
+        printer().append(">>");
+        printer().append(".");
+        getNext().print();
+    }
+
+    public void End.print(){
+       printer().append("End");
+    }
+
+
+
 
     public void Send.print() {
         printer().append(indent());
@@ -137,9 +256,20 @@ aspect PrettyPrint {
         }
     }
 
+    public void AtomType.print(){
+        printer().append("Atom");
+    }
+    public void IntType.print(){
+        printer().append("Int");
+    }
+    public void StringType.print(){
+        printer().append("String");
+    }
+
+
     public void Operator.print() {
         getLeftOp().print();
-        printer().append(getOperatorSymbol());
+        printer().append(getOperatorSymbol().replace("'",""));
         getRightOp().print();
     }
 
@@ -298,4 +428,7 @@ aspect PrettyPrint {
         printer().append("process");
     }
 
+    public void Session.print(){
+       printer().append("session");
+    }
 }

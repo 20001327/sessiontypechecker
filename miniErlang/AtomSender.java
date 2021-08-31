@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:41
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:39
  * @astdecl AtomSender : SenderId ::= <Ident:String>;
  * @production AtomSender : {@link SenderId} ::= <span class="component">&lt;Ident:{@link String}&gt;</span>;
 
@@ -11,7 +11,7 @@ import miniErlang.Expression;
 public class AtomSender extends SenderId implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:264
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:394
    */
   public void print(){
        printer().append(getIdent());

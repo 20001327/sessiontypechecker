@@ -36,12 +36,11 @@ import miniErlang.ErlangParser.Terminals;
 
 LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f]
+Symbol         = '\='|'\-'|'\*'|'\+'|'\\'
 StringValue    = \"(.[^\"]*)\"
 Integer        = [1-9][0-9]* | 0
-Atom           = '[a-z][a-zA-Z0-9_ ]*'
 Identifier     = [a-zA-Z][a-zA-Z0-9_]*
-Variable       = '[A-Z][a-zA-Z0-9_]*'
-Symbol         = \=|\-|\*|\+|\/|\\|<
+IdInSingle     = '{Identifier}'
 
 %%
 
@@ -64,32 +63,47 @@ Symbol         = \=|\-|\*|\+|\/|\\|<
 "true"               { return sym(Terminals.TRUE); }
 "false"              { return sym(Terminals.FALSE); }
 "register"           { return sym(Terminals.REGISTER); }
+"unregister"         { return sym(Terminals.UNREGISTER); }
 "spawn"              { return sym(Terminals.SPAWN); }
+"End"                { return sym(Terminals.END); }
 
 "string"             { return sym(Terminals.STRING); }
 "atom"               { return sym(Terminals.ATOM); }
+"integer"            { return sym(Terminals.INT); }
 "tuple"              { return sym(Terminals.TUPLE); }
-"integer"            { return sym(Terminals.INTTYPE); }
 "nil"                { return sym(Terminals.NULL); }
 
 
 "{"                   { return sym(Terminals.LCURLYBRACE); }
 "}"                   { return sym(Terminals.RCURLYBRACE); }
 "["                   { return sym(Terminals.LBRACKET); }
+"("                   { return sym(Terminals.LQUAD); }
 "]"                   { return sym(Terminals.RBRACKET); }
+")"                   { return sym(Terminals.RQUAD); }
 
+"."                   { return sym(Terminals.DOT); }
 ","                   { return sym(Terminals.COMMA); }
+"!"                   { return sym(Terminals.SESSIONSEND); }
+"?"                   { return sym(Terminals.SESSIONRECEIVE); }
+"@"                   { return sym(Terminals.INTERNALCHOICE); }
+"&"                   { return sym(Terminals.EXTERNALCHOICE); }
+"'!'"                 { return sym(Terminals.SEND); }
+"'/'"                 { return sym(Terminals.DIVISION); }
+"'<'"                 { return sym(Terminals.LESS); }
+
 "'"                   { return sym(Terminals.SINGLEMARKS); }
-"!"                   { return sym(Terminals.SEND); }
+"<"                   { return sym(Terminals.OPENANGULAR); }
+">"                   { return sym(Terminals.CLOSEANGULAR); }
+"String"            { return sym(Terminals.STRINGTYPE); }
+"Int"               { return sym(Terminals.INTTYPE); }
+"Atom"              { return sym(Terminals.ATOMTYPE); }
 
-"case"                { return sym(Terminals.CASE); }
 
+{Symbol}              { return sym(Terminals.SYMBOL); }
 {Integer}             { return sym(Terminals.INTEGER); }
 {Identifier}          { return sym(Terminals.IDENTIFIER); }
-{Atom}                { return sym(Terminals.ATOMID); }
-{Variable}            { return sym(Terminals.VARIABLEID); }
+{IdInSingle}          { return sym(Terminals.ATOMID); }
 {StringValue}         { return sym(Terminals.STRINGVALUE); }
-{Symbol}              { return sym(Terminals.SYMBOL); }
 
 // fall through errors
 .                     { throw new beaver.Scanner.Exception("illegal character \"" + yytext() + "\" at line " + yyline + "," + yycolumn); }

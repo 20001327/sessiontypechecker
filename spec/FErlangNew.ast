@@ -3,16 +3,14 @@
 Program ::= Modules:Module*;
 Module::= <Partecipant:String> <RegisteredName:String> <ModuleName:String> <FunName:String> Functions:Function*;
 
-Function ::= <FunType:String> <FunctionName:String> Parameters:Variable* Body:Process;
+Function ::= [Type:FunType] <FunctionName:String> Parameters:Variable* Body:Process;  /* funType di tipo funType */
 
-abstract Term;
+Message ::= Sender:SenderId Label:Atom Payload:Expression*;
 
-Message:Term ::= Sender:SenderId Label:Atom Payload:Expression*;
+ReceiveClause ::= Sender:Atom Label:Atom Variables:Pattern* Actions:Process;
+CaseClause ::= Patterns:Pattern* Actions:Process;
 
-ReceiveClause:Term ::= Sender:Atom Label:Atom Variables:Pattern* Actions:Process;
-CaseClause:Term ::= Patterns:Pattern* Actions:Process;
-
-abstract Process:Term;
+abstract Process;
 Send:Process ::= Recipient:Atom Message:Message [Next:Process];
 Receive:Process ::= Clauses:ReceiveClause* [Next:Process];
 Case:Process ::= Matching:Expression* Clauses:CaseClause* [Next:Process];
@@ -20,7 +18,7 @@ Let:Process ::= Left:Variable Right:Expression Next:Process;
 ExpressionProcess:Process ::= Expression:Expression [Next:Process];
 
 /*  expressions  */
-abstract Expression:Term;
+abstract Expression;
 Operator:Expression ::= <OperatorSymbol:String> LeftOp:Expression RightOp:Expression;
 Call:Expression ::= FunctionName:Atom Arguments:Expression*;
 Self:Expression;
@@ -37,22 +35,32 @@ Boolean:Literal ::= <BooleanValue:boolean>;
 
 Variable:Pattern::= <Ident:String>;
 
-SenderId:Term;
+SenderId;
 AtomSender:SenderId ::= <Ident:String>;
 VarSender:SenderId ::= <Ident:String>;
 
-abstract Session:Term;
-SessionLiteral:Session ::= Literal:Literal;
-SessionSend:Session ::= Sender:Atom Label:Atom <Type:String> Next:Session;
+
+abstract Session;
+SessionSend:Session ::= Sender:Atom Label:Atom Type:LiteralType* Next:Session;
+SessionReceive:Session ::= Recipient:Atom Label:Atom Type:LiteralType* Next:Session;
 InternalChoice:Session ::= Sends:SessionSend*;
 ExternalChoice:Session ::= Receives:SessionReceive*;
-RequestForwardDelegation ::= Delegating:Atom Next:Session;
-RequestBackwardDelegation ::= Delegating:Atom Next:Session;
-AcceptForwardDelegation ::= Delegate:Atom Next:Session;
-AcceptBackwardDelegation ::= Delegate:Atom Next:Session;
+RequestForwardDelegation:Session ::= Delegating:Atom Next:Session;
+RequestBackwardDelegation:Session ::= Delegating:Atom Next:Session;
+AcceptForwardDelegation:Session ::= Delegate:Atom Next:Session;
+AcceptBackwardDelegation:Session ::= Delegate:Atom Next:Session;
+End:Session;
 
-SessionReceive:Term ::= Recipient:Atom Label:Atom <Type:String> Next:Session;
+abstract LiteralType:Session;
+AtomType:LiteralType;
+IntType:LiteralType;
+StringType:LiteralType;
+PidType:LiteralType;
+BoolType:LiteralType;
+ActorPid:LiteralType::=<Actor:String>;
+AtS:LiteralType::=<Partecipant:String>;
 
+FunType ::= <FunName:String> Arguments:LiteralType* SessionType:Session;
 
 
 

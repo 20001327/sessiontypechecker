@@ -3,7 +3,7 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:36
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:34
  * @astdecl Boolean : Literal ::= <BooleanValue:boolean>;
  * @production Boolean : {@link Literal} ::= <span class="component">&lt;BooleanValue:{@link boolean}&gt;</span>;
 
@@ -11,7 +11,7 @@ import miniErlang.Expression;
 public class Boolean extends Literal implements Cloneable {
   /**
    * @aspect PrettyPrint
-   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:280
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:410
    */
   public void print(){
        printer().append(getBooleanValue() ? "true" : "false");

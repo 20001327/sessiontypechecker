@@ -3,12 +3,22 @@ package miniErlang;
 import miniErlang.Expression;
 /**
  * @ast node
- * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:49
- * @astdecl RequestForwardDelegation : ASTNode ::= Delegating:Atom Next:Session;
- * @production RequestForwardDelegation : {@link ASTNode} ::= <span class="component">Delegating:{@link Atom}</span> <span class="component">Next:{@link Session}</span>;
+ * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\FErlangNew.ast:48
+ * @astdecl RequestForwardDelegation : Session ::= Delegating:Atom Next:Session;
+ * @production RequestForwardDelegation : {@link Session} ::= <span class="component">Delegating:{@link Atom}</span> <span class="component">Next:{@link Session}</span>;
 
  */
-public class RequestForwardDelegation extends ASTNode<ASTNode> implements Cloneable {
+public class RequestForwardDelegation extends Session implements Cloneable {
+  /**
+   * @aspect PrettyPrint
+   * @declaredat C:\\Users\\Lorenzo\\IdeaProjects\\TwoBuyerProtocol\\spec\\PrettyPrint.jrag:213
+   */
+  public void print(){
+        printer().append("<<");
+        getDelegating().print();
+        printer().append(".");
+        getNext().print();
+    }
   /**
    * @declaredat ASTNode:1
    */
