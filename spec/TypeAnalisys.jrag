@@ -1,0 +1,314 @@
+aspect TypeAnalysis {
+
+    public class TypeInfo {
+
+        Map<String,List<Session>> funTypeMap = new HashMap<>();
+        Map<String,Session> gamma = new HashMap<>();
+        Map<String,Session> delta = new HashMap<>();
+        String moduleName;
+
+        public void setModuleName(String name){
+            moduleName = name;
+        }
+
+        public String getModuleName(){
+            return moduleName;
+        }
+
+        public Session getFunTypeSessionType(String key){
+            if(funTypeMap.containsKey(key)){
+                return funTypeMap.get(key);
+            }
+
+            return null;
+        }
+
+        public void setFunTypeSessionType(String label, List<Session> type){
+            funTypeMap.put(label,type);
+        }
+
+        public Session getGammaSessionType(String key){
+            if(gamma.containsKey(key)){
+                return gamma.get(key);
+            }
+
+            return null;
+        }
+
+        public void setGammaSessionType(String name, Session type){
+            gamma.put(name,type);
+        }
+
+        public Session getDeltaSessionType(String key){
+            if(delta.containsKey(key)){
+                return delta.get(key);
+            }
+
+            return null;
+        }
+
+        public void setDeltaSessionType(String name, Session type){
+            delta.put(name,type);
+        }
+    }
+
+
+    eq Module.getFunctions().actor = this.getPartecipant();
+
+
+    syn lazy TypeInfo Function.typeInfo() {
+        return t;
+    }
+
+
+    eq Function.getBody().typeInfo() = this.typeInfo();
+    eq Function.getType().typeInfo() = this.typeInfo();
+    eq FunType.getSessionType().typeInfo() = this.typeInfo();
+    eq Receive.getNext().typeInfo() = this.typeInfo();
+    eq Send.getNext().typeInfo() = this.typeInfo();
+    eq Send.getRecipient().typeInfo() = this.typeInfo();
+    eq Send.getMessage().typeInfo() = this.typeInfo();
+    eq Message.getSender().typeInfo() = this.typeInfo();
+    eq Message.getPayload().typeInfo() = this.typeInfo();
+    eq Receive.getClauses().typeInfo() = this.typeInfo();
+    eq Case.getClauses().typeInfo() = this.typeInfo();
+    eq ReceiveClause.getActions().typeInfo() = this.typeInfo();
+    eq Let.getNext().typeInfo() = this.typeInfo();
+
+    inh lazy TypeInfo Module.typeInfo();
+    inh lazy TypeInfo Function.typeInfo();
+    inh lazy TypeInfo FunType.typeInfo();
+    inh lazy TypeInfo Process.typeInfo();
+    inh lazy TypeInfo Expression.typeInfo();
+    inh lazy TypeInfo Session.typeInfo();
+    inh lazy TypeInfo Message.typeInfo();
+    inh lazy TypeInfo ReceiveClause.typeInfo();
+    inh lazy TypeInfo CaseClause.typeInfo();
+    inh lazy TypeInfo SenderId.typeInfo();
+    inh lazy TypeInfo Atom.printer();
+
+    public abstract boolean Session.isSubtypeOf(Session t);
+    public boolean Session.isSameType(Session t) {
+        return isSubtypeOf(t);
+    }
+
+    public boolean IntType.isSubtypeOf(Session t) {
+            return t instanceof IntType;
+    }
+
+    public boolean AtomType.isSubtypeOf(Session t) {
+            return t instanceof AtomType;
+    }
+
+    public boolean BoolType.isSubtypeOf(Session t) {
+            return t instanceof PidType;
+    }
+
+    public boolean PidType.isSubtypeOf(Session t) {
+            return t instanceof PidType;
+    }
+
+    public boolean ActorPid.isSubtypeOf(Session t) {
+            return t instanceof ActorPid;
+    }
+
+    public boolean AtS.isSubtypeOf(Session t) {
+            return t instanceof AtS;
+    }
+
+    public booleand SessionSend.isSubtypeOf(Session t) {
+           return t instanceof SessionSend;
+    }
+
+    SessionReceive.isSubtypeOf(Session t) {
+              return t instanceof SessionReceive;
+   }
+
+    InternalChoice.isSubtypeOf(Session t) {
+            return t instanceof InternalChoice;
+    }
+
+    ExternalChoice.isSubtypeOf(Session t) {
+            return t instanceof ExternalChoice;
+    }
+
+    RequestForwardDelegation.isSubtypeOf(Session t) {
+            return t instanceof RequestForwardDelegation;
+    }
+
+    RequestBackwardDelegation.isSubtypeOf(Session t) {
+             return t instanceof RequestBackwardDelegation;
+    }
+
+    AcceptForwardDelegation.isSubtypeOf(Session t) {
+           return t instanceof AcceptForwardDelegation;
+    }
+
+    AcceptBackwardDelegation.isSubtypeOf(Session t) {
+            return t instanceof AcceptBackwardDelegation;
+    }
+
+    FunType.isSubtypeOf(Session t) {
+            return t instanceof FunType;
+    }
+
+    /* expressions */
+
+    syn lazy Session Expression.type();
+
+    eq AtomSender.type() = new AtomType();
+    eq Atom.type() = new AtomType();
+    eq Pid.type() = new PidType();
+    eq CharList.type() = new StringType();
+    eq Number.type() = new IntType();
+    eq Boolean.type() = new BooleanType();
+
+    eq FunType.getInfo(){
+        getSession().getInfo();
+    }
+
+    public void SessionSend.print(){
+        getNext().getInfo();
+    }
+
+    public void SessionReceive.print(){
+        String label = getLabel().getIdent();
+        List<Session> types = new List();
+        if(getNumType()>0){
+           for (int i=0; i<getNumType(); i++) {
+                types.add(getType(i));
+            }
+        }
+        setFunTypeSessionType(label, types);
+        getNext().getInfo();
+    }
+
+    public void ExternalChoice.print(){
+        if(getNumReceives()>0){
+            for (int i=0; i<getNumReceives(); i++) {
+                getReceives(i).getInfo();
+            }
+        }
+    }
+
+    public void RequestForwardDelegation.getInfo(){
+        getNext().getInfo();
+    }
+
+    public void RequestBackwardDelegation.getInfo(){
+        getNext().getInfo();
+    }
+
+    public void AcceptForwardDelegation.getInfo(){;
+        getNext().getInfo();
+    }
+
+    public void AcceptBackwardDelegation.getInfo(){
+        getNext().getInfo();
+    }
+
+    eq Self.type() {
+        return new PidType();
+    }
+
+    eq Variable.type() {
+        if(typeInfo().getGammaSessionType(getIdent())!=null){
+            return typeInfo().getGammaSessionType(getIdent());
+        }
+
+        return null;
+    }
+
+    eq VarSender.type() {
+        // in this case Var is used in send
+        // then type is defined by a previous let or inherited from funtype
+       return typeInfo().getGammaSessionType(getIdent());
+    }
+
+    eq Operator.type() {
+        if(getLeft().type().isSubtypeOf(new BooleanType())
+            && getRight().type().isSubtypeOf(new BooleanType()) {
+            return new BooleanType();
+        }
+
+        if(getLeft().type().isSubtypeOf(new IntType())
+            && getRight().type().isSubtypeOf(new IntType())) {
+            return new IntType();
+        }
+    }
+
+    eq Call.type(){
+        SessionType type = getDeltaSessionType(getFunctionName);
+        if(type.isSubtypeOf(FunType)){
+            return ((FunType)type).getSessionType();
+        }
+        return null;
+    }
+
+    /* case expression non lo abbiamo usato e neanche la sequenza per le espressioni */
+
+   syn lazy Session Process.type();
+
+    eq Send.type(){
+        if(getMessage().getSender().getIdent().equals(typeInfo().getModuleName())
+           || getMessage().getSender.type.isSubTypeOf(new ActorPid())){
+           List<LiteralType> types = new List();
+           for(int i=0;i<getNumPayload();i++){
+               types.add(getPayload(i).type());
+           }
+           return new SessionSend(getRecipient(),getMessage.getLabel(), types, getNext().type());
+        }
+
+        return null;
+    }
+
+    eq Receive.type(){
+        List<SessionType> types = new List();
+        for(int i=0; i<getNumClauses();i++){
+            SessionType t = getClauses(i).type();
+            if(t.isSubTypeOf(new SessionReceive()){
+                types.add(t);
+            }else{
+                types.add(null);
+            }
+        }
+
+        return new ExternalChoice(types);
+    }
+
+    eq ReceiveClause.type(){
+       List<Session> sessions = new List();
+       int size = 0;
+       if(getNumVariables()>0){
+           for(int i=0; i<getNumVariables();i++){
+                if(getVariables(i).type()!=null){
+                    sessions.add(getVariables(i).type())
+                    size++;
+                }
+           }
+       }
+
+       if(size>0){
+           sessions = getFunTypeSessionType(getLabel().getIdent());
+       }
+
+       return new SessionReceive(getSender(),getLabel(),sessions, getActions.type());
+    }
+
+    eq Let.type(){
+        if(typeInfo().getGammaSessionType()==null){
+            typeInfo.setGammaSessionType(getRight().type());
+        }
+
+        return getNext().type();
+    }
+
+    eq ExpressionProcess.type(){
+        if(hasNext()){
+            return getNext.type();
+        }
+        return getExpression().type();
+    }
+
+
+}
