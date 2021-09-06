@@ -57,7 +57,9 @@ aspect TypeAnalysis {
 
 
     syn lazy TypeInfo Function.typeInfo() {
-        return t;
+        getFunType().getInfo():
+        getFunType().print();
+        getBody().type().info();
     }
 
 
@@ -167,11 +169,11 @@ aspect TypeAnalysis {
         getSession().getInfo();
     }
 
-    public void SessionSend.print(){
+    public void SessionSend.getInfo(){
         getNext().getInfo();
     }
 
-    public void SessionReceive.print(){
+    public void SessionReceive.getInfo(){
         String label = getLabel().getIdent();
         List<Session> types = new List();
         if(getNumType()>0){
@@ -183,7 +185,7 @@ aspect TypeAnalysis {
         getNext().getInfo();
     }
 
-    public void ExternalChoice.print(){
+    public void ExternalChoice.getInfo(){
         if(getNumReceives()>0){
             for (int i=0; i<getNumReceives(); i++) {
                 getReceives(i).getInfo();
