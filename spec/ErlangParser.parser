@@ -320,8 +320,8 @@ List session_receive_list =
 
 LiteralType literaltype =
     STRINGTYPE  {: return new StringType(); :}
-    INTTYPE     {: return new IntType(); :}
-    ATOMTYPE    {: return new AtomType(); :}
+|    INTTYPE     {: return new IntType(); :}
+|    ATOMTYPE    {: return new AtomType(); :}
 ;
 
 List literal_type_list =
