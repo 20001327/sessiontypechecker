@@ -37,13 +37,10 @@ public class Printer {
 				out.println(printer.getString());
 			}
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.err.println("error (PrettyPrint) : " + e.getMessage());
 			e.printStackTrace();
-		} catch (beaver.Parser.Exception e) {
-			System.err.println("error (PrettyPrint) : " + e.getMessage());
-			e.printStackTrace();
-		} 
+		}
 	}
 
 }

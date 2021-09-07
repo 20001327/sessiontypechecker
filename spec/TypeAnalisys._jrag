@@ -88,7 +88,7 @@ aspect TypeAnalysis {
     inh lazy TypeInfo ReceiveClause.typeInfo();
     inh lazy TypeInfo CaseClause.typeInfo();
     inh lazy TypeInfo SenderId.typeInfo();
-    inh lazy TypeInfo Atom.printer();
+    inh lazy TypeInfo Atom.typeInfo();
 
     public abstract boolean Session.isSubtypeOf(Session t);
     public boolean Session.isSameType(Session t) {
@@ -104,7 +104,7 @@ aspect TypeAnalysis {
     }
 
     public boolean BoolType.isSubtypeOf(Session t) {
-            return t instanceof PidType;
+            return t instanceof BoolType;
     }
 
     public boolean PidType.isSubtypeOf(Session t) {

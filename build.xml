@@ -48,8 +48,21 @@
 
     <target name="build" depends="generate">
         <mkdir dir="build" />
+        <copy todir="./build/beaver/">
+            <fileset dir="./tools/beaver-rt/beaver">
+            </fileset>
+        </copy>
+        <copy todir="./src/ast/">
+            <fileset dir="./src/ast/">
+            </fileset>
+        </copy>
         <javac srcdir="." destdir="build" debug="true"
-               classpath=".:tools/beaver-rt.jar" includeantruntime="false" />
+               classpath=".:tools/beaver-rt.jar:tools/beaver-ant.jar" includeantruntime="true" />
+        <jar destfile="./jar/threeBuyer.jar" basedir="./build">
+            <manifest>
+                <attribute name="Main-Class" value="Printer"/>
+            </manifest>
+        </jar>
     </target>
 
 </project>
