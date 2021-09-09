@@ -1,4 +1,6 @@
-/*
+import java.util.HashMap;
+import java.util.Map;
+
 aspect TypeAnalysis {
 
     public class TypeInfo {
@@ -16,7 +18,7 @@ aspect TypeAnalysis {
             return moduleName;
         }
 
-        public Session getFunTypeSessionType(String key){
+        public List<Session> getFunTypeSessionType(String key){
             if(funTypeMap.containsKey(key)){
                 return funTypeMap.get(key);
             }
@@ -54,18 +56,36 @@ aspect TypeAnalysis {
     }
 
 
-    eq Module.getFunctions().actor = this.getPartecipant();
-
 
     syn lazy TypeInfo Function.typeInfo() {
-        getFunType().getInfo():
-        getFunType().print();
-        getBody().type().info();
+       return new TypeInfo();
     }
 
+    public void Program.checkType(){
+        for (Module module: getModuless()){
+            for (Function function : module.getFunctionss()){
+                function.typeInfo().setModuleName(module.getPartecipant());
+                function.getType().getSessionType().getInfo();
+                FunType type1 = function.getType();
+                printer().reset();
+                type1.print();
+                System.out.println("\n\ntipo atteso: ");
+                System.out.println(printer().getString());
+
+                if(function.getType().getNumArguments()==function.getNumParameters()){
+                    Session t = function.getBody().type();
+                    FunctionType type2 = new FunctionType(function.getFunctionName(),
+                                                function.getType().getArgumentss(),t);
+                    System.out.println("tipo calcolato: ");
+                    System.out.println(type2.stampa().getString());
+                }
+            }
+        }
+    }
 
     eq Function.getBody().typeInfo() = this.typeInfo();
     eq Function.getType().typeInfo() = this.typeInfo();
+    eq Function.getParameters().typeInfo() = this.typeInfo();
     eq FunType.getSessionType().typeInfo() = this.typeInfo();
     eq Receive.getNext().typeInfo() = this.typeInfo();
     eq Send.getNext().typeInfo() = this.typeInfo();
@@ -74,12 +94,11 @@ aspect TypeAnalysis {
     eq Message.getSender().typeInfo() = this.typeInfo();
     eq Message.getPayload().typeInfo() = this.typeInfo();
     eq Receive.getClauses().typeInfo() = this.typeInfo();
+    eq ReceiveClause.getVariables().typeInfo() = this.typeInfo();
     eq Case.getClauses().typeInfo() = this.typeInfo();
     eq ReceiveClause.getActions().typeInfo() = this.typeInfo();
     eq Let.getNext().typeInfo() = this.typeInfo();
 
-    inh lazy TypeInfo Module.typeInfo();
-    inh lazy TypeInfo Function.typeInfo();
     inh lazy TypeInfo FunType.typeInfo();
     inh lazy TypeInfo Process.typeInfo();
     inh lazy TypeInfo Expression.typeInfo();
@@ -89,6 +108,7 @@ aspect TypeAnalysis {
     inh lazy TypeInfo CaseClause.typeInfo();
     inh lazy TypeInfo SenderId.typeInfo();
     inh lazy TypeInfo Atom.typeInfo();
+    inh lazy TypeInfo Variable.typeInfo();
 
     public abstract boolean Session.isSubtypeOf(Session t);
     public boolean Session.isSameType(Session t) {
@@ -115,44 +135,52 @@ aspect TypeAnalysis {
             return t instanceof ActorPid;
     }
 
+    public boolean End.isSubtypeOf(Session t) {
+            return t instanceof End;
+    }
+
     public boolean AtS.isSubtypeOf(Session t) {
             return t instanceof AtS;
     }
 
-    public booleand SessionSend.isSubtypeOf(Session t) {
+    public boolean SessionSend.isSubtypeOf(Session t) {
            return t instanceof SessionSend;
     }
 
-    SessionReceive.isSubtypeOf(Session t) {
+    public boolean SessionReceive.isSubtypeOf(Session t) {
               return t instanceof SessionReceive;
    }
 
-    InternalChoice.isSubtypeOf(Session t) {
+    public boolean InternalChoice.isSubtypeOf(Session t) {
             return t instanceof InternalChoice;
     }
 
-    ExternalChoice.isSubtypeOf(Session t) {
+    public boolean ExternalChoice.isSubtypeOf(Session t) {
             return t instanceof ExternalChoice;
     }
 
-    RequestForwardDelegation.isSubtypeOf(Session t) {
+    public boolean RequestForwardDelegation.isSubtypeOf(Session t) {
             return t instanceof RequestForwardDelegation;
     }
 
-    RequestBackwardDelegation.isSubtypeOf(Session t) {
+    public boolean RequestBackwardDelegation.isSubtypeOf(Session t) {
              return t instanceof RequestBackwardDelegation;
     }
 
-    AcceptForwardDelegation.isSubtypeOf(Session t) {
+    public boolean AcceptForwardDelegation.isSubtypeOf(Session t) {
            return t instanceof AcceptForwardDelegation;
     }
 
-    AcceptBackwardDelegation.isSubtypeOf(Session t) {
+    public boolean AcceptBackwardDelegation.isSubtypeOf(Session t) {
             return t instanceof AcceptBackwardDelegation;
     }
 
-    FunType.isSubtypeOf(Session t) {
+    public boolean FunType.isSubtypeOf(Session t) {
             return t instanceof FunType;
+    }
+
+    public boolean StringType.isSubtypeOf(Session t) {
+            return t instanceof StringType;
     }
 
     /* expressions */
@@ -160,14 +188,13 @@ aspect TypeAnalysis {
     syn lazy Session Expression.type();
 
     eq AtomSender.type() = new AtomType();
-    eq Atom.type() = new AtomType();
     eq Pid.type() = new PidType();
     eq CharList.type() = new StringType();
     eq Number.type() = new IntType();
-    eq Boolean.type() = new BooleanType();
+    eq Boolean.type() = new BoolType();
 
-    eq FunType.getInfo(){
-        getSession().getInfo();
+    public void Session.getInfo(){
+
     }
 
     public void SessionSend.getInfo(){
@@ -182,7 +209,7 @@ aspect TypeAnalysis {
                 types.add(getType(i));
             }
         }
-        setFunTypeSessionType(label, types);
+        typeInfo().setFunTypeSessionType(label, types);
         getNext().getInfo();
     }
 
@@ -222,6 +249,8 @@ aspect TypeAnalysis {
         return null;
     }
 
+   syn lazy Session SenderId.type();
+
     eq VarSender.type() {
         // in this case Var is used in send
         // then type is defined by a previous let or inherited from funtype
@@ -229,20 +258,22 @@ aspect TypeAnalysis {
     }
 
     eq Operator.type() {
-        if(getLeft().type().isSubtypeOf(new BooleanType())
-            && getRight().type().isSubtypeOf(new BooleanType()) {
-            return new BooleanType();
+        if(getLeftOp().type().isSameType(new BoolType())
+            && getRightOp().type().isSameType(new BoolType())) {
+            return new BoolType();
         }
 
-        if(getLeft().type().isSubtypeOf(new IntType())
-            && getRight().type().isSubtypeOf(new IntType())) {
+        if(getLeftOp().type().isSameType(new IntType())
+            && getRightOp().type().isSameType(new IntType())) {
             return new IntType();
         }
+
+        return null;
     }
 
     eq Call.type(){
-        SessionType type = getDeltaSessionType(getFunctionName);
-        if(type.isSubtypeOf(FunType)){
+        Session type = typeInfo().getDeltaSessionType(getFunctionName().getIdent());
+        if(type.isSubtypeOf(new FunType())){
             return ((FunType)type).getSessionType();
         }
         return null;
@@ -253,54 +284,73 @@ aspect TypeAnalysis {
    syn lazy Session Process.type();
 
     eq Send.type(){
-        if(getMessage().getSender().getIdent().equals(typeInfo().getModuleName())
-           || getMessage().getSender.type.isSubTypeOf(new ActorPid())){
+        String sender = "";
+        if(getMessage().getSender() instanceof AtomSender){
+            sender = ((AtomSender)getMessage().getSender()).getIdent();
+        }else{
+            sender = ((VarSender)getMessage().getSender()).getIdent();
+        }
+
+        if(sender.equals(typeInfo().getModuleName())
+           || getMessage().getSender().type().isSameType(new ActorPid())){
            List<LiteralType> types = new List();
-           for(int i=0;i<getNumPayload();i++){
-               types.add(getPayload(i).type());
+           for(int i=0;i<getMessage().getNumPayload();i++){
+               types.add((LiteralType)getMessage().getPayload(i).type());
            }
-           return new SessionSend(getRecipient(),getMessage.getLabel(), types, getNext().type());
+           return new SessionSend(getRecipient(),getMessage().getLabel(), types, getNext().type());
         }
 
         return null;
     }
 
     eq Receive.type(){
-        List<SessionType> types = new List();
+        List<SessionReceive> types = new List();
         for(int i=0; i<getNumClauses();i++){
-            SessionType t = getClauses(i).type();
-            if(t.isSubTypeOf(new SessionReceive()){
-                types.add(t);
+            Session t = getClauses(i).type();
+            if(t.isSameType(new SessionReceive())){
+                types.add((SessionReceive)t);
             }else{
                 types.add(null);
             }
         }
-
+        if(types.getNumChild()==1) {
+            return types.getChild(0);
+        }
         return new ExternalChoice(types);
     }
 
+    syn lazy Session ReceiveClause.type();
+
     eq ReceiveClause.type(){
-       List<Session> sessions = new List();
+       List<LiteralType> sessions = new List();
        int size = 0;
        if(getNumVariables()>0){
            for(int i=0; i<getNumVariables();i++){
                 if(getVariables(i).type()!=null){
-                    sessions.add(getVariables(i).type())
+                    sessions.add((LiteralType)getVariables(i).type());
                     size++;
                 }
            }
        }
 
-       if(size>0){
-           sessions = getFunTypeSessionType(getLabel().getIdent());
+       List<Session> expected = typeInfo().getFunTypeSessionType(getLabel().getIdent());
+       for(int k = 0; k < expected.getNumChild(); k++){
+            Session sess = expected.getChild(k);
+            if(sessions.getChild(k)==null){
+                sessions.removeChild(k);
+                sessions.insertChild(sess,k);
+            }
+
+            typeInfo().setGammaSessionType(((Variable)getVariables(k)).getIdent(),sessions.getChild(k));
        }
 
-       return new SessionReceive(getSender(),getLabel(),sessions, getActions.type());
+
+       return new SessionReceive(getSender(),getLabel(),sessions, getActions().type());
     }
 
     eq Let.type(){
-        if(typeInfo().getGammaSessionType()==null){
-            typeInfo.setGammaSessionType(getRight().type());
+        if(typeInfo().getGammaSessionType(getLeft().getIdent())==null){
+            typeInfo().setGammaSessionType(getLeft().getIdent(),getRight().type());
         }
 
         return getNext().type();
@@ -308,12 +358,24 @@ aspect TypeAnalysis {
 
     eq ExpressionProcess.type(){
         if(hasNext()){
-            return getNext.type();
+            return getNext().type();
         }
         return getExpression().type();
     }
 
+    eq Case.type(){
+        return null;
+    }
+
+    eq SenderId.type(){
+        return null;
+    }
+
+    eq Atom.type(){
+        if(getIdent().equals("'End'")){
+            return new End();
+        }
+        return new AtomType();
+    }
 
 }
-
-*/

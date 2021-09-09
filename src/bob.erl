@@ -22,7 +22,7 @@ init() ->
               seller ! {bob, address, "Address"},
               receive
                 {seller, date, Date} ->
-                  Date
+                  'End'
               %%io:format("BOB: received Date ~n")
               end;
             false ->
@@ -32,9 +32,9 @@ init() ->
                 {carol, end_delegation} ->
                   receive
                     {carol, quit} ->
-                      quit;
+                      'End';
                     {carol, ok} ->
-                      ok
+                      'End'
                   end
               end
           end

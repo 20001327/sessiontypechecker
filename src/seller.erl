@@ -20,10 +20,11 @@ init() ->
           receive
             {bob, address, Address} ->
               %%io:format("seller: received address ~p ~n", [Address]),
-              bob ! {seller, date, "09-09-2021"}
+              bob ! {seller, date, "09-09-2021"},
+              'End'
           end;
         {bob, quit} ->
-          quit
+          'End'
       %%io:format("seller: quit from bob ~n")
       end
   end,

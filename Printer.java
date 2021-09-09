@@ -2,6 +2,7 @@ import java.io.*;
 
 
 import miniErlang.*;
+import miniErlang.Module;
 
 
 public class Printer {
@@ -36,6 +37,8 @@ public class Printer {
 			try (PrintWriter out = new PrintWriter("prettyPrint.txt")) {
 				out.println(printer.getString());
 			}
+
+			p.checkType();
 
 		} catch (Exception e) {
 			System.err.println("error (PrettyPrint) : " + e.getMessage());

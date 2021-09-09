@@ -25,14 +25,12 @@ aspect PrettyPrint {
 
     //similar to JastAdd Java compiler
     syn String ASTNode.indent()
-
     {
         String indent = extractIndent();
         return indent.startsWith("\n") ? indent : ("\n" + indent);
     }
 
     syn String ASTNode.extractIndent()
-
     {
         if (getParent() == null)
             return "";
@@ -55,6 +53,14 @@ aspect PrettyPrint {
     syn lazy PrettyPrinter Program.printer() {
         return new PrettyPrinter();
     }
+
+    syn lazy PrettyPrinter FunctionType.stampante() {
+        return new PrettyPrinter();
+    }
+    eq FunctionType.getArguments().stampante() = this.stampante();
+    eq FunctionType.getSessionType().stampante() = this.stampante();
+    inh lazy PrettyPrinter Session.stampante();
+    inh lazy PrettyPrinter Atom.stampante();
 
     eq Program.getModules().printer() = this.printer();
     eq Module.getFunctions().printer() = this.printer();
@@ -120,6 +126,7 @@ aspect PrettyPrint {
         if(hasType()){
             getType().print();
         }
+
         printer().append("\n" + getFunctionName() + "(");
         for (int i=0; i<getNumParameters(); i++) {
             Variable var = getParameters(i);
@@ -242,7 +249,15 @@ aspect PrettyPrint {
        printer().append("End");
     }
 
-
+    public void AtomType.print(){
+        printer().append("Atom");
+    }
+    public void IntType.print(){
+        printer().append("Int");
+    }
+    public void StringType.print(){
+        printer().append("String");
+    }
 
 
     public void Send.print() {
@@ -255,17 +270,6 @@ aspect PrettyPrint {
             getNext().print();
         }
     }
-
-    public void AtomType.print(){
-        printer().append("Atom");
-    }
-    public void IntType.print(){
-        printer().append("Int");
-    }
-    public void StringType.print(){
-        printer().append("String");
-    }
-
 
     public void Operator.print() {
         getLeftOp().print();
@@ -379,6 +383,7 @@ aspect PrettyPrint {
         printer().append(",");
         getNext().print();
     }
+
     public void Call.print(){
         getFunctionName().print();
         printer().append("(");
@@ -431,4 +436,132 @@ aspect PrettyPrint {
     public void Session.print(){
        printer().append("session");
     }
+
+    public void Session.stampa(){
+       stampante().append("session");
+    }
+
+    syn PrettyPrinter FunctionType.stampa(){
+       stampante().append("\n");
+       stampante().append("-type " + getFunName() + "(");
+       for (int i=0; i<getNumArguments(); i++) {
+           LiteralType var = getArguments(i);
+           stampante().append(var.getClass().getName());
+           if(i<getNumArguments()-1){
+               stampante().append(",");
+           }
+       }
+       stampante().append(") :: '");
+       getSessionType().stampa();
+       stampante().append("'");
+       return stampante();
+    }
+
+    public void SessionSend.stampa(){
+        getSender().stampa();
+        stampante().append("!");
+        getLabel().stampa();
+        if(getNumType()>0){
+            stampante().append("<");
+            for (int i=0; i<getNumType(); i++) {
+                getType(i).stampa();
+                if(i<getNumType()-1){
+                    stampante().append(",");
+                }
+            }
+            stampante().append(">");
+        }
+        stampante().append(".");
+        getNext().stampa();
+    }
+
+    public void SessionReceive.stampa(){
+        getRecipient().stampa();
+        stampante().append("?");
+        getLabel().stampa();
+        if(getNumType()>0){
+        stampante().append("<");
+            for (int i=0; i<getNumType(); i++) {
+                getType(i).stampa();
+                if(i<getNumType()-1){
+                    stampante().append(",");
+                }
+            }
+        stampante().append(">");
+        }
+        stampante().append(".");
+        getNext().stampa();
+    }
+
+    public void InternalChoice.stampa(){
+        stampante().append("@(");
+        if(getNumSends()>0){
+            for (int i=0; i<getNumSends(); i++) {
+                getSends(i).stampa();
+                if(i<getNumSends()-1){
+                    stampante().append(",");
+                }
+            }
+        }
+        stampante().append(")");
+    }
+
+    public void ExternalChoice.stampa(){
+        stampante().append("&(");
+        if(getNumReceives()>0){
+            for (int i=0; i<getNumReceives(); i++) {
+                getReceives(i).stampa();
+                if(i<getNumReceives()-1){
+                    stampante().append(",");
+                }
+            }
+        }
+        stampante().append(")");
+    }
+
+    public void RequestForwardDelegation.stampa(){
+        stampante().append("<<");
+        getDelegating().stampa();
+        stampante().append(".");
+        getNext().stampa();
+    }
+
+    public void RequestBackwardDelegation.stampa(){
+        stampante().append(">>");
+        getDelegating().stampa();
+        stampante().append(".");
+        getNext().stampa();
+    }
+
+    public void AcceptForwardDelegation.stampa(){
+        getDelegate().stampa();
+        stampante().append("<<");
+        stampante().append(".");
+        getNext().stampa();
+    }
+
+    public void AcceptBackwardDelegation.stampa(){
+        getDelegate().stampa();
+        stampante().append(">>");
+        stampante().append(".");
+        getNext().stampa();
+    }
+
+    public void End.stampa(){
+       stampante().append("End");
+    }
+
+    public void AtomType.stampa(){
+        stampante().append("Atom");
+    }
+    public void IntType.stampa(){
+        stampante().append("Int");
+    }
+    public void StringType.stampa(){
+        stampante().append("String");
+    }
+    public void Atom.stampa() {
+        stampante().append(getIdent());
+    }
+
 }

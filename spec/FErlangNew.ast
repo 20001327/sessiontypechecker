@@ -60,6 +60,7 @@ ActorPid:LiteralType::=<Actor:String>;
 AtS:LiteralType::=<Partecipant:String>;
 
 FunType:Session ::= <FunName:String> Arguments:LiteralType* SessionType:Session;
+FunctionType ::= <FunName:String> Arguments:LiteralType* SessionType:Session;
 
 
 

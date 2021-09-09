@@ -23,7 +23,7 @@ init() ->
               seller ! {Name, address, "Address"},
               receive
                 {seller, date, Date} ->
-                    Date
+                    'End'
               end;
             false ->
               alice ! {Name, quit},
@@ -41,6 +41,6 @@ init() ->
           end
       end;
     {bob,quit} ->
-       ok
+       'End'
   end,
   unregister(carol).
