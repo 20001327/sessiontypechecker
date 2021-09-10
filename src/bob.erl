@@ -5,10 +5,7 @@
 start() ->
   register(bob, spawn(bob, init, [])).
 
--type init() :: 'seller?quote<Int>.alice?myquote<Int>.
-                 @(seller!ok.alice!ok.seller!address<String>.seller?date<String>.,
-                    carol!quote<Int>.<<carol.carol>>.
-                    &(carol?quit.End,carol?ok.End))'.
+-type init() :: 'seller?quote<Int>.alice?myquote<Int>.@(seller!ok.alice!ok.seller!address<String>.seller?date<String>.End,carol!quote<Int>.<<carol.carol>>.End)'.
 init() ->
   receive
     {seller, quote, Quote} ->

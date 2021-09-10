@@ -60,7 +60,7 @@
                classpath=".:tools/beaver-rt.jar:tools/beaver-ant.jar" includeantruntime="true" />
         <jar destfile="./jar/threeBuyer.jar" basedir="./build">
             <manifest>
-                <attribute name="Main-Class" value="Printer"/>
+                <attribute name="Main-Class" value="TypeCheck"/>
             </manifest>
         </jar>
     </target>

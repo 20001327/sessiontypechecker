@@ -61,6 +61,8 @@ aspect TypeAnalysis {
        return new TypeInfo();
     }
 
+    /***********************************************************************/
+
     public void Program.checkType(){
         for (Module module: getModuless()){
             for (Function function : module.getFunctionss()){
@@ -82,6 +84,9 @@ aspect TypeAnalysis {
             }
         }
     }
+
+    /***********************************************************************/
+
 
     eq Function.getBody().typeInfo() = this.typeInfo();
     eq Function.getType().typeInfo() = this.typeInfo();
@@ -293,11 +298,21 @@ aspect TypeAnalysis {
 
         if(sender.equals(typeInfo().getModuleName())
            || getMessage().getSender().type().isSameType(new ActorPid())){
-           List<LiteralType> types = new List();
-           for(int i=0;i<getMessage().getNumPayload();i++){
-               types.add((LiteralType)getMessage().getPayload(i).type());
+
+           if(getMessage().getLabel().getIdent().equals("start_delegation") ){
+                if(getMessage().getNumPayload() == 2 &&
+                    getMessage.getPayload(0).getIdent().equals(typeInfo(getModuleName())) &&
+                       getMessage.getPayload(1).type().isSameType(new Atom())){
+
+                       }
            }
-           return new SessionSend(getRecipient(),getMessage().getLabel(), types, getNext().type());
+           else{
+               List<LiteralType> types = new List();
+               for(int i=0;i<getMessage().getNumPayload();i++){
+                   types.add((LiteralType)getMessage().getPayload(i).type());
+               }
+               return new SessionSend(getRecipient(),getMessage().getLabel(), types, getNext().type());
+           }
         }
 
         return null;

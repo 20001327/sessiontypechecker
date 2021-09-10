@@ -543,7 +543,6 @@ get_ast()->
   read_to_binary(seller,"ast/seller.ast"),
   read_to_binary(carol,"ast/carol.ast"),
   read_to_binary(bob,"ast/bob.ast"),
-  read_to_binary(alice,"ast/alice.ast"),
-  read_to_binary(three_buyer,"ast/three_buyer.ast").
+  read_to_binary(alice,"ast/alice.ast").
 
 
