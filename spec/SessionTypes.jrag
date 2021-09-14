@@ -1,54 +1,71 @@
 aspect SessionTypes{
 
-    public void Session.getInfo(){
-
+    public List<Session> Session.getInfo(String label){
+        return null;
     }
 
-    public void SessionSend.getInfo(){
-        getNext().getInfo();
+    public List<Session> SessionSend.getInfo(String label){
+        return getNext().getInfo(label);
     }
 
-    public void SessionReceive.getInfo(){
+    public List<Session> SessionReceive.getInfo(String lbl){
         String label = getLabel().getIdent();
-        List<Session> types = new List();
-        if(getNumType()>0){
-           for (int i=0; i<getNumType(); i++) {
-                types.add(getType(i));
+        if(label.equals(lbl)){
+            List<Session> types = new List();
+            if(getNumType()>0){
+               for (int i=0; i<getNumType(); i++) {
+                    types.add(getType(i));
+                }
             }
+            return types;
         }
-        typeInfo().setFunTypeSessionType(label, types);
-        getNext().getInfo();
+        else {
+            return getNext().getInfo(lbl);
+        }
     }
 
-    public void ExternalChoice.getInfo(){
+    public List<Session> ExternalChoice.getInfo(String label){
         if(getNumReceives()>0){
             for (int i=0; i<getNumReceives(); i++) {
-                getReceives(i).getInfo();
+                List<Session> s = getReceives(i).getInfo(label);
+                if(s!=null){
+                    return s;
+                }
             }
         }
+        return null;
     }
-    public void InternalChoice.getInfo(){
+
+    public List<Session> End.getInfo(String label){
+        return null;
+    }
+
+    public List<Session> InternalChoice.getInfo(String label){
         if(getNumSends()>0){
             for (int i=0; i<getNumSends(); i++) {
-                getSends(i).getInfo();
+                if(getSends(i).getInfo(label)!=null){
+                    return getSends(i).getInfo(label);
+                }
             }
         }
+
+        return null;
     }
 
-    public void RequestForwardDelegation.getInfo(){
-        getNext().getInfo();
+    public List<Session> RequestForwardDelegation.getInfo(String label){
+        return getNext().getInfo(label);
     }
 
-    public void RequestBackwardDelegation.getInfo(){
-        getNext().getInfo();
+    public List<Session> RequestBackwardDelegation.getInfo(String label){
+        return getNext().getInfo(label);
     }
 
-    public void AcceptForwardDelegation.getInfo(){;
-        getNext().getInfo();
+    public List<Session> AcceptForwardDelegation.getInfo(String label){;
+        return getNext().getInfo(label);
     }
 
-    public void AcceptBackwardDelegation.getInfo(){
-        getNext().getInfo();
+    public List<Session> AcceptBackwardDelegation.getInfo(String label){
+        return getNext().getInfo(label);
     }
 
 }

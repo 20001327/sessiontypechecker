@@ -5,7 +5,6 @@ aspect TypeAnalysis {
 
     public class TypeInfo {
 
-            Map<String,List<Session>> funTypeMap = new HashMap<>();
             Map<String,Session> gamma = new HashMap<>();
             Map<String,Session> delta = new HashMap<>();
             List<Module> moduleList = new List();
@@ -36,14 +35,6 @@ aspect TypeAnalysis {
                 return delegating;
             }
 
-            public List<Session> getFunTypeSessionType(String key){
-                if(funTypeMap.containsKey(key)){
-                    return funTypeMap.get(key);
-                }
-
-                return null;
-            }
-
             public Process getNext(Process p){
                 String className = p.getClass().getName();
                 if(className.equals(ExpressionProcess.class.getName())){
@@ -60,12 +51,6 @@ aspect TypeAnalysis {
 
                 return null;
             }
-
-
-
-        public void setFunTypeSessionType(String label, List<Session> type){
-            funTypeMap.put(label,type);
-        }
 
         public Session getGammaSessionType(String key){
             if(gamma.containsKey(key)){
@@ -171,7 +156,6 @@ aspect TypeAnalysis {
             for (Function function : module.getFunctionss()){
                 function.typeInfo().setModuleName(module.getPartecipant());
                 function.typeInfo().setModuleList(getModuless());
-                function.getType().getSessionType().getInfo();
                 FunType type1 = function.getType();
                 printer().reset();
                 type1.print();
@@ -194,8 +178,6 @@ aspect TypeAnalysis {
     eq Function.getType().typeInfo() = this.typeInfo();
     eq Function.getParameters().typeInfo() = this.typeInfo();
     eq FunType.getSessionType().typeInfo() = this.typeInfo();
-    eq Receive.getNext().typeInfo() = this.typeInfo();
-    eq Send.getNext().typeInfo() = this.typeInfo();
     eq Send.getRecipient().typeInfo() = this.typeInfo();
     eq Send.getMessage().typeInfo() = this.typeInfo();
     eq Message.getSender().typeInfo() = this.typeInfo();
@@ -214,8 +196,16 @@ aspect TypeAnalysis {
     inh lazy TypeInfo ReceiveClause.typeInfo();
     inh lazy TypeInfo CaseClause.typeInfo();
     inh lazy TypeInfo SenderId.typeInfo();
-    inh lazy TypeInfo Atom.typeInfo();
-    inh lazy TypeInfo Variable.typeInfo();
+
+    eq Function.getBody().getInfo(String label) = this.getInfo(label);
+    eq Receive.getClauses().getInfo(String label) = this.getInfo(label);
+
+    inh lazy List<Session> Process.getInfo(String label);
+    inh lazy List<Session> ReceiveClause.getInfo(String label);
+
+    syn lazy List<Session> Function.getInfo(String label){
+        return getType().getSessionType().getInfo(label);
+    }
 
 
 }

@@ -74,7 +74,7 @@ aspect ProcessTypes{
 
        }
 
-       List<Session> expected = typeInfo().getFunTypeSessionType(getLabel().getIdent());
+       List<Session> expected = getInfo(getLabel().getIdent());
        if(getNumVariables()>0){
            for(int k = 0; k < expected.getNumChild(); k++){
                 Session sess = expected.getChild(k);
