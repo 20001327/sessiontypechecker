@@ -55,21 +55,6 @@ aspect PrettyPrint {
     }
 
     eq Program.getModules().printer() = this.printer();
-    eq Module.getFunctions().printer() = this.printer();
-    eq Function.getBody().printer() = this.printer();
-    eq Function.getType().printer() = this.printer();
-    eq FunType.getArguments().printer() = this.printer();
-    eq FunType.getSessionType().printer() = this.printer();
-    eq Receive.getNext().printer() = this.printer();
-    eq Send.getNext().printer() = this.printer();
-    eq Send.getRecipient().printer() = this.printer();
-    eq Send.getMessage().printer() = this.printer();
-    eq Message.getSender().printer() = this.printer();
-    eq Message.getPayload().printer() = this.printer();
-    eq Receive.getClauses().printer() = this.printer();
-    eq Case.getClauses().printer() = this.printer();
-    eq ReceiveClause.getActions().printer() = this.printer();
-    eq Let.getNext().printer() = this.printer();
 
     inh lazy PrettyPrinter Module.printer();
     inh lazy PrettyPrinter Function.printer();

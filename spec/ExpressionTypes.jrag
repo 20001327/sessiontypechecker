@@ -1,7 +1,5 @@
 aspect ExpressionTypes {
 
-
-
     syn lazy Session Expression.type();
 
     eq Call.type(){
@@ -17,7 +15,7 @@ aspect ExpressionTypes {
         }else if(getFunctionName().getIdent().equals("self")){
             return new PidType();
         }else{
-             Session type = typeInfo().getDeltaSessionType(getFunctionName().getIdent());
+             Session type = getFunType();
              if(type.isSubtypeOf(new FunType())){
                  return ((FunType)type).getSessionType();
              }

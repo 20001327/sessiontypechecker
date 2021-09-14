@@ -6,7 +6,6 @@ aspect TypeAnalysis {
     public class TypeInfo {
 
             Map<String,Session> gamma = new HashMap<>();
-            Map<String,Session> delta = new HashMap<>();
             List<Module> moduleList = new List();
             String moduleName;
             Delegating delegating;
@@ -64,18 +63,6 @@ aspect TypeAnalysis {
             gamma.put(name,type);
         }
 
-        public Session getDeltaSessionType(String key){
-            if(delta.containsKey(key)){
-                return delta.get(key);
-            }
-
-            return null;
-        }
-
-        public void setDeltaSessionType(String name, Session type){
-            delta.put(name,type);
-        }
-
         public Send searchSendInMod(String moduleName,String dest, String label){
             for (Module module: moduleList){
                 if(module.getPartecipant().equals(moduleName)){
@@ -129,7 +116,6 @@ aspect TypeAnalysis {
 
     public class Delegating {
        Atom delegatingName;
-       Pid delegatingPid;
 
        public Delegating(Atom name){
             delegatingName = name;
@@ -175,18 +161,6 @@ aspect TypeAnalysis {
 
 
     eq Function.getBody().typeInfo() = this.typeInfo();
-    eq Function.getType().typeInfo() = this.typeInfo();
-    eq Function.getParameters().typeInfo() = this.typeInfo();
-    eq FunType.getSessionType().typeInfo() = this.typeInfo();
-    eq Send.getRecipient().typeInfo() = this.typeInfo();
-    eq Send.getMessage().typeInfo() = this.typeInfo();
-    eq Message.getSender().typeInfo() = this.typeInfo();
-    eq Message.getPayload().typeInfo() = this.typeInfo();
-    eq Receive.getClauses().typeInfo() = this.typeInfo();
-    eq ReceiveClause.getVariables().typeInfo() = this.typeInfo();
-    eq Case.getClauses().typeInfo() = this.typeInfo();
-    eq ReceiveClause.getActions().typeInfo() = this.typeInfo();
-    eq Let.getNext().typeInfo() = this.typeInfo();
 
     inh lazy TypeInfo FunType.typeInfo();
     inh lazy TypeInfo Process.typeInfo();
@@ -197,15 +171,23 @@ aspect TypeAnalysis {
     inh lazy TypeInfo CaseClause.typeInfo();
     inh lazy TypeInfo SenderId.typeInfo();
 
-    eq Function.getBody().getInfo(String label) = this.getInfo(label);
-    eq Receive.getClauses().getInfo(String label) = this.getInfo(label);
 
+    // get fun type inheriting
+    eq Function.getBody().getFunType() = this.getType();
+
+    inh lazy FunType Process.getFunType();
+    inh lazy FunType Expression.getFunType();
+
+
+    // visita nel session type annotato per trovare i tipi di una send
+    eq Function.getBody().getInfo(String label) = this.getInfo(label);
     inh lazy List<Session> Process.getInfo(String label);
     inh lazy List<Session> ReceiveClause.getInfo(String label);
 
     syn lazy List<Session> Function.getInfo(String label){
         return getType().getSessionType().getInfo(label);
     }
+
 
 
 }
