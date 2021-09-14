@@ -20,24 +20,21 @@ init() ->
               seller ! {Name, address, "Address"},
               receive
                 {seller, date, Date} ->
+                     unregister(Name),
+                     register(Name,ReturnPid),
+                     register(carol, self()),
+                     bob ! {carol, end_delegation},
                     'End'
               end;
             false ->
               alice ! {Name, quit},
-              seller ! {Name, quit}
-          end,
-          unregister(Name),
-          register(Name,ReturnPid),
-          register(carol, self()),
-          bob ! {carol, end_delegation},
-          case MyQuote < 100 of
-            true ->
-              bob ! {carol, ok};
-            false->
-              bob ! {carol, quit}
+              seller ! {Name, quit},
+              unregister(Name),
+              register(Name,ReturnPid),
+              register(carol, self()),
+              bob ! {carol, end_delegation},
+              'End'
           end
-      end;
-    {bob,quit} ->
-       'End'
+      end
   end,
   unregister(carol).

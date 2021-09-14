@@ -1,0 +1,75 @@
+aspect TypesComparison{
+    public abstract boolean Session.isSubtypeOf(Session t);
+    public boolean Session.isSameType(Session t) {
+        return isSubtypeOf(t);
+    }
+
+    public boolean IntType.isSubtypeOf(Session t) {
+            return t instanceof IntType;
+    }
+
+    public boolean AtomType.isSubtypeOf(Session t) {
+            return t instanceof AtomType;
+    }
+
+    public boolean BoolType.isSubtypeOf(Session t) {
+            return t instanceof BoolType;
+    }
+
+    public boolean PidType.isSubtypeOf(Session t) {
+            return t instanceof PidType;
+    }
+
+    public boolean ActorPid.isSubtypeOf(Session t) {
+            return t instanceof ActorPid;
+    }
+
+    public boolean End.isSubtypeOf(Session t) {
+            return t instanceof End;
+    }
+
+    public boolean AtS.isSubtypeOf(Session t) {
+            return t instanceof AtS;
+    }
+
+    public boolean SessionSend.isSubtypeOf(Session t) {
+           return t instanceof SessionSend;
+    }
+
+    public boolean SessionReceive.isSubtypeOf(Session t) {
+              return t instanceof SessionReceive;
+   }
+
+    public boolean InternalChoice.isSubtypeOf(Session t) {
+            return t instanceof InternalChoice;
+    }
+
+    public boolean ExternalChoice.isSubtypeOf(Session t) {
+            return t instanceof ExternalChoice;
+    }
+
+    public boolean RequestForwardDelegation.isSubtypeOf(Session t) {
+            return t instanceof RequestForwardDelegation;
+    }
+
+    public boolean RequestBackwardDelegation.isSubtypeOf(Session t) {
+             return t instanceof RequestBackwardDelegation;
+    }
+
+    public boolean AcceptForwardDelegation.isSubtypeOf(Session t) {
+           return t instanceof AcceptForwardDelegation;
+    }
+
+    public boolean AcceptBackwardDelegation.isSubtypeOf(Session t) {
+            return t instanceof AcceptBackwardDelegation;
+    }
+
+    public boolean FunType.isSubtypeOf(Session t) {
+            return t instanceof FunType;
+    }
+
+    public boolean StringType.isSubtypeOf(Session t) {
+            return t instanceof StringType;
+    }
+
+}

@@ -1,0 +1,47 @@
+aspect ExpressionTypes {
+
+
+
+    syn lazy Session Expression.type();
+
+    eq Call.type(){
+
+        if(getFunctionName().getIdent().equals("unregister") && typeInfo().getDelegating()!=null){
+            Process p = typeInfo().getNext((Process)getParent());
+            Process p1 = typeInfo().getNext(p);
+            Process p2 = typeInfo().getNext(p1);
+            Session next = typeInfo().getNext(p2)!=null?typeInfo().getNext(p2).type():null;
+            // check next 4 process 3 call unreg(getDelegating), reg(ModuleName, self), reg(getDelegating, getPid<del>)
+            // check send
+            return new AcceptBackwardDelegation(typeInfo().getDelegating().getDelegatingName(),next);
+        }else if(getFunctionName().getIdent().equals("self")){
+            return new PidType();
+        }else{
+             Session type = typeInfo().getDeltaSessionType(getFunctionName().getIdent());
+             if(type.isSubtypeOf(new FunType())){
+                 return ((FunType)type).getSessionType();
+             }
+         }
+
+        return null;
+    }
+
+
+    eq Self.type() {
+        return new PidType();
+    }
+
+    eq Operator.type() {
+        if(getLeftOp().type().isSameType(new BoolType())
+            && getRightOp().type().isSameType(new BoolType())) {
+            return new BoolType();
+        }
+
+        if(getLeftOp().type().isSameType(new IntType())
+            && getRightOp().type().isSameType(new IntType())) {
+            return new IntType();
+        }
+
+        return null;
+    }
+}

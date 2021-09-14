@@ -1,0 +1,54 @@
+aspect SessionTypes{
+
+    public void Session.getInfo(){
+
+    }
+
+    public void SessionSend.getInfo(){
+        getNext().getInfo();
+    }
+
+    public void SessionReceive.getInfo(){
+        String label = getLabel().getIdent();
+        List<Session> types = new List();
+        if(getNumType()>0){
+           for (int i=0; i<getNumType(); i++) {
+                types.add(getType(i));
+            }
+        }
+        typeInfo().setFunTypeSessionType(label, types);
+        getNext().getInfo();
+    }
+
+    public void ExternalChoice.getInfo(){
+        if(getNumReceives()>0){
+            for (int i=0; i<getNumReceives(); i++) {
+                getReceives(i).getInfo();
+            }
+        }
+    }
+    public void InternalChoice.getInfo(){
+        if(getNumSends()>0){
+            for (int i=0; i<getNumSends(); i++) {
+                getSends(i).getInfo();
+            }
+        }
+    }
+
+    public void RequestForwardDelegation.getInfo(){
+        getNext().getInfo();
+    }
+
+    public void RequestBackwardDelegation.getInfo(){
+        getNext().getInfo();
+    }
+
+    public void AcceptForwardDelegation.getInfo(){;
+        getNext().getInfo();
+    }
+
+    public void AcceptBackwardDelegation.getInfo(){
+        getNext().getInfo();
+    }
+
+}

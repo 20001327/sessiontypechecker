@@ -10,7 +10,7 @@ init() ->
   receive
     {alice, title, Title} ->
       %%io:format("Title:  ~p~n", [Title]),
-      Quote=320,
+      Quote=20,
       bob ! {seller, quote, Quote},
       alice ! {seller, quote, Quote},
       receive

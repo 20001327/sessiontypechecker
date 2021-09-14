@@ -1,0 +1,66 @@
+
+aspect PrimitiveTypes {
+
+
+
+    eq Pid.type(){
+       if(getParent().getClass().getName().equals(Send.class.getName())){
+                    Send s = (Send) getParent();
+                    if(s.getMessage().getLabel().getIdent().equals("start_delegation")){
+                        return new ActorPid(s.getMessage().getSender().getIdent());
+                    }
+                }
+       return new PidType();
+
+    }
+    eq CharList.type() = new StringType();
+    eq Number.type() = new IntType();
+    eq Boolean.type() = new BoolType();
+
+
+    eq Atom.type(){
+        if(getIdent().equals("'End'")){
+            return new End();
+        }else if(getParent().getClass().getName().equals(Send.class.getName())){
+            Send s = (Send) getParent();
+            if(s.getMessage().getLabel().getIdent().equals("start_delegation")){
+                return new AtS(s.getMessage().getSender().getIdent());
+            }
+        }
+        return new AtomType();
+    }
+
+
+    eq Variable.type() {
+        if(typeInfo().getGammaSessionType(getIdent())!=null){
+            return typeInfo().getGammaSessionType(getIdent());
+        }
+
+        return null;
+    }
+
+
+    syn lazy Session SenderId.type();
+
+    public String SenderId.getIdent(){
+        if(getClass().getName().equals(AtomSender.class.getName())){
+            return ((AtomSender) this).getIdent();
+        }
+        if(getClass().getName().equals(VarSender.class.getName())){
+            return ((VarSender) this).getIdent();
+        }
+
+        return null;
+    }
+
+    eq SenderId.type(){
+        return null;
+    }
+
+    eq VarSender.type() {
+       return typeInfo().getGammaSessionType(getIdent());
+    }
+
+    eq AtomSender.type() = new AtomType();
+
+}

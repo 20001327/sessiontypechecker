@@ -1,0 +1,134 @@
+aspect ProcessTypes{
+
+
+   syn lazy Session Process.type();
+
+    eq Send.type(){
+
+       if(getMessage().getLabel().getIdent().equals("start_delegation") ){
+//            if(((Atom)getMessage().getPayload(0)).getIdent().equals(typeInfo().getModuleName()) &&
+//                   getMessage().getPayload(1).type().isSameType(new AtomType())){
+                        return new RequestForwardDelegation(getRecipient(), getNext().type());
+//                   }
+       }
+       else{
+           List<LiteralType> types = new List();
+           for(int i=0;i<getMessage().getNumPayload();i++){
+               types.add((LiteralType)getMessage().getPayload(i).type());
+           }
+           Session n = hasNext()?getNext().type():null;
+           return new SessionSend(getRecipient(),getMessage().getLabel(), types, n);
+       }
+    }
+
+    eq Receive.type(){
+        List<SessionReceive> types = new List();
+        for(int i=0; i<getNumClauses();i++){
+            Session t = getClauses(i).type();
+            if(t.isSameType(new SessionReceive())){
+                types.add((SessionReceive)t);
+            }else{
+                return t;
+            }
+        }
+        if(types.getNumChild()==1) {
+            return types.getChild(0);
+        }
+        return new ExternalChoice(types);
+    }
+
+    syn lazy Session ReceiveClause.type();
+
+    eq ReceiveClause.type(){
+       List<LiteralType> sessions = new List();
+
+       if(getLabel().getIdent().equals("end_delegation")){
+           return new RequestBackwardDelegation(getSender(),getActions().type());
+       }
+
+       if(getNumVariables()>0){
+           if(getNumVariables()==2){
+               if(getLabel().getIdent().equals("start_delegation")){
+                   Send s = typeInfo().searchSendInMod(getSender().getIdent(), typeInfo().getModuleName(),getLabel().getIdent());
+                   if(s.getMessage().getPayload(0).type().isSameType(new AtomType()) &&
+                       s.getMessage().getPayload(1).type().isSameType(new PidType())){
+                           Process p = getActions();
+                           Process p1 = typeInfo().getNext(p);
+                           Process p2 = typeInfo().getNext(p1);
+
+                          // check actions next 3 are call unreg(getSender.getIdent())
+                          // , unreg(ModuleName), reg(ModuleName, self)
+                           Atom d = (Atom)s.getMessage().getPayload(0);
+                           typeInfo().setDelegating(new Delegating(d));
+                           return new AcceptForwardDelegation(d, typeInfo().getNext(p2).type());
+                       }
+               }
+          }
+
+
+           for(int i=0; i<getNumVariables();i++){
+                if(getVariables(i).type()!=null){
+                    sessions.add((LiteralType)getVariables(i).type());
+                }
+           }
+
+       }
+
+       List<Session> expected = typeInfo().getFunTypeSessionType(getLabel().getIdent());
+       if(getNumVariables()>0){
+           for(int k = 0; k < expected.getNumChild(); k++){
+                Session sess = expected.getChild(k);
+                if(sessions.getChild(k)==null){
+                    sessions.removeChild(k);
+                    sessions.insertChild(sess,k);
+                }
+
+                typeInfo().setGammaSessionType(((Variable)getVariables(k)).getIdent(),sessions.getChild(k));
+           }
+       }
+
+       return new SessionReceive(getSender(),getLabel(),sessions, getActions().type());
+    }
+
+    eq Let.type(){
+        if(typeInfo().getGammaSessionType(getLeft().getIdent())==null){
+            typeInfo().setGammaSessionType(getLeft().getIdent(),getRight().type());
+        }
+
+        return getNext().type();
+    }
+
+    eq ExpressionProcess.type(){
+        Session s = getExpression().type();
+        if(s.getClass().getName().equals(AcceptBackwardDelegation.class.getName())){
+            return s;
+        }else{
+            if(hasNext()){
+                return getNext().type();
+            }
+        }
+        return s;
+    }
+
+    eq Case.type(){
+        List<SessionSend> types = new List();
+        for(int i=0; i<getNumClauses();i++){
+            Session t = getClauses(i).type();
+            if(t.isSameType(new SessionSend())){
+                types.add((SessionSend)t);
+            }
+        }
+        if(types.getNumChild()==1) {
+            return types.getChild(0);
+        }
+        return new InternalChoice(types);
+    }
+
+    syn lazy Session CaseClause.type();
+
+    eq CaseClause.type(){
+       return getActions().type();
+    }
+
+
+}

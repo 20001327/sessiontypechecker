@@ -472,7 +472,7 @@ aspect PrettyPrint {
             stampante().append(">");
         }
         stampante().append(".");
-        getNext().stampa();
+        if(getNext()!=null)getNext().stampa();
     }
 
     public void SessionReceive.stampa(){
@@ -490,7 +490,7 @@ aspect PrettyPrint {
         stampante().append(">");
         }
         stampante().append(".");
-        getNext().stampa();
+        if(getNext()!=null)getNext().stampa();
     }
 
     public void InternalChoice.stampa(){
@@ -527,8 +527,8 @@ aspect PrettyPrint {
     }
 
     public void RequestBackwardDelegation.stampa(){
-        stampante().append(">>");
         getDelegating().stampa();
+        stampante().append(">>");
         stampante().append(".");
         getNext().stampa();
     }
@@ -541,10 +541,10 @@ aspect PrettyPrint {
     }
 
     public void AcceptBackwardDelegation.stampa(){
-        getDelegate().stampa();
         stampante().append(">>");
+        getDelegate().stampa();
         stampante().append(".");
-        getNext().stampa();
+        if(getNext()!=null)getNext().stampa();
     }
 
     public void End.stampa(){

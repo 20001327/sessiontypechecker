@@ -27,12 +27,7 @@ init() ->
               carol ! {bob, start_delegation, bob, self()},
               receive
                 {carol, end_delegation} ->
-                  receive
-                    {carol, quit} ->
-                      'End';
-                    {carol, ok} ->
-                      'End'
-                  end
+                    'End'
               end
           end
       end

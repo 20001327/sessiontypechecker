@@ -59,7 +59,7 @@ public class TypeCheck {
 				out.println(printer.getString());
 			}
 
-			//p.checkType();
+			p.checkType();
 
 		} catch (Exception e) {
 			System.err.println("error (PrettyPrint) : " + e.getMessage());

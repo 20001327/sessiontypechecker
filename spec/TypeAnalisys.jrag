@@ -5,26 +5,63 @@ aspect TypeAnalysis {
 
     public class TypeInfo {
 
-        Map<String,List<Session>> funTypeMap = new HashMap<>();
-        Map<String,Session> gamma = new HashMap<>();
-        Map<String,Session> delta = new HashMap<>();
-        String moduleName;
+            Map<String,List<Session>> funTypeMap = new HashMap<>();
+            Map<String,Session> gamma = new HashMap<>();
+            Map<String,Session> delta = new HashMap<>();
+            List<Module> moduleList = new List();
+            String moduleName;
+            Delegating delegating;
 
-        public void setModuleName(String name){
-            moduleName = name;
-        }
-
-        public String getModuleName(){
-            return moduleName;
-        }
-
-        public List<Session> getFunTypeSessionType(String key){
-            if(funTypeMap.containsKey(key)){
-                return funTypeMap.get(key);
+            public void setModuleName(String name){
+                moduleName = name;
             }
 
-            return null;
-        }
+            public String getModuleName(){
+                return moduleName;
+            }
+
+            public void setModuleList(List<Module> list){
+                moduleList = list;
+            }
+
+            public List<Module> getModuleList(){
+                return moduleList;
+            }
+
+            public void setDelegating(Delegating del){
+                delegating = del;
+            }
+
+            public Delegating getDelegating(){
+                return delegating;
+            }
+
+            public List<Session> getFunTypeSessionType(String key){
+                if(funTypeMap.containsKey(key)){
+                    return funTypeMap.get(key);
+                }
+
+                return null;
+            }
+
+            public Process getNext(Process p){
+                String className = p.getClass().getName();
+                if(className.equals(ExpressionProcess.class.getName())){
+                    ExpressionProcess exp = (ExpressionProcess) p;
+                    if(exp.hasNext()){
+                        return exp.getNext();
+                    }
+                }else if(className.equals(Send.class.getName())){
+                    Send exp = (Send) p;
+                    if(exp.hasNext()){
+                        return exp.getNext();
+                    }
+                }
+
+                return null;
+            }
+
+
 
         public void setFunTypeSessionType(String label, List<Session> type){
             funTypeMap.put(label,type);
@@ -53,20 +90,87 @@ aspect TypeAnalysis {
         public void setDeltaSessionType(String name, Session type){
             delta.put(name,type);
         }
+
+        public Send searchSendInMod(String moduleName,String dest, String label){
+            for (Module module: moduleList){
+                if(module.getPartecipant().equals(moduleName)){
+                    for(Function f: module.getFunctionss()){
+                        return searchSend(f.getBody(), dest, label);
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        public Send searchSend(Process process, String dest, String label){
+            String className = process.getClass().getName();
+            if(className.equals(Send.class.getName())){
+                Send s = (Send) process;
+                if(s.getRecipient().getIdent().equals(dest)
+                    && s.getMessage().getLabel().getIdent().equals(label)){
+                    return s;
+                }else if(s.hasNext()) {
+                    return searchSend(s.getNext(),dest,label);
+                }
+            }else if(className.equals(Receive.class.getName())){
+                Receive s = (Receive) process;
+                Send send = null;
+                for (ReceiveClause rc : s.getClausess()){
+                    send = searchSend(rc.getActions(),dest,label);
+                    if (send!=null) return send;
+                }
+                if(s.hasNext()) return searchSend(s.getNext(),dest,label);
+            }else if(className.equals(Case.class.getName())){
+                Case s = (Case) process;
+                Send send = null;
+                for (CaseClause rc : s.getClausess()){
+                    send = searchSend(rc.getActions(),dest,label);
+                    if (send!=null) return send;
+                }
+                if(s.hasNext()) return searchSend(s.getNext(),dest,label);
+            }else if(className.equals(Let.class.getName())){
+                Let s = (Let) process;
+                return searchSend(s.getNext(),dest,label);
+            }else if(className.equals(ExpressionProcess.class.getName())){
+                ExpressionProcess s = (ExpressionProcess) process;
+                if(s.hasNext()) return searchSend(s.getNext(),dest,label);
+            }
+
+            return null;
+        }
+
     }
 
+    public class Delegating {
+       Atom delegatingName;
+       Pid delegatingPid;
 
+       public Delegating(Atom name){
+            delegatingName = name;
+       }
+
+       public Atom getDelegatingName(){
+           return delegatingName;
+       }
+
+       public void setDelegatingName(Atom del){
+           delegatingName = del;
+       }
+
+
+    }
 
     syn lazy TypeInfo Function.typeInfo() {
        return new TypeInfo();
     }
 
-    /***********************************************************************/
 
     public void Program.checkType(){
         for (Module module: getModuless()){
             for (Function function : module.getFunctionss()){
                 function.typeInfo().setModuleName(module.getPartecipant());
+                function.typeInfo().setModuleList(getModuless());
                 function.getType().getSessionType().getInfo();
                 FunType type1 = function.getType();
                 printer().reset();
@@ -84,8 +188,6 @@ aspect TypeAnalysis {
             }
         }
     }
-
-    /***********************************************************************/
 
 
     eq Function.getBody().typeInfo() = this.typeInfo();
@@ -115,282 +217,5 @@ aspect TypeAnalysis {
     inh lazy TypeInfo Atom.typeInfo();
     inh lazy TypeInfo Variable.typeInfo();
 
-    public abstract boolean Session.isSubtypeOf(Session t);
-    public boolean Session.isSameType(Session t) {
-        return isSubtypeOf(t);
-    }
-
-    public boolean IntType.isSubtypeOf(Session t) {
-            return t instanceof IntType;
-    }
-
-    public boolean AtomType.isSubtypeOf(Session t) {
-            return t instanceof AtomType;
-    }
-
-    public boolean BoolType.isSubtypeOf(Session t) {
-            return t instanceof BoolType;
-    }
-
-    public boolean PidType.isSubtypeOf(Session t) {
-            return t instanceof PidType;
-    }
-
-    public boolean ActorPid.isSubtypeOf(Session t) {
-            return t instanceof ActorPid;
-    }
-
-    public boolean End.isSubtypeOf(Session t) {
-            return t instanceof End;
-    }
-
-    public boolean AtS.isSubtypeOf(Session t) {
-            return t instanceof AtS;
-    }
-
-    public boolean SessionSend.isSubtypeOf(Session t) {
-           return t instanceof SessionSend;
-    }
-
-    public boolean SessionReceive.isSubtypeOf(Session t) {
-              return t instanceof SessionReceive;
-   }
-
-    public boolean InternalChoice.isSubtypeOf(Session t) {
-            return t instanceof InternalChoice;
-    }
-
-    public boolean ExternalChoice.isSubtypeOf(Session t) {
-            return t instanceof ExternalChoice;
-    }
-
-    public boolean RequestForwardDelegation.isSubtypeOf(Session t) {
-            return t instanceof RequestForwardDelegation;
-    }
-
-    public boolean RequestBackwardDelegation.isSubtypeOf(Session t) {
-             return t instanceof RequestBackwardDelegation;
-    }
-
-    public boolean AcceptForwardDelegation.isSubtypeOf(Session t) {
-           return t instanceof AcceptForwardDelegation;
-    }
-
-    public boolean AcceptBackwardDelegation.isSubtypeOf(Session t) {
-            return t instanceof AcceptBackwardDelegation;
-    }
-
-    public boolean FunType.isSubtypeOf(Session t) {
-            return t instanceof FunType;
-    }
-
-    public boolean StringType.isSubtypeOf(Session t) {
-            return t instanceof StringType;
-    }
-
-    /* expressions */
-
-    syn lazy Session Expression.type();
-
-    eq AtomSender.type() = new AtomType();
-    eq Pid.type() = new PidType();
-    eq CharList.type() = new StringType();
-    eq Number.type() = new IntType();
-    eq Boolean.type() = new BoolType();
-
-    public void Session.getInfo(){
-
-    }
-
-    public void SessionSend.getInfo(){
-        getNext().getInfo();
-    }
-
-    public void SessionReceive.getInfo(){
-        String label = getLabel().getIdent();
-        List<Session> types = new List();
-        if(getNumType()>0){
-           for (int i=0; i<getNumType(); i++) {
-                types.add(getType(i));
-            }
-        }
-        typeInfo().setFunTypeSessionType(label, types);
-        getNext().getInfo();
-    }
-
-    public void ExternalChoice.getInfo(){
-        if(getNumReceives()>0){
-            for (int i=0; i<getNumReceives(); i++) {
-                getReceives(i).getInfo();
-            }
-        }
-    }
-
-    public void RequestForwardDelegation.getInfo(){
-        getNext().getInfo();
-    }
-
-    public void RequestBackwardDelegation.getInfo(){
-        getNext().getInfo();
-    }
-
-    public void AcceptForwardDelegation.getInfo(){;
-        getNext().getInfo();
-    }
-
-    public void AcceptBackwardDelegation.getInfo(){
-        getNext().getInfo();
-    }
-
-    eq Self.type() {
-        return new PidType();
-    }
-
-    eq Variable.type() {
-        if(typeInfo().getGammaSessionType(getIdent())!=null){
-            return typeInfo().getGammaSessionType(getIdent());
-        }
-
-        return null;
-    }
-
-   syn lazy Session SenderId.type();
-
-    eq VarSender.type() {
-        // in this case Var is used in send
-        // then type is defined by a previous let or inherited from funtype
-       return typeInfo().getGammaSessionType(getIdent());
-    }
-
-    eq Operator.type() {
-        if(getLeftOp().type().isSameType(new BoolType())
-            && getRightOp().type().isSameType(new BoolType())) {
-            return new BoolType();
-        }
-
-        if(getLeftOp().type().isSameType(new IntType())
-            && getRightOp().type().isSameType(new IntType())) {
-            return new IntType();
-        }
-
-        return null;
-    }
-
-    eq Call.type(){
-        Session type = typeInfo().getDeltaSessionType(getFunctionName().getIdent());
-        if(type.isSubtypeOf(new FunType())){
-            return ((FunType)type).getSessionType();
-        }
-        return null;
-    }
-
-    /* case expression non lo abbiamo usato e neanche la sequenza per le espressioni */
-
-   syn lazy Session Process.type();
-
-    eq Send.type(){
-        String sender = "";
-        if(getMessage().getSender() instanceof AtomSender){
-            sender = ((AtomSender)getMessage().getSender()).getIdent();
-        }else{
-            sender = ((VarSender)getMessage().getSender()).getIdent();
-        }
-
-        if(sender.equals(typeInfo().getModuleName())
-           || getMessage().getSender().type().isSameType(new ActorPid())){
-
-           if(getMessage().getLabel().getIdent().equals("start_delegation") ){
-                if(getMessage().getNumPayload() == 2 &&
-                    getMessage.getPayload(0).getIdent().equals(typeInfo(getModuleName())) &&
-                       getMessage.getPayload(1).type().isSameType(new Atom())){
-
-                       }
-           }
-           else{
-               List<LiteralType> types = new List();
-               for(int i=0;i<getMessage().getNumPayload();i++){
-                   types.add((LiteralType)getMessage().getPayload(i).type());
-               }
-               return new SessionSend(getRecipient(),getMessage().getLabel(), types, getNext().type());
-           }
-        }
-
-        return null;
-    }
-
-    eq Receive.type(){
-        List<SessionReceive> types = new List();
-        for(int i=0; i<getNumClauses();i++){
-            Session t = getClauses(i).type();
-            if(t.isSameType(new SessionReceive())){
-                types.add((SessionReceive)t);
-            }else{
-                types.add(null);
-            }
-        }
-        if(types.getNumChild()==1) {
-            return types.getChild(0);
-        }
-        return new ExternalChoice(types);
-    }
-
-    syn lazy Session ReceiveClause.type();
-
-    eq ReceiveClause.type(){
-       List<LiteralType> sessions = new List();
-       int size = 0;
-       if(getNumVariables()>0){
-           for(int i=0; i<getNumVariables();i++){
-                if(getVariables(i).type()!=null){
-                    sessions.add((LiteralType)getVariables(i).type());
-                    size++;
-                }
-           }
-       }
-
-       List<Session> expected = typeInfo().getFunTypeSessionType(getLabel().getIdent());
-       for(int k = 0; k < expected.getNumChild(); k++){
-            Session sess = expected.getChild(k);
-            if(sessions.getChild(k)==null){
-                sessions.removeChild(k);
-                sessions.insertChild(sess,k);
-            }
-
-            typeInfo().setGammaSessionType(((Variable)getVariables(k)).getIdent(),sessions.getChild(k));
-       }
-
-
-       return new SessionReceive(getSender(),getLabel(),sessions, getActions().type());
-    }
-
-    eq Let.type(){
-        if(typeInfo().getGammaSessionType(getLeft().getIdent())==null){
-            typeInfo().setGammaSessionType(getLeft().getIdent(),getRight().type());
-        }
-
-        return getNext().type();
-    }
-
-    eq ExpressionProcess.type(){
-        if(hasNext()){
-            return getNext().type();
-        }
-        return getExpression().type();
-    }
-
-    eq Case.type(){
-        return null;
-    }
-
-    eq SenderId.type(){
-        return null;
-    }
-
-    eq Atom.type(){
-        if(getIdent().equals("'End'")){
-            return new End();
-        }
-        return new AtomType();
-    }
 
 }
