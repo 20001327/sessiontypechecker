@@ -1,0 +1,25 @@
+aspect TypeChecking{
+
+    public void Program.checkType(){
+        for (Module module: getModuless()){
+            for (Function function : module.getFunctionss()){
+                function.typeInfo().setModuleName(module.getPartecipant());
+                function.typeInfo().setModuleList(getModuless());
+                FunType type1 = function.getType();
+                printer().reset();
+                type1.print();
+                System.out.println("\n\ntipo atteso: ");
+                System.out.println(printer().getString());
+
+                if(function.getType().getNumArguments()==function.getNumParameters()){
+                    Session t = function.getBody().type();
+                    FunctionType type2 = new FunctionType(function.getFunctionName(),
+                                                function.getType().getArgumentss(),t);
+                    System.out.println("tipo calcolato: ");
+                    System.out.println(type2.stampa().getString());
+                }
+            }
+        }
+    }
+
+}

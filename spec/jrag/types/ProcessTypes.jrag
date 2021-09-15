@@ -67,23 +67,12 @@ aspect ProcessTypes{
 
 
            for(int i=0; i<getNumVariables();i++){
-                if(getVariables(i).type()!=null){
-                    sessions.add((LiteralType)getVariables(i).type());
+                LiteralType st = (LiteralType)getVariables(i).type();
+                if(st==null){
+                    st = (LiteralType)getInfo(getLabel().getIdent(), i);
                 }
-           }
-
-       }
-
-       List<Session> expected = getInfo(getLabel().getIdent());
-       if(getNumVariables()>0){
-           for(int k = 0; k < expected.getNumChild(); k++){
-                Session sess = expected.getChild(k);
-                if(sessions.getChild(k)==null){
-                    sessions.removeChild(k);
-                    sessions.insertChild(sess,k);
-                }
-
-                typeInfo().setGammaSessionType(((Variable)getVariables(k)).getIdent(),sessions.getChild(k));
+                typeInfo().setGammaSessionType(((Variable)getVariables(i)).getIdent(),st);
+                sessions.add(st);
            }
        }
 

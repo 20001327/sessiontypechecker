@@ -31,7 +31,7 @@
         <fileset dir="spec" id="jastAddSpecs">
             <include name="*.ast" />
             <include name="**/*.jrag" />
-            <include name="*.jadd" />
+            <include name="**/*.jadd" />
         </fileset>
         <pathconvert property="cmdJastAddSpecs" refid="jastAddSpecs"
                      pathsep=" " />

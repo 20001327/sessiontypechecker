@@ -112,35 +112,25 @@ aspect TypeAnalysis {
             return null;
         }
 
+        public boolean checkUnregister(List<Process> processes, Expression e){
+            boolean found = false;
+            for(Process p:processes){
+                if(!found && p.getClass().getName().equals(ExpressionProcess.class.getName())){
+                    Expression call = ((ExpressionProcess) p).getExpression();
+                    if(call.getClass().getName().equals(Call.class.getName())){
+                        Call c = (Call) call;
+                        found = c.getArguments(0).equals(e);
+                    }
+                }
+            }
+            return found;
+        }
+
     }
 
     syn lazy TypeInfo Function.typeInfo() {
        return new TypeInfo();
     }
-
-
-    public void Program.checkType(){
-        for (Module module: getModuless()){
-            for (Function function : module.getFunctionss()){
-                function.typeInfo().setModuleName(module.getPartecipant());
-                function.typeInfo().setModuleList(getModuless());
-                FunType type1 = function.getType();
-                printer().reset();
-                type1.print();
-                System.out.println("\n\ntipo atteso: ");
-                System.out.println(printer().getString());
-
-                if(function.getType().getNumArguments()==function.getNumParameters()){
-                    Session t = function.getBody().type();
-                    FunctionType type2 = new FunctionType(function.getFunctionName(),
-                                                function.getType().getArgumentss(),t);
-                    System.out.println("tipo calcolato: ");
-                    System.out.println(type2.stampa().getString());
-                }
-            }
-        }
-    }
-
 
     eq Function.getBody().typeInfo() = this.typeInfo();
 
@@ -162,12 +152,12 @@ aspect TypeAnalysis {
 
 
     // visita nel session type annotato per trovare i tipi di una send
-    eq Function.getBody().getInfo(String label) = this.getInfo(label);
-    inh lazy List<Session> Process.getInfo(String label);
-    inh lazy List<Session> ReceiveClause.getInfo(String label);
+    eq Function.getBody().getInfo(String label, int index) = this.getInfo(label,index);
+    inh lazy Session Process.getInfo(String label,int index);
+    inh lazy Session ReceiveClause.getInfo(String label,int index);
 
-    syn lazy List<Session> Function.getInfo(String label){
-        return getType().getSessionType().getInfo(label);
+    syn lazy Session Function.getInfo(String label,int index){
+        return getType().getSessionType().getInfo(label, index);
     }
 
 

@@ -1,33 +1,27 @@
 aspect SessionTypes{
 
-    public List<Session> Session.getInfo(String label){
+    public Session Session.getInfo(String label,int index){
         return null;
     }
 
-    public List<Session> SessionSend.getInfo(String label){
-        return getNext().getInfo(label);
+    public Session SessionSend.getInfo(String label,int index){
+        return getNext().getInfo(label, index);
     }
 
-    public List<Session> SessionReceive.getInfo(String lbl){
+    public Session SessionReceive.getInfo(String lbl,int index){
         String label = getLabel().getIdent();
-        if(label.equals(lbl)){
-            List<Session> types = new List();
-            if(getNumType()>0){
-               for (int i=0; i<getNumType(); i++) {
-                    types.add(getType(i));
-                }
-            }
-            return types;
+        if(label.equals(lbl) && getNumType()>=index){
+            return getType(index);
         }
         else {
-            return getNext().getInfo(lbl);
+            return getNext().getInfo(lbl, index);
         }
     }
 
-    public List<Session> ExternalChoice.getInfo(String label){
+    public Session ExternalChoice.getInfo(String label,int index){
         if(getNumReceives()>0){
             for (int i=0; i<getNumReceives(); i++) {
-                List<Session> s = getReceives(i).getInfo(label);
+                Session s = getReceives(i).getInfo(label, index);
                 if(s!=null){
                     return s;
                 }
@@ -36,15 +30,15 @@ aspect SessionTypes{
         return null;
     }
 
-    public List<Session> End.getInfo(String label){
+    public Session End.getInfo(String label,int index){
         return null;
     }
 
-    public List<Session> InternalChoice.getInfo(String label){
+    public Session InternalChoice.getInfo(String label,int index){
         if(getNumSends()>0){
             for (int i=0; i<getNumSends(); i++) {
-                if(getSends(i).getInfo(label)!=null){
-                    return getSends(i).getInfo(label);
+                if(getSends(i).getInfo(label, index)!=null){
+                    return getSends(i).getInfo(label, index);
                 }
             }
         }
@@ -52,20 +46,20 @@ aspect SessionTypes{
         return null;
     }
 
-    public List<Session> RequestForwardDelegation.getInfo(String label){
-        return getNext().getInfo(label);
+    public Session RequestForwardDelegation.getInfo(String label,int index){
+        return getNext().getInfo(label, index);
     }
 
-    public List<Session> RequestBackwardDelegation.getInfo(String label){
-        return getNext().getInfo(label);
+    public Session RequestBackwardDelegation.getInfo(String label,int index){
+        return getNext().getInfo(label, index);
     }
 
-    public List<Session> AcceptForwardDelegation.getInfo(String label){;
-        return getNext().getInfo(label);
+    public Session AcceptForwardDelegation.getInfo(String label,int index){;
+        return getNext().getInfo(label,index);
     }
 
-    public List<Session> AcceptBackwardDelegation.getInfo(String label){
-        return getNext().getInfo(label);
+    public Session AcceptBackwardDelegation.getInfo(String label,int index){
+        return getNext().getInfo(label, index);
     }
 
 }
