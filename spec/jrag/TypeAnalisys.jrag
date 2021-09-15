@@ -8,7 +8,7 @@ aspect TypeAnalysis {
         Map<String,Session> gamma = new HashMap<>();
         List<Module> moduleList = new List();
         String moduleName;
-        Delegating delegating;
+        Atom delegating;
 
         public void setModuleName(String name){
             moduleName = name;
@@ -26,11 +26,11 @@ aspect TypeAnalysis {
             return moduleList;
         }
 
-        public void setDelegating(Delegating del){
+        public void setDelegating(Atom del){
             delegating = del;
         }
 
-        public Delegating getDelegating(){
+        public Atom getDelegating(){
             return delegating;
         }
 
@@ -111,24 +111,6 @@ aspect TypeAnalysis {
 
             return null;
         }
-
-    }
-
-    public class Delegating {
-       Atom delegatingName;
-
-       public Delegating(Atom name){
-            delegatingName = name;
-       }
-
-       public Atom getDelegatingName(){
-           return delegatingName;
-       }
-
-       public void setDelegatingName(Atom del){
-           delegatingName = del;
-       }
-
 
     }
 

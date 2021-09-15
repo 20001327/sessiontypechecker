@@ -30,7 +30,7 @@
     <target name="generate" depends="scanner,parser">
         <fileset dir="spec" id="jastAddSpecs">
             <include name="*.ast" />
-            <include name="*.jrag" />
+            <include name="**/*.jrag" />
             <include name="*.jadd" />
         </fileset>
         <pathconvert property="cmdJastAddSpecs" refid="jastAddSpecs"

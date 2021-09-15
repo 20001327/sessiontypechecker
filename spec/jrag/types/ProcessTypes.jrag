@@ -59,7 +59,7 @@ aspect ProcessTypes{
                           // check actions next 3 are call unreg(getSender.getIdent())
                           // , unreg(ModuleName), reg(ModuleName, self)
                            Atom d = (Atom)s.getMessage().getPayload(0);
-                           typeInfo().setDelegating(new Delegating(d));
+                           typeInfo().setDelegating(d);
                            return new AcceptForwardDelegation(d, typeInfo().getNext(p2).type());
                        }
                }

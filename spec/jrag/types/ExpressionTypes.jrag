@@ -11,7 +11,7 @@ aspect ExpressionTypes {
             Session next = typeInfo().getNext(p2)!=null?typeInfo().getNext(p2).type():null;
             // check next 4 process 3 call unreg(getDelegating), reg(ModuleName, self), reg(getDelegating, getPid<del>)
             // check send
-            return new AcceptBackwardDelegation(typeInfo().getDelegating().getDelegatingName(),next);
+            return new AcceptBackwardDelegation(typeInfo().getDelegating(),next);
         }else if(getFunctionName().getIdent().equals("self")){
             return new PidType();
         }else{
