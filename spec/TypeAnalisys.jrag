@@ -5,51 +5,51 @@ aspect TypeAnalysis {
 
     public class TypeInfo {
 
-            Map<String,Session> gamma = new HashMap<>();
-            List<Module> moduleList = new List();
-            String moduleName;
-            Delegating delegating;
+        Map<String,Session> gamma = new HashMap<>();
+        List<Module> moduleList = new List();
+        String moduleName;
+        Delegating delegating;
 
-            public void setModuleName(String name){
-                moduleName = name;
-            }
+        public void setModuleName(String name){
+            moduleName = name;
+        }
 
-            public String getModuleName(){
-                return moduleName;
-            }
+        public String getModuleName(){
+            return moduleName;
+        }
 
-            public void setModuleList(List<Module> list){
-                moduleList = list;
-            }
+        public void setModuleList(List<Module> list){
+            moduleList = list;
+        }
 
-            public List<Module> getModuleList(){
-                return moduleList;
-            }
+        public List<Module> getModuleList(){
+            return moduleList;
+        }
 
-            public void setDelegating(Delegating del){
-                delegating = del;
-            }
+        public void setDelegating(Delegating del){
+            delegating = del;
+        }
 
-            public Delegating getDelegating(){
-                return delegating;
-            }
+        public Delegating getDelegating(){
+            return delegating;
+        }
 
-            public Process getNext(Process p){
-                String className = p.getClass().getName();
-                if(className.equals(ExpressionProcess.class.getName())){
-                    ExpressionProcess exp = (ExpressionProcess) p;
-                    if(exp.hasNext()){
-                        return exp.getNext();
-                    }
-                }else if(className.equals(Send.class.getName())){
-                    Send exp = (Send) p;
-                    if(exp.hasNext()){
-                        return exp.getNext();
-                    }
+        public Process getNext(Process p){
+            String className = p.getClass().getName();
+            if(className.equals(ExpressionProcess.class.getName())){
+                ExpressionProcess exp = (ExpressionProcess) p;
+                if(exp.hasNext()){
+                    return exp.getNext();
                 }
-
-                return null;
+            }else if(className.equals(Send.class.getName())){
+                Send exp = (Send) p;
+                if(exp.hasNext()){
+                    return exp.getNext();
+                }
             }
+
+            return null;
+        }
 
         public Session getGammaSessionType(String key){
             if(gamma.containsKey(key)){
