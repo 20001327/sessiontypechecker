@@ -30,13 +30,13 @@ aspect PrimitiveTypes {
 
 
     eq Variable.type() {
-        if(typeInfo().getGammaSessionType(getIdent())!=null){
-            return typeInfo().getGammaSessionType(getIdent());
+        for (VarDeclaration d : getDeclarations()) {
+          if(d.getName().equals(getIdent())){
+            return d.getType();
+          }
         }
-
         return null;
     }
-
 
     syn lazy Session SenderId.type();
     eq SenderId.type(){  return null;  }
@@ -46,7 +46,12 @@ aspect PrimitiveTypes {
     }
 
     eq VarSender.type() {
-       return typeInfo().getGammaSessionType(getIdent());
+        for (VarDeclaration d : getDeclarations()) {
+          if(d.getName().equals(getIdent())){
+            return d.getType();
+          }
+        }
+        return null;
     }
 
     public boolean VarSender.equals(VarSender other){

@@ -1,0 +1,60 @@
+import java.util.ArrayList;
+
+aspect NameAnalisys{
+    class VarDeclaration{
+        String name;
+        Session type;
+        Expression value;
+
+        public String getName(){
+            return name;
+        }
+
+        public Session getType(){
+            return type;
+        }
+
+        public Expression getValue(){
+            return value;
+        }
+
+        public void setName(String name){
+            this.name = name;
+        }
+
+        public void setType(Session type){
+            this.type = type;
+        }
+
+        public void setValue(Expression value){
+            this.value = value;
+        }
+    }
+
+    syn lazy ArrayList<VarDeclaration> Function.getDeclarations() {
+        return new ArrayList<>();
+    }
+
+    public void ReceiveClause.addDeclaration(String label, Session type, Expression value) {
+        VarDeclaration var = new VarDeclaration();
+        var.setName(label);
+        var.setType(type);
+        var.setValue(value);
+        getDeclarations().add(var);
+    }
+
+    public void Let.addDeclaration(String label, Session type, Expression value) {
+        VarDeclaration var = new VarDeclaration();
+        var.setName(label);
+        var.setType(type);
+        var.setValue(value);
+        getDeclarations().add(var);
+    }
+
+    eq Function.getBody().getDeclarations() = this.getDeclarations();
+    inh lazy ArrayList<VarDeclaration> Process.getDeclarations() ;
+    inh lazy ArrayList<VarDeclaration> ReceiveClause.getDeclarations() ;
+    inh lazy ArrayList<VarDeclaration> SenderId.getDeclarations() ;
+    inh lazy ArrayList<VarDeclaration> Expression.getDeclarations() ;
+
+}

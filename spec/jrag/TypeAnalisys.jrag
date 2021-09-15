@@ -5,7 +5,6 @@ aspect TypeAnalysis {
 
     public class TypeInfo {
 
-        Map<String,Session> gamma = new HashMap<>();
         List<Module> moduleList = new List();
         String moduleName;
         Atom delegating;
@@ -49,18 +48,6 @@ aspect TypeAnalysis {
             }
 
             return null;
-        }
-
-        public Session getGammaSessionType(String key){
-            if(gamma.containsKey(key)){
-                return gamma.get(key);
-            }
-
-            return null;
-        }
-
-        public void setGammaSessionType(String name, Session type){
-            gamma.put(name,type);
         }
 
         public Send searchSendInMod(String moduleName,String dest, String label){
