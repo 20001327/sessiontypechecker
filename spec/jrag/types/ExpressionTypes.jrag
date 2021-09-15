@@ -2,23 +2,28 @@ aspect ExpressionTypes {
 
     syn lazy Session Expression.type();
 
+    inh lazy FunType Expression.getFunType();
+    inh lazy Process Expression.getNextProcess(Process p);
+
+    inh lazy Delegating Call.delegating();
+
     public boolean Expression.equals(Expression other){
         return false;
     }
 
     eq Call.type(){
 
-        if(getFunctionName().getIdent().equals("unregister") && typeInfo().getDelegating()!=null){
-            Process p = typeInfo().getNext((Process)getParent());
-            Process p1 = typeInfo().getNext(p);
-            Process p2 = typeInfo().getNext(p1);
+        if(getFunctionName().getIdent().equals("unregister")){
+            Process p = getNextProcess((Process)getParent());
+            Process p1 = getNextProcess(p);
+            Process p2 = getNextProcess(p1);
             List<Process> ps = new List();
             ps.add(p);ps.add(p1);ps.add(p2);
-            Session next = typeInfo().getNext(p2)!=null?typeInfo().getNext(p2).type():null;
+            Session next = getNextProcess(p2)!=null?getNextProcess(p2).type():null;
 
             // check next 4 process 3 call unreg(getDelegating), reg(ModuleName, self), reg(getDelegating, getPid<del>)
             // check send
-            return new AcceptBackwardDelegation(typeInfo().getDelegating(),next);
+            return new AcceptBackwardDelegation(delegating().getName(),next);
         }else if(getFunctionName().getIdent().equals("self")){
             return new PidType();
         }else{

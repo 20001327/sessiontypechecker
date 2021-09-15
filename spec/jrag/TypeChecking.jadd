@@ -3,8 +3,6 @@ aspect TypeChecking{
     public void Program.checkType(){
         for (Module module: getModuless()){
             for (Function function : module.getFunctionss()){
-                function.typeInfo().setModuleName(module.getPartecipant());
-                function.typeInfo().setModuleList(getModuless());
                 FunType type1 = function.getType();
                 printer().reset();
                 type1.print();
