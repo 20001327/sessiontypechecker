@@ -79,11 +79,23 @@ aspect ProcessTypes{
                                s.getMessage().getPayload(i).type(), s.getMessage().getPayload(i));
                            }
 
-                          // check actions next 3 are call unreg(getSender.getIdent())
-                          // , unreg(ModuleName), reg(ModuleName, self)
                            Atom d = (Atom)s.getMessage().getPayload(0);
-                           delegating().setName(d);
-                           return new AcceptForwardDelegation(d, getNextProcess(p2).type());
+
+                           Call unreg1 = new Call(new Atom("unregister"),new List(new Atom(getModuleName())));
+                           Call unreg2 = new Call(new Atom("unregister"), new List(d));
+                           Call reg1 = new Call(new Atom("register"), new List(new Atom(getModuleName()),new Call(new Atom("self"), new List())));
+                           Call c1 = (Call)((ExpressionProcess)p).getExpression();
+                           Call c2 = (Call)((ExpressionProcess)p1).getExpression();
+                           Call c3 = (Call)((ExpressionProcess)p2).getExpression();
+
+                           boolean b1 = c1.equals(unreg1) || c1.equals(unreg2);
+                           boolean b2 = c2.equals(unreg1) || c2.equals(unreg2);
+                           boolean b3 = c3.equals(reg1);
+
+                           if(b1 && b2 && b3){
+                                delegating().setName(d);
+                                return new AcceptForwardDelegation(d, getNextProcess(p2).type());
+                           }
                        }
                }
           }
