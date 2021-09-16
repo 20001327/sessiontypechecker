@@ -1,6 +1,5 @@
 aspect ProcessTypes{
 
-
    syn lazy Session Process.type();
    syn lazy Session ReceiveClause.type();
    syn lazy Session CaseClause.type();
@@ -84,15 +83,13 @@ aspect ProcessTypes{
                            Call unreg1 = new Call(new Atom("unregister"),new List(new Atom(getModuleName())));
                            Call unreg2 = new Call(new Atom("unregister"), new List(d));
                            Call reg1 = new Call(new Atom("register"), new List(new Atom(getModuleName()),new Call(new Atom("self"), new List())));
-                           Call c1 = (Call)((ExpressionProcess)p).getExpression();
-                           Call c2 = (Call)((ExpressionProcess)p1).getExpression();
-                           Call c3 = (Call)((ExpressionProcess)p2).getExpression();
 
-                           boolean b1 = c1.equals(unreg1) || c1.equals(unreg2);
-                           boolean b2 = c2.equals(unreg1) || c2.equals(unreg2);
-                           boolean b3 = c3.equals(reg1);
+                           boolean differ = !p.equals(p1);
+                           boolean b1 = (p.equals(unreg1) || p.equals(unreg2));
+                           boolean b2 = (p1.equals(unreg1) || p1.equals(unreg2));
+                           boolean b3 = p2.equals(reg1);
 
-                           if(b1 && b2 && b3){
+                           if(b1 && b2 && b3 && differ){
                                 delegating().setName(d);
                                 return new AcceptForwardDelegation(d, getNextProcess(p2).type());
                            }

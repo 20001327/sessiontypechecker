@@ -5,70 +5,88 @@ import java.util.Map;
 
 aspect Comparison{
 
+    public boolean ExpressionProcess.equals(Object other){
+        if(this.getClass().getName().equals(other.getClass().getName())){
+            return getExpression().equals(((ExpressionProcess)other).getExpression());
+        }
+        return getExpression().equals(other);
+    }
 
     public boolean Send.equals(Object o){
-        Send other = (Send) o;
-        return getRecipient().equals(other.getRecipient()) &&
+        if(this.getClass().getName().equals(o.getClass().getName())){
+            Send other = (Send) o;
+            return getRecipient().equals(other.getRecipient()) &&
                 getMessage().equals(other.getMessage());
+        }
+        return false;
     }
 
     public boolean Message.equals(Object o){
-        Message other = (Message) o;
-        boolean temp = getSender().equals(other.getSender()) &&
-                getLabel().equals(other.getLabel());
-        Map<Expression, Integer> freq1 = new HashMap<>();
-        getPayloads().forEach(it -> freq1.merge(it, 1, (a, b) -> a + b));
-        Map<Expression, Integer> freq2 = new HashMap<>();
-        other.getPayloads().forEach(it -> freq2.merge(it, 1, (a, b) -> a + b));
-        return freq1.equals(freq2) && temp;
+        if(this.getClass().getName().equals(o.getClass().getName())){
+            Message other = (Message) o;
+            boolean temp = getSender().equals(other.getSender()) &&
+                    getLabel().equals(other.getLabel());
+            Map<Expression, Integer> freq1 = new HashMap<>();
+            getPayloads().forEach(it -> freq1.merge(it, 1, (a, b) -> a + b));
+            Map<Expression, Integer> freq2 = new HashMap<>();
+            other.getPayloads().forEach(it -> freq2.merge(it, 1, (a, b) -> a + b));
+            return freq1.equals(freq2) && temp;
+        }
+        return false;
     }
 
     public boolean Call.equals(Object o){
-        Call other = (Call) o;
-        boolean temp = getFunctionName().equals(other.getFunctionName());
-        boolean foundAll = true;
-        for(Expression e : getArgumentss()){
-                boolean found = false;
-                for(Expression it : other.getArgumentss()){
-                    if(e.getClass().getName().equals(Variable.class.getName())){
-                       for (VarDeclaration d : getDeclarations()) {
-                          if(!found && d.getType().isSameType(new PidType())){
-                            found = d.getType().isSameType(it.type());
-                          }
+        if(this.getClass().getName().equals(o.getClass().getName())){
+            Call other = (Call) o;
+            boolean temp = getFunctionName().equals(other.getFunctionName());
+            boolean foundAll = true;
+            for(Expression e : getArgumentss()){
+                    boolean found = false;
+                    for(Expression it : other.getArgumentss()){
+                        if(e.getClass().getName().equals(Variable.class.getName())){
+                           for (VarDeclaration d : getDeclarations()) {
+                              if(!found && d.getType().isSameType(new PidType())){
+                                found = d.getType().isSameType(it.type());
+                              }
 
-                          if(!found && d.getName().equals(((Variable)e).getIdent())){
-                            found = d.getValue().getClass().getName().equals(it.getClass().getName()) &&
-                                                                        d.getValue().equals(it);
-                          }
+                              if(!found && d.getName().equals(((Variable)e).getIdent())){
+                                found = d.getValue().getClass().getName().equals(it.getClass().getName()) &&
+                                                                            d.getValue().equals(it);
+                              }
+                            }
+                        }
+
+                        if(!found && e.getClass().getName().equals(it.getClass().getName())){
+                            found = e.equals(it);
                         }
                     }
+                    foundAll = foundAll && found;
 
-                    if(!found && e.getClass().getName().equals(it.getClass().getName())){
-                        found = e.equals(it);
-                    }
-                }
-                foundAll = foundAll && found;
-
-        }
-        return temp && foundAll;
+            }
+            return temp && foundAll;
+            }
+        return false;
     }
 
 
     public boolean AtomSender.equals(Object o){
-        AtomSender other = (AtomSender)o;
-        return this.getIdent().equals(other.getIdent());
+        return this.getClass().getName().equals(o.getClass().getName())
+            && this.getIdent().equals(((AtomSender)o).getIdent());
     }
 
     public boolean VarSender.equals(Object other){
-        return this.getIdent().equals(((VarSender)other).getIdent());
+        return this.getClass().getName().equals(other.getClass().getName())
+            &&  this.getIdent().equals(((VarSender)other).getIdent());
     }
 
     public boolean Variable.equals(Object other){
-        return this.getIdent().equals(((Variable)other).getIdent());
+        return this.getClass().getName().equals(other.getClass().getName())
+            &&  this.getIdent().equals(((Variable)other).getIdent());
     }
 
     public boolean Atom.equals(Object other){
-        return this.getIdent().equals(((Atom)other).getIdent());
+        return this.getClass().getName().equals(other.getClass().getName())
+            &&  this.getIdent().equals(((Atom)other).getIdent());
     }
 
     public boolean Pid.equals(Object other){

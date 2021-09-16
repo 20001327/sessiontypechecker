@@ -19,12 +19,11 @@ aspect ExpressionTypes {
             Call reg1 = new Call(new Atom("register"),
                             new List(new Atom(getModuleName()),new Call(new Atom("self"), new List())));
             Call reg2 = new Call(new Atom("register"), new List(delegating().getName(),new Call(new Atom("self"), new List())));
-            Call c1 = (Call)((ExpressionProcess)p).getExpression();
-            Call c2 = (Call)((ExpressionProcess)p1).getExpression();
 
+            boolean differ = !p.equals(p1);
             boolean b1 = this.equals(new Call(new Atom("unregister"),new List(delegating().getName())));
-            boolean b2 = c1.equals(reg1) || c1.equals(reg2);
-            boolean b3 = c2.equals(reg1) || c2.equals(reg2);
+            boolean b2 = (p.equals(reg1) || p.equals(reg2));
+            boolean b3 = (p1.equals(reg1) || p1.equals(reg2));
             boolean b4 = p2.equals(new Send(delegating().getName(),
                     new Message(new AtomSender(getModuleName()), new Atom("end_delegation"),new List()), null));
 
