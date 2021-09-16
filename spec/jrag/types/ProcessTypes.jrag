@@ -82,7 +82,7 @@ aspect ProcessTypes{
 
                            Call unreg1 = new Call(new Atom("unregister"),new List(new Atom(getModuleName())));
                            Call unreg2 = new Call(new Atom("unregister"), new List(d));
-                           Call reg1 = new Call(new Atom("register"), new List(new Atom(getModuleName()),new Call(new Atom("self"), new List())));
+                           Call reg1 = new Call(new Atom("register"), new List(d,new Call(new Atom("self"), new List())));
 
                            boolean differ = !p.equals(p1);
                            boolean b1 = (p.equals(unreg1) || p.equals(unreg2));

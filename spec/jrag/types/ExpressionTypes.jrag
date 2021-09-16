@@ -27,7 +27,7 @@ aspect ExpressionTypes {
             boolean b4 = p2.equals(new Send(delegating().getName(),
                     new Message(new AtomSender(getModuleName()), new Atom("end_delegation"),new List()), null));
 
-            if(b1 && b2 && b3 && b4){
+            if(b1 && b2 && b3 && b4 && differ){
                 return new AcceptBackwardDelegation(delegating().getName(),next);
             }
         }else if(getFunctionName().getIdent().equals("self")){

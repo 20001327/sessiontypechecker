@@ -45,18 +45,19 @@ aspect Comparison{
                     for(Expression it : other.getArgumentss()){
                         if(e.getClass().getName().equals(Variable.class.getName())){
                            for (VarDeclaration d : getDeclarations()) {
-                              if(!found && d.getType().isSameType(new PidType())){
-                                found = d.getType().isSameType(it.type());
-                              }
+                           if(d.getName().equals(((Variable)e).getIdent())){
+                                  if(!found && d.getType().isSameType(new PidType())){
+                                    found = d.getType().isSameType(it.type());
+                                  }
 
-                              if(!found && d.getName().equals(((Variable)e).getIdent())){
-                                found = d.getValue().getClass().getName().equals(it.getClass().getName()) &&
-                                                                            d.getValue().equals(it);
-                              }
+                                  if(!found){
+                                    found = d.getValue().equals(it);
+                                  }
+                                }
                             }
                         }
 
-                        if(!found && e.getClass().getName().equals(it.getClass().getName())){
+                        if(!found){
                             found = e.equals(it);
                         }
                     }
