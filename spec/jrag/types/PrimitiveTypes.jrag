@@ -54,15 +54,7 @@ aspect PrimitiveTypes {
         return null;
     }
 
-    public boolean VarSender.equals(VarSender other){
-        return this.getIdent().equals(other.getIdent());
-    }
-
     eq AtomSender.type() = new AtomType();
-
-    public boolean AtomSender.equals(AtomSender other){
-        return this.getIdent().equals(other.getIdent());
-    }
 
 
 }

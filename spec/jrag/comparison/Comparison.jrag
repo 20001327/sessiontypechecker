@@ -1,0 +1,92 @@
+
+import java.util.HashMap;
+import java.util.Map;
+
+
+aspect Comparison{
+
+
+    public boolean Send.equals(Object o){
+        Send other = (Send) o;
+        return getRecipient().equals(other.getRecipient()) &&
+                getMessage().equals(other.getMessage());
+    }
+
+    public boolean Message.equals(Object o){
+        Message other = (Message) o;
+        boolean temp = getSender().equals(other.getSender()) &&
+                getLabel().equals(other.getLabel());
+        Map<Expression, Integer> freq1 = new HashMap<>();
+        getPayloads().forEach(it -> freq1.merge(it, 1, (a, b) -> a + b));
+        Map<Expression, Integer> freq2 = new HashMap<>();
+        other.getPayloads().forEach(it -> freq2.merge(it, 1, (a, b) -> a + b));
+        return freq1.equals(freq2) && temp;
+    }
+
+    public boolean Call.equals(Object o){
+        Call other = (Call) o;
+        boolean temp = getFunctionName().equals(other.getFunctionName());
+        boolean foundAll = true;
+        for(Expression e : getArgumentss()){
+                boolean found = false;
+                for(Expression it : other.getArgumentss()){
+                    if(e.getClass().getName().equals(Variable.class.getName())){
+                       for (VarDeclaration d : getDeclarations()) {
+                          if(!found && d.getType().isSameType(new PidType())){
+                            found = d.getType().isSameType(it.type());
+                          }
+
+                          if(!found && d.getName().equals(((Variable)e).getIdent())){
+                            found = d.getValue().getClass().getName().equals(it.getClass().getName()) &&
+                                                                        d.getValue().equals(it);
+                          }
+                        }
+                    }
+
+                    if(!found && e.getClass().getName().equals(it.getClass().getName())){
+                        found = e.equals(it);
+                    }
+                }
+                foundAll = foundAll && found;
+
+        }
+        return temp && foundAll;
+    }
+
+
+    public boolean AtomSender.equals(Object o){
+        AtomSender other = (AtomSender)o;
+        return this.getIdent().equals(other.getIdent());
+    }
+
+    public boolean VarSender.equals(Object other){
+        return this.getIdent().equals(((VarSender)other).getIdent());
+    }
+
+    public boolean Variable.equals(Object other){
+        return this.getIdent().equals(((Variable)other).getIdent());
+    }
+
+    public boolean Atom.equals(Object other){
+        return this.getIdent().equals(((Atom)other).getIdent());
+    }
+
+    public boolean Pid.equals(Object other){
+        return this.getPid().equals(((Pid)other).getPid());
+    }
+
+    public boolean CharList.equals(Object other){
+        return this.getStringValue().equals(((CharList)other).getStringValue());
+    }
+
+    public boolean Number.equals(Object other){
+        return this.getIntegerValue().equals(((Number)other).getIntegerValue());
+    }
+
+    public boolean Boolean.equals(Object other){
+        return this.getBooleanValue() == ((Boolean)other).getBooleanValue();
+    }
+
+
+
+}

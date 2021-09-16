@@ -4,12 +4,9 @@ aspect ExpressionTypes {
 
     inh lazy FunType Expression.getFunType();
     inh lazy Process Expression.getNextProcess(Process p);
+    inh lazy String Expression.getModuleName();
 
     inh lazy Delegating Call.delegating();
-
-    public boolean Expression.equals(Expression other){
-        return false;
-    }
 
     eq Call.type(){
 
@@ -17,13 +14,23 @@ aspect ExpressionTypes {
             Process p = getNextProcess((Process)getParent());
             Process p1 = getNextProcess(p);
             Process p2 = getNextProcess(p1);
-            List<Process> ps = new List();
-            ps.add(p);ps.add(p1);ps.add(p2);
             Session next = getNextProcess(p2)!=null?getNextProcess(p2).type():null;
 
-            // check next 4 process 3 call unreg(getDelegating), reg(ModuleName, self), reg(getDelegating, getPid<del>)
-            // check send
-            return new AcceptBackwardDelegation(delegating().getName(),next);
+            Call reg1 = new Call(new Atom("register"),
+                            new List(new Atom(getModuleName()),new Call(new Atom("self"), new List())));
+            Call reg2 = new Call(new Atom("register"), new List(delegating().getName(),new Call(new Atom("self"), new List())));
+            Call c1 = (Call)((ExpressionProcess)p).getExpression();
+            Call c2 = (Call)((ExpressionProcess)p1).getExpression();
+
+            boolean b1 = this.equals(new Call(new Atom("unregister"),new List(delegating().getName())));
+            boolean b2 = c1.equals(reg1) || c1.equals(reg2);
+            boolean b3 = c2.equals(reg1) || c2.equals(reg2);
+            boolean b4 = p2.equals(new Send(delegating().getName(),
+                    new Message(new AtomSender(getModuleName()), new Atom("end_delegation"),new List()), null));
+
+            if(b1 && b2 && b3 && b4){
+                return new AcceptBackwardDelegation(delegating().getName(),next);
+            }
         }else if(getFunctionName().getIdent().equals("self")){
             return new PidType();
         }else{

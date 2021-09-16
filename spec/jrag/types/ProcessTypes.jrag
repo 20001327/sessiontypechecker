@@ -9,26 +9,25 @@ aspect ProcessTypes{
    inh lazy List<Module> ReceiveClause.getModulesList();
 
    eq Module.getFunctions().getModuleName() = this.getPartecipant();
+   inh lazy String Process.getModuleName();
    inh lazy String ReceiveClause.getModuleName();
 
    eq Function.getBody().getFunType() = this.getType();
    inh lazy FunType Process.getFunType();
 
-   syn lazy Delegating Function.delegating() {
-       return new Delegating();
-   }
+   syn lazy Delegating Function.delegating() = new Delegating();
    eq Function.getBody().delegating() = this.delegating();
+   inh lazy Delegating Process.delegating();
    inh lazy Delegating ReceiveClause.delegating();
-
-
 
    eq Send.type(){
 
        if(getMessage().getLabel().getIdent().equals("start_delegation") ){
-//            if(((Atom)getMessage().getPayload(0)).getIdent().equals(typeInfo().getModuleName()) &&
-//                   getMessage().getPayload(1).type().isSameType(new AtomType())){
+            if(((Atom)getMessage().getPayload(0)).getIdent().equals(getModuleName()) &&
+                   getMessage().getPayload(1).type().isSameType(new PidType())){
+                        delegating().setDelegateName(getRecipient());
                         return new RequestForwardDelegation(getRecipient(), getNext().type());
-//                   }
+            }
        }
        else{
            List<LiteralType> types = new List();
@@ -38,6 +37,8 @@ aspect ProcessTypes{
            Session n = hasNext()?getNext().type():null;
            return new SessionSend(getRecipient(),getMessage().getLabel(), types, n);
        }
+
+       return null;
     }
 
     eq Receive.type(){
@@ -59,7 +60,8 @@ aspect ProcessTypes{
     eq ReceiveClause.type(){
        List<LiteralType> sessions = new List();
 
-       if(getLabel().getIdent().equals("end_delegation")){
+       if(getLabel().getIdent().equals("end_delegation")
+            && getSender().getIdent().equals(delegating().getDelegateName().getIdent())){
            return new RequestBackwardDelegation(getSender(),getActions().type());
        }
 
@@ -72,6 +74,10 @@ aspect ProcessTypes{
                            Process p = getActions();
                            Process p1 = getNextProcess(p);
                            Process p2 = getNextProcess(p1);
+                           for(int i=0; i<s.getMessage().getNumPayload();i++){
+                               addDeclaration(((Variable)getVariables(i)).getIdent(),
+                               s.getMessage().getPayload(i).type(), s.getMessage().getPayload(i));
+                           }
 
                           // check actions next 3 are call unreg(getSender.getIdent())
                           // , unreg(ModuleName), reg(ModuleName, self)
@@ -130,7 +136,7 @@ aspect ProcessTypes{
        return getActions().type();
     }
 
-    syn Process ReceiveClause.getNextProcess(Process p){
+    syn Process Process.getNextProcess(Process p){
         String className = p.getClass().getName();
         if(className.equals(ExpressionProcess.class.getName())){
             ExpressionProcess exp = (ExpressionProcess) p;
@@ -147,8 +153,8 @@ aspect ProcessTypes{
         return null;
     }
 
-    eq ReceiveClause.getActions().getNextProcess(Process p) = this.getNextProcess(p);
-
+    eq Receive.getClauses().getNextProcess(Process p) = this.getNextProcess(p);
+    inh lazy Process ReceiveClause.getNextProcess(Process p);
 
     syn Send ReceiveClause.searchSendInMod(String moduleName,String dest, String label){
         for (Module module: getModulesList()){
@@ -203,6 +209,7 @@ aspect ProcessTypes{
     public class Delegating {
 
         Atom name;
+        Atom delegateName;
 
         public void setName(Atom del){
             name = del;
@@ -211,7 +218,16 @@ aspect ProcessTypes{
         public Atom getName(){
             return name;
         }
+
+        public void setDelegateName(Atom del){
+            delegateName = del;
+        }
+
+        public Atom getDelegateName(){
+            return delegateName;
+        }
     }
+
 
 
 }
