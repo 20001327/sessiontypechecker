@@ -5,6 +5,15 @@ import java.util.Map;
 
 aspect Comparison{
 
+
+    public static boolean Program.checkLists(List<? extends ASTNode> l1, List<? extends ASTNode> l2){
+         Map<ASTNode, Integer> freq1 = new HashMap<>();
+         l1.forEach(it -> freq1.merge(it, 1, (a, b) -> a + b));
+         Map<ASTNode, Integer> freq2 = new HashMap<>();
+         l2.forEach(it -> freq2.merge(it, 1, (a, b) -> a + b));
+         return freq1.equals(freq2);
+    }
+
     public boolean ExpressionProcess.equals(Object other){
         if(this.getClass().getName().equals(other.getClass().getName())){
             return getExpression().equals(((ExpressionProcess)other).getExpression());
@@ -26,11 +35,7 @@ aspect Comparison{
             Message other = (Message) o;
             boolean temp = getSender().equals(other.getSender()) &&
                     getLabel().equals(other.getLabel());
-            Map<Expression, Integer> freq1 = new HashMap<>();
-            getPayloads().forEach(it -> freq1.merge(it, 1, (a, b) -> a + b));
-            Map<Expression, Integer> freq2 = new HashMap<>();
-            other.getPayloads().forEach(it -> freq2.merge(it, 1, (a, b) -> a + b));
-            return freq1.equals(freq2) && temp;
+            return Program.checkLists(other.getPayloads(),getPayloads()) && temp;
         }
         return false;
     }
