@@ -12,7 +12,7 @@ import miniErlang.Module;
 
 public class TypeCheck {
 	public static void main(String[] args) {
-		new TypeCheck().run("src/ast");
+		new TypeCheck().run("../src/ast/");
 	}
 
 	public void run(String... args) {
@@ -24,10 +24,12 @@ public class TypeCheck {
 
 		// check that the file exists
 		File file = new File(args[0]);
-	    if(!file.isDirectory()) {
-	    	System.err.println("error (PrettyPrint) : not a directory");
-	    	System.exit(2);
-	    }
+		if(!file.isDirectory()) {
+			Path path = Paths.get(args[0]);
+			System.out.println("directory : " + path.toAbsolutePath());
+			System.err.println("error (PrettyPrint) : not a directory");
+			System.exit(2);
+		}
 	    System.out.println("file : " + args[0]);
 		Path path = Paths.get(args[0]);
 		System.out.println("directory : " + path.toAbsolutePath());
