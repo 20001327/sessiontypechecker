@@ -70,9 +70,6 @@
     eq ReceiveClause.type(){
         List<LiteralType> sessions = new List();
 
-        // prendere le coppie primo e secondo parametro e
-        // controllare che non ci siano ripetizioni nelle clausole
-
        if(getLabel().getIdent().equals("end_delegation")){
            return new RequestBackwardDelegation(getSender(),getActions().type());
        }
@@ -80,7 +77,8 @@
        if(getNumVariables()>0){
            if(getNumVariables()==2){
                if(getLabel().getIdent().equals("start_delegation")){
-                   // probabilemte questo non serve!
+                   // questo mi serve perchè non posso conoscere il tipo delle variabili
+                   // nell'annotazione di tipo non ho il tipo del messaggio
                    Send s = searchSendInMod(getSender().getIdent(), getModuleName(),getLabel().getIdent());
                    if(s.getMessage().getPayload(0).type().isSameType(new AtomType()) &&
                        s.getMessage().getPayload(1).type().isSameType(new PidType())){
