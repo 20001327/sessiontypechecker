@@ -14,6 +14,14 @@ aspect Comparison{
          return freq1.equals(freq2);
     }
 
+    public boolean ReceiveClause.equals(Object other){
+        if(this.getClass().getName().equals(other.getClass().getName())){
+            ReceiveClause rc = (ReceiveClause) other;
+            return rc.getLabel().equals(getLabel()) && rc.getSender().equals(getSender());
+        }
+        return false;
+    }
+
     public boolean ExpressionProcess.equals(Object other){
         if(this.getClass().getName().equals(other.getClass().getName())){
             return getExpression().equals(((ExpressionProcess)other).getExpression());

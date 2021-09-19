@@ -35,17 +35,17 @@ aspect NameAnalisys{
         return new ArrayList<>();
     }
 
-    public void ReceiveClause.addDeclaration(String label, Session type, Expression value) {
+    public void ReceiveClause.addDeclaration(String name, Session type, Expression value) {
         VarDeclaration var = new VarDeclaration();
-        var.setName(label);
+        var.setName(name);
         var.setType(type);
         var.setValue(value);
         getDeclarations().add(var);
     }
 
-    public void Let.addDeclaration(String label, Session type, Expression value) {
+    public void Let.addDeclaration(String name, Session type, Expression value) {
         VarDeclaration var = new VarDeclaration();
-        var.setName(label);
+        var.setName(name);
         var.setType(type);
         var.setValue(value);
         getDeclarations().add(var);

@@ -9,8 +9,7 @@ aspect ExpressionTypes {
     inh lazy Delegating Call.delegating();
 
     eq Call.type(){
-
-        if(getFunctionName().getIdent().equals("unregister")){
+        if(getFunctionName().getIdent().equals("unregister") && delegating().getName()!=null){
             Process p = getNextProcess((Process)getParent());
             Process p1 = getNextProcess(p);
             Process p2 = getNextProcess(p1);
@@ -30,7 +29,9 @@ aspect ExpressionTypes {
             if(b1 && b2 && b3 && b4 && differ){
                 return new AcceptBackwardDelegation(delegating().getName(),next);
             }
-        }else if(getFunctionName().getIdent().equals("self")){
+        }
+
+        if(getFunctionName().getIdent().equals("self")){
             return new PidType();
         }else{
              Session type = getFunType();
@@ -38,6 +39,7 @@ aspect ExpressionTypes {
                  return ((FunType)type).getSessionType();
              }
          }
+
 
         return null;
     }

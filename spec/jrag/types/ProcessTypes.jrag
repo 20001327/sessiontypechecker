@@ -1,72 +1,86 @@
-aspect ProcessTypes{
+ import java.util.HashMap;
+ import java.util.Map;
 
-   syn lazy Session Process.type();
-   syn lazy Session ReceiveClause.type();
-   syn lazy Session CaseClause.type();
+    aspect ProcessTypes{
 
-   eq Program.getModules().getModulesList() = this.getModulesList();
-   inh lazy List<Module> ReceiveClause.getModulesList();
+    syn lazy Session Process.type();
+    syn lazy Session ReceiveClause.type();
+    syn lazy Session CaseClause.type();
 
-   eq Module.getFunctions().getModuleName() = this.getPartecipant();
-   inh lazy String Process.getModuleName();
-   inh lazy String ReceiveClause.getModuleName();
+    eq Program.getModules().getModulesList() = this.getModulesList();
+    inh lazy List<Module> ReceiveClause.getModulesList();
 
-   eq Function.getBody().getFunType() = this.getType();
-   inh lazy FunType Process.getFunType();
+    eq Module.getFunctions().getModuleName() = this.getPartecipant();
+    inh lazy String Process.getModuleName();
+    inh lazy String ReceiveClause.getModuleName();
 
-   syn lazy Delegating Function.delegating() = new Delegating();
-   eq Function.getBody().delegating() = this.delegating();
-   inh lazy Delegating Process.delegating();
-   inh lazy Delegating ReceiveClause.delegating();
+    eq Function.getBody().getFunType() = this.getType();
+    inh lazy FunType Process.getFunType();
 
-   eq Send.type(){
+    syn lazy Delegating Receive.delegating() = new Delegating();
+    eq Receive.getClauses().delegating() = this.delegating();
+    inh lazy Delegating Process.delegating();
+    inh lazy Delegating ReceiveClause.delegating();
 
-       if(getMessage().getLabel().getIdent().equals("start_delegation") ){
-            if(((Atom)getMessage().getPayload(0)).getIdent().equals(getModuleName()) &&
-                   getMessage().getPayload(1).type().isSameType(new PidType())){
-                        delegating().setDelegateName(getRecipient());
-                        return new RequestForwardDelegation(getRecipient(), getNext().type());
-            }
-       }
-       else{
-           List<LiteralType> types = new List();
-           for(int i=0;i<getMessage().getNumPayload();i++){
-               types.add((LiteralType)getMessage().getPayload(i).type());
+    eq Send.type(){
+        if(getMessage().getSender().getIdent().equals(getModuleName()) ||
+                getMessage().getSender().getClass().getName().equals(VarSender.class.getName())){
+           if(getMessage().getLabel().getIdent().equals("start_delegation")){
+               if(((Atom)getMessage().getPayload(0)).getIdent().equals(getModuleName()) &&
+                        getMessage().getPayload(1).type().isSameType(new PidType())){
+                            delegating().setDelegateName(getRecipient());
+                            return new RequestForwardDelegation(getRecipient(), getNext().type());
+               }
            }
-           Session n = hasNext()?getNext().type():null;
-           return new SessionSend(getRecipient(),getMessage().getLabel(), types, n);
-       }
-
+           else{
+               if(getMessage().getNumPayload() == 0 || !(new Atom("end_delegation")).equals(getMessage().getPayload(0))){
+                   List<LiteralType> types = new List();
+                   for(int i=0;i<getMessage().getNumPayload();i++){
+                       types.add((LiteralType)getMessage().getPayload(i).type());
+                   }
+                   return new SessionSend(getRecipient(),getMessage().getLabel(), types, getNext().type());
+               }
+           }
+        }
        return null;
     }
 
     eq Receive.type(){
         List<SessionReceive> types = new List();
-        for(int i=0; i<getNumClauses();i++){
-            Session t = getClauses(i).type();
-            if(t.isSameType(new SessionReceive())){
-                types.add((SessionReceive)t);
-            }else{
-                return t;
+
+        Map<ReceiveClause, Integer> freq1 = new HashMap<>();
+        getClausess().forEach(it -> freq1.merge(it, 1, (a, b) -> a + b));
+        if(!freq1.entrySet().stream().filter(entry->entry.getValue()>1).findAny().isPresent()){
+            for(int i=0; i<getNumClauses();i++){
+                Session t = getClauses(i).type();
+                if(t.isSameType(new SessionReceive())){
+                    types.add((SessionReceive)t);
+                }else{
+                    return t;
+                }
             }
+            if(types.getNumChild()==1) {
+                return types.getChild(0);
+            }
+            return new ExternalChoice(types);
         }
-        if(types.getNumChild()==1) {
-            return types.getChild(0);
-        }
-        return new ExternalChoice(types);
+        return null;
     }
 
     eq ReceiveClause.type(){
-       List<LiteralType> sessions = new List();
+        List<LiteralType> sessions = new List();
 
-       if(getLabel().getIdent().equals("end_delegation")
-            && getSender().getIdent().equals(delegating().getDelegateName().getIdent())){
+        // prendere le coppie primo e secondo parametro e
+        // controllare che non ci siano ripetizioni nelle clausole
+
+       if(getLabel().getIdent().equals("end_delegation")){
            return new RequestBackwardDelegation(getSender(),getActions().type());
        }
 
        if(getNumVariables()>0){
            if(getNumVariables()==2){
                if(getLabel().getIdent().equals("start_delegation")){
+                   // probabilemte questo non serve!
                    Send s = searchSendInMod(getSender().getIdent(), getModuleName(),getLabel().getIdent());
                    if(s.getMessage().getPayload(0).type().isSameType(new AtomType()) &&
                        s.getMessage().getPayload(1).type().isSameType(new PidType())){
@@ -140,12 +154,11 @@ aspect ProcessTypes{
         return new InternalChoice(types);
     }
 
-
     eq CaseClause.type(){
        return getActions().type();
     }
 
-    syn Process Process.getNextProcess(Process p){
+     Process Process.getNextProcess(Process p){
         String className = p.getClass().getName();
         if(className.equals(ExpressionProcess.class.getName())){
             ExpressionProcess exp = (ExpressionProcess) p;
@@ -239,4 +252,4 @@ aspect ProcessTypes{
 
 
 
-}
+    }

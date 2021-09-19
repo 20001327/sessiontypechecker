@@ -23,6 +23,21 @@ packages we use; for example it demonstrates how to use JastAddParser
 (Beaver preprocessor) and JastAdd (which have currently no built-in Ant
 support).
 
+## Before running
+
+Before running we have to generate the ast from erland. to do this open terminal in src folder
+and then open erl with
+    
+    $ erl
+
+then compile all with
+
+    $ make:all().
+
+and extract ast with
+
+    $ forms:get_ast().
+
 ## Building
 
 Just run

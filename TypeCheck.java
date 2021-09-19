@@ -12,7 +12,7 @@ import miniErlang.Module;
 
 public class TypeCheck {
 	public static void main(String[] args) {
-		new TypeCheck().run("../src/ast/");
+		new TypeCheck().run(args[0]);
 	}
 
 	public void run(String... args) {

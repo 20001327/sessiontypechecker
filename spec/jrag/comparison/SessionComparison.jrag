@@ -3,34 +3,57 @@ aspect SessionComparison{
     public boolean FunType.compareWith(FunctionType type) {
         boolean name = this.getFunName().equals(type.getFunName());
         boolean arguments = Program.checkLists(getArgumentss(),type.getArgumentss());
-        boolean sessions = getSessionType().compareWith(type.getSessionType());
+        boolean sessions = getSessionType().equals(type.getSessionType());
         return name && arguments && sessions;
     }
 
-    public boolean Session.compareWith(Session s){
+    public boolean Session.equals(Session s){
         return false;
     }
 
-    /*
-    SessionSend:Session ::= Sender:Atom Label:Atom Type:LiteralType* Next:Session;
-    SessionReceive:Session ::= Recipient:Atom Label:Atom Type:LiteralType* Next:Session;
-    InternalChoice:Session ::= Sends:SessionSend*;
-    ExternalChoice:Session ::= Receives:SessionReceive*;
-    RequestForwardDelegation:Session ::= Delegating:Atom Next:Session;
-    RequestBackwardDelegation:Session ::= Delegating:Atom Next:Session;
-    AcceptForwardDelegation:Session ::= Delegate:Atom Next:Session;
-    AcceptBackwardDelegation:Session ::= Delegate:Atom Next:Session;
-    End:Session;
+/* SessionSend:Session ::= Sender:Atom Label:Atom Type:LiteralType* Next:Session;
+    public boolean SessionSend.equals(Object other){
 
-    abstract LiteralType:Session;
-    AtomType:LiteralType;
-    IntType:LiteralType;
-    StringType:LiteralType;
-    PidType:LiteralType;
-    BoolType:LiteralType;
-    ActorPid:LiteralType::=<Actor:String>;
-    AtS:LiteralType::=<Partecipant:String>;
+    }
 
-    */
+//  SessionReceive:Session ::= Recipient:Atom Label:Atom Type:LiteralType* Next:Session;
+    public boolean SessionReceive.equals(Object other){
 
+    }
+
+//  InternalChoice:Session ::= Sends:SessionSend*;
+    public boolean InternalChoice.equals(Object other){
+
+    }
+
+//  ExternalChoice:Session ::= Receives:SessionReceive*;
+    public boolean ExternalChoice.equals(Object other){
+
+    }
+
+//  RequestForwardDelegation:Session ::= Delegating:Atom Next:Session;
+    public boolean RequestForwardDelegation.equals(Object other){
+
+    }
+
+//  RequestBackwardDelegation:Session ::= Delegating:Atom Next:Session;
+    public boolean RequestBackwardDelegation.equals(Object other){
+
+    }
+
+//  AcceptForwardDelegation:Session ::= Delegate:Atom Next:Session;
+    public boolean AcceptForwardDelegation.equals(Object other){
+
+    }
+
+//  AcceptBackwardDelegation:Session ::= Delegate:Atom Next:Session;
+    public boolean AcceptBackwardDelegation.equals(Object other){
+
+    }
+
+//  End:Session;
+    public boolean End.equals(Object other){
+        return other.getClass().getName().equals(getClass().getName());
+    }
+ */
 }
