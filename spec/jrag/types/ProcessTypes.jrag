@@ -79,6 +79,7 @@
                if(getLabel().getIdent().equals("start_delegation")){
                    // questo mi serve perchè non posso conoscere il tipo delle variabili
                    // nell'annotazione di tipo non ho il tipo del messaggio
+                   // devo in qualche modo sapere il nome di chi sto delegando per sapere il tipo corretto
                    Send s = searchSendInMod(getSender().getIdent(), getModuleName(),getLabel().getIdent());
                    if(s.getMessage().getPayload(0).type().isSameType(new AtomType()) &&
                        s.getMessage().getPayload(1).type().isSameType(new PidType())){

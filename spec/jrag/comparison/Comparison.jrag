@@ -22,6 +22,14 @@ aspect Comparison{
         return false;
     }
 
+    public static boolean Program.sameClass(Object one, Object other){
+        return Program.sameClass(one,other.getClass());
+    }
+
+    public static boolean Program.sameClass(Object one, Class other){
+        return one.getClass().getName().equals(other.getName());
+    }
+
     public boolean ExpressionProcess.equals(Object other){
         if(this.getClass().getName().equals(other.getClass().getName())){
             return getExpression().equals(((ExpressionProcess)other).getExpression());

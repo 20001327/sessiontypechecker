@@ -9,6 +9,8 @@ aspect ExpressionTypes {
     inh lazy Delegating Call.delegating();
 
     eq Call.type(){
+        // anche qui le info non le riesco a desumere dal tipo annotato, devo fare un check con le info
+        // che mi sono tirato giù prima
         if(getFunctionName().getIdent().equals("unregister") && delegating().getName()!=null){
             Process p = getNextProcess((Process)getParent());
             Process p1 = getNextProcess(p);
