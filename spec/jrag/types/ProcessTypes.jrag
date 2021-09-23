@@ -17,10 +17,30 @@
     eq Function.getBody().getFunType() = this.getType();
     inh lazy FunType Process.getFunType();
 
-    syn lazy Delegating Receive.delegating() = new Delegating();
+    syn Delegating Receive.delegating(){
+        ASTNode node = getParent();
+
+        while(node!=null && !Program.sameClass(node,ReceiveClause.class)){
+            node = node.getParent();
+        }
+
+        if(node==null){
+            return new Delegating();
+        }
+
+
+        if(Program.sameClass(node,ReceiveClause.class)){
+            ReceiveClause receive = (ReceiveClause)node;
+            return receive.delegating();
+        }
+
+        return new Delegating();
+    }
+
     eq Receive.getClauses().delegating() = this.delegating();
     inh lazy Delegating Process.delegating();
     inh lazy Delegating ReceiveClause.delegating();
+    eq ReceiveClause.getActions().delegating() = this.delegating();
 
     eq Send.type(){
         if(getMessage().getSender().getIdent().equals(getModuleName()) ||

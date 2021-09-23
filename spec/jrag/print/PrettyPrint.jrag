@@ -202,8 +202,8 @@ aspect PrettyPrint {
     }
 
     public void RequestBackwardDelegation.print(){
-        printer().append(">>");
         getDelegating().print();
+        printer().append(">>");
         printer().append(".");
         getNext().print();
     }
@@ -216,8 +216,8 @@ aspect PrettyPrint {
     }
 
     public void AcceptBackwardDelegation.print(){
-        getDelegate().print();
         printer().append(">>");
+        getDelegate().print();
         printer().append(".");
         getNext().print();
     }

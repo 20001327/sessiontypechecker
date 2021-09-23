@@ -7,53 +7,126 @@ aspect SessionComparison{
         return name && arguments && sessions;
     }
 
-    public boolean Session.equals(Session s){
+    public static boolean Program.checkListsByClassName(List<? extends ASTNode> l1, List<? extends ASTNode> l2){
+         Map<String, Integer> freq1 = new HashMap<>();
+         l1.forEach(it -> freq1.merge(it.getClass().getName(), 1, (a, b) -> a + b));
+         Map<String, Integer> freq2 = new HashMap<>();
+         l2.forEach(it -> freq2.merge(it.getClass().getName(), 1, (a, b) -> a + b));
+         return freq1.equals(freq2);
+    }
+
+    public boolean SessionSend.equals(Object other){
+
+        if(Program.sameClass(this, other)){
+            SessionSend send = (SessionSend) other;
+            if(getSender().equals(send.getSender()) && getLabel().equals(send.getLabel())){
+                boolean list = Program.checkListsByClassName(getTypes(), send.getTypes());
+                return list && getNext().equals(send.getNext());
+            }
+        }
         return false;
     }
 
-/* SessionSend:Session ::= Sender:Atom Label:Atom Type:LiteralType* Next:Session;
-    public boolean SessionSend.equals(Object other){
-
-    }
-
-//  SessionReceive:Session ::= Recipient:Atom Label:Atom Type:LiteralType* Next:Session;
     public boolean SessionReceive.equals(Object other){
-
+        System.out.println("receive");
+        if(Program.sameClass(this, other)){
+            SessionReceive obj = (SessionReceive) other;
+            if(getRecipient().equals(obj.getRecipient()) && getLabel().equals(obj.getLabel())){
+                boolean list = Program.checkListsByClassName(getTypes(), obj.getTypes());
+                return list && getNext().equals(obj.getNext());
+            }
+        }
+        return false;
     }
 
-//  InternalChoice:Session ::= Sends:SessionSend*;
     public boolean InternalChoice.equals(Object other){
-
+          System.out.println("ic");
+          if(Program.sameClass(this, other)){
+              InternalChoice obj = (InternalChoice) other;
+              boolean foundAll = true;
+              for (SessionSend send: getSendss()){
+                boolean found = false;
+                for (SessionSend s2 : obj.getSendss()){
+                  found = found || send.equals(s2);
+                }
+                foundAll = found && foundAll;
+              }
+              return foundAll;
+          }
+        return false;
     }
 
-//  ExternalChoice:Session ::= Receives:SessionReceive*;
     public boolean ExternalChoice.equals(Object other){
-
+        if(Program.sameClass(this, other)){
+            ExternalChoice obj = (ExternalChoice) other;
+            boolean foundAll = true;
+            for (SessionReceive s1: getReceivess()){
+              boolean found = false;
+              for (SessionReceive s2 : obj.getReceivess()){
+                found = found || s1.equals(s2);
+              }
+              foundAll = found && foundAll;
+            }
+            return foundAll;
+        }
+        return false;
     }
 
-//  RequestForwardDelegation:Session ::= Delegating:Atom Next:Session;
     public boolean RequestForwardDelegation.equals(Object other){
+            System.out.println("rfd");
 
+        if(Program.sameClass(this, other)){
+            RequestForwardDelegation obj = (RequestForwardDelegation) other;
+            return getDelegating().equals(obj.getDelegating()) &&
+                               getNext().equals(obj.getNext());
+
+        }
+        return false;
     }
 
-//  RequestBackwardDelegation:Session ::= Delegating:Atom Next:Session;
     public boolean RequestBackwardDelegation.equals(Object other){
+            System.out.println("rbd");
 
+        if(Program.sameClass(this, other)){
+            RequestBackwardDelegation obj = (RequestBackwardDelegation) other;
+            return getDelegating().equals(obj.getDelegating()) &&
+                               getNext().equals(obj.getNext());
+
+        }
+        return false;
     }
 
-//  AcceptForwardDelegation:Session ::= Delegate:Atom Next:Session;
     public boolean AcceptForwardDelegation.equals(Object other){
+            System.out.println("afd");
 
+        if(Program.sameClass(this, other)){
+            AcceptForwardDelegation obj = (AcceptForwardDelegation) other;
+            return getDelegate().equals(obj.getDelegate()) &&
+                               getNext().equals(obj.getNext());
+
+        }
+        return false;
     }
 
-//  AcceptBackwardDelegation:Session ::= Delegate:Atom Next:Session;
     public boolean AcceptBackwardDelegation.equals(Object other){
+            System.out.println("abd");
 
+        if(Program.sameClass(this, other)){
+            AcceptBackwardDelegation obj = (AcceptBackwardDelegation) other;
+            return getDelegate().equals(obj.getDelegate()) &&
+                               getNext().equals(obj.getNext());
+
+        }
+        return false;
     }
 
-//  End:Session;
-    public boolean End.equals(Object other){
-        return other.getClass().getName().equals(getClass().getName());
+
+     public boolean Session.equals(Object other){
+        return Program.sameClass(this,other);
     }
- */
+
+     public boolean LiteralType.equals(Object other){
+        return Program.sameClass(this,other);
+    }
+
 }

@@ -3,7 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-aspect Comparison{
+aspect Equals{
 
 
     public static boolean Program.checkLists(List<? extends ASTNode> l1, List<? extends ASTNode> l2){
