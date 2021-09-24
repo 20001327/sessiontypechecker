@@ -28,7 +28,6 @@ aspect SessionComparison{
     }
 
     public boolean SessionReceive.equals(Object other){
-        System.out.println("receive");
         if(Program.sameClass(this, other)){
             SessionReceive obj = (SessionReceive) other;
             if(getRecipient().equals(obj.getRecipient()) && getLabel().equals(obj.getLabel())){
@@ -40,8 +39,7 @@ aspect SessionComparison{
     }
 
     public boolean InternalChoice.equals(Object other){
-          System.out.println("ic");
-          if(Program.sameClass(this, other)){
+              if(Program.sameClass(this, other)){
               InternalChoice obj = (InternalChoice) other;
               boolean foundAll = true;
               for (SessionSend send: getSendss()){
@@ -73,8 +71,6 @@ aspect SessionComparison{
     }
 
     public boolean RequestForwardDelegation.equals(Object other){
-            System.out.println("rfd");
-
         if(Program.sameClass(this, other)){
             RequestForwardDelegation obj = (RequestForwardDelegation) other;
             return getDelegating().equals(obj.getDelegating()) &&
@@ -85,8 +81,6 @@ aspect SessionComparison{
     }
 
     public boolean RequestBackwardDelegation.equals(Object other){
-            System.out.println("rbd");
-
         if(Program.sameClass(this, other)){
             RequestBackwardDelegation obj = (RequestBackwardDelegation) other;
             return getDelegating().equals(obj.getDelegating()) &&
@@ -97,8 +91,6 @@ aspect SessionComparison{
     }
 
     public boolean AcceptForwardDelegation.equals(Object other){
-            System.out.println("afd");
-
         if(Program.sameClass(this, other)){
             AcceptForwardDelegation obj = (AcceptForwardDelegation) other;
             return getDelegate().equals(obj.getDelegate()) &&
@@ -109,8 +101,6 @@ aspect SessionComparison{
     }
 
     public boolean AcceptBackwardDelegation.equals(Object other){
-            System.out.println("abd");
-
         if(Program.sameClass(this, other)){
             AcceptBackwardDelegation obj = (AcceptBackwardDelegation) other;
             return getDelegate().equals(obj.getDelegate()) &&
