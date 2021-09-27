@@ -4,7 +4,6 @@ jar/
 
 /.idea/
 /calc/
-/tools/beaver-rt/
 /src/*.beam
 /buildold.xml
 /erl_crash.dump
