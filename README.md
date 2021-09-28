@@ -58,3 +58,13 @@ Run
 to clean up the project tree.
 If you encounter some problems on Cygwin environment, try to add the `-v` flag.
 
+## using forms for generate ast files
+
+In the previous example we use make:all() and form:get_ast() to get the ast. If you want to test 
+the typechecker with other protocol, you have to compile your actors source file with debug option, 
+for example typing in cmd:
+    
+    $ erlc +debug_info file.erl
+and then with forms module extract the ast. in erlang terminal:
+
+    $ read_to_binary(file,"ast/file.ast"),
