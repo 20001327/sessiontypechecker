@@ -4,7 +4,7 @@ Program ::= Modules:Module*;
 Module::= <Partecipant:String> <RegisteredName:String> <ModuleName:String> <FunName:String> Functions:Function*;
 
 Function ::= [Type:FunType] <FunctionName:String> Parameters:Variable* Body:Process;  /* funType di tipo funType */
-
+Anno ::= <Line:Integer> <StartToken:Integer>;
 Message ::= Sender:SenderId Label:Atom Payload:Expression*;
 
 ReceiveClause ::= Sender:Atom Label:Atom Variables:Pattern* Actions:Process;

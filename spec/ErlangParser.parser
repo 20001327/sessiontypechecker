@@ -17,25 +17,32 @@ program goal =
 	module_list 	    	    {: return new Program(module_list); :}
 ;
 
+Anno anno =
+     INTEGER.i
+     {: return new Anno(Integer.parseInt(i),0); :}
+|    LCURLYBRACE INTEGER.i COMMA INTEGER.o RCURLYBRACE
+     {: return new Anno(Integer.parseInt(i),Integer.parseInt(o)); :}
+;
+
 Module module =
    LBRACKET
-    LCURLYBRACE ATTRIBUTE COMMA INTEGER COMMA MODULE COMMA IDENTIFIER.value RCURLYBRACE COMMA
-        LCURLYBRACE FUNCTION COMMA INTEGER
-            COMMA START COMMA INTEGER COMMA
+    LCURLYBRACE ATTRIBUTE COMMA anno COMMA MODULE COMMA IDENTIFIER.value RCURLYBRACE COMMA
+        LCURLYBRACE FUNCTION COMMA anno
+            COMMA START COMMA anno COMMA
             LBRACKET
-                LCURLYBRACE CLAUSE COMMA INTEGER COMMA LBRACKET RBRACKET COMMA
+                LCURLYBRACE CLAUSE COMMA anno COMMA LBRACKET RBRACKET COMMA
                 LBRACKET RBRACKET COMMA LBRACKET
-                     LCURLYBRACE CALL COMMA INTEGER COMMA
-                     LCURLYBRACE ATOM COMMA INTEGER COMMA REGISTER RCURLYBRACE
+                     LCURLYBRACE CALL COMMA anno COMMA
+                     LCURLYBRACE ATOM COMMA anno COMMA REGISTER RCURLYBRACE
                       COMMA
                         LBRACKET
-                            LCURLYBRACE ATOM COMMA INTEGER COMMA IDENTIFIER.value1 RCURLYBRACE COMMA
-                            LCURLYBRACE CALL COMMA INTEGER COMMA
-                            LCURLYBRACE ATOM COMMA INTEGER COMMA SPAWN RCURLYBRACE COMMA
+                            LCURLYBRACE ATOM COMMA anno COMMA IDENTIFIER.value1 RCURLYBRACE COMMA
+                            LCURLYBRACE CALL COMMA anno COMMA
+                            LCURLYBRACE ATOM COMMA anno COMMA SPAWN RCURLYBRACE COMMA
                                 LBRACKET
-                                LCURLYBRACE ATOM COMMA INTEGER COMMA IDENTIFIER.value2 RCURLYBRACE COMMA
-                                LCURLYBRACE ATOM COMMA INTEGER COMMA IDENTIFIER.funName RCURLYBRACE COMMA
-                                LCURLYBRACE NULL COMMA INTEGER RCURLYBRACE
+                                LCURLYBRACE ATOM COMMA anno COMMA IDENTIFIER.value2 RCURLYBRACE COMMA
+                                LCURLYBRACE ATOM COMMA anno COMMA IDENTIFIER.funName RCURLYBRACE COMMA
+                                LCURLYBRACE NULL COMMA anno RCURLYBRACE
                                 RBRACKET
                                 RCURLYBRACE
                         RBRACKET
@@ -60,11 +67,11 @@ List function_list =
 
 Function function =
     funtype?
-    LCURLYBRACE FUNCTION COMMA INTEGER
+    LCURLYBRACE FUNCTION COMMA anno
     COMMA IDENTIFIER.funName COMMA
-    INTEGER.numArguments COMMA
+    anno.numArguments COMMA
     LBRACKET
-                LCURLYBRACE CLAUSE COMMA INTEGER COMMA
+                LCURLYBRACE CLAUSE COMMA anno COMMA
                 LBRACKET variable_list.vars? RBRACKET COMMA
                 LBRACKET RBRACKET COMMA LBRACKET process RBRACKET RCURLYBRACE
     RBRACKET
@@ -73,20 +80,20 @@ RCURLYBRACE
 ;
 
 FunType funtype =
-LCURLYBRACE ATTRIBUTE COMMA INTEGER COMMA TYPE COMMA
+LCURLYBRACE ATTRIBUTE COMMA anno COMMA TYPE COMMA
     LCURLYBRACE IDENTIFIER.fun
     COMMA
-    LCURLYBRACE ATOM COMMA INTEGER COMMA SINGLEMARKS session SINGLEMARKS RCURLYBRACE
+    LCURLYBRACE ATOM COMMA anno COMMA SINGLEMARKS session SINGLEMARKS RCURLYBRACE
     COMMA
     LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
 {: return new FunType(fun, new List(), session ); :}
 ;
 
 ReceiveClause receive_clause =
-    LCURLYBRACE CLAUSE COMMA INTEGER COMMA
+    LCURLYBRACE CLAUSE COMMA anno COMMA
     LBRACKET
         LCURLYBRACE
-            TUPLE COMMA INTEGER COMMA
+            TUPLE COMMA anno COMMA
             LBRACKET
             atom.sender COMMA atom.label COMMA pattern_list.vars?
             RBRACKET
@@ -94,10 +101,10 @@ ReceiveClause receive_clause =
     RBRACKET COMMA LBRACKET RBRACKET COMMA
     LBRACKET process RBRACKET RCURLYBRACE
        {: return new ReceiveClause(sender, label, vars, process); :}
-|    LCURLYBRACE CLAUSE COMMA INTEGER COMMA
+|    LCURLYBRACE CLAUSE COMMA anno COMMA
      LBRACKET
          LCURLYBRACE
-             TUPLE COMMA INTEGER COMMA
+             TUPLE COMMA anno COMMA
              LBRACKET
              atom.sender COMMA atom.label
              RBRACKET
@@ -108,7 +115,7 @@ ReceiveClause receive_clause =
 ;
 
 CaseClause case_clause =
-    LCURLYBRACE CLAUSE COMMA INTEGER COMMA
+    LCURLYBRACE CLAUSE COMMA anno COMMA
     LBRACKET pattern_list.patterns RBRACKET COMMA
     LBRACKET RBRACKET COMMA LBRACKET process RBRACKET RCURLYBRACE
        {: return new CaseClause(patterns, process); :}
@@ -125,35 +132,35 @@ List receive_clause_list =
 ;
 
 Message message =
- LCURLYBRACE TUPLE COMMA INTEGER COMMA
+ LCURLYBRACE TUPLE COMMA anno COMMA
     LBRACKET sender_id.recipient COMMA atom.label COMMA expression_list RBRACKET RCURLYBRACE
         {: return new Message(recipient, label, expression_list); :}
-|  LCURLYBRACE TUPLE COMMA INTEGER COMMA
+|  LCURLYBRACE TUPLE COMMA anno COMMA
       LBRACKET sender_id.recipient COMMA atom.label RBRACKET RCURLYBRACE
           {: return new Message(recipient, label, new List()); :}
 ;
 
 Process process =
-   LCURLYBRACE OPERATOR COMMA INTEGER COMMA SEND COMMA
+   LCURLYBRACE OPERATOR COMMA anno COMMA SEND COMMA
         atom.dest COMMA message.message RCURLYBRACE COMMA process.next?
         {: return new Send(dest, message,next); :}
-|   LCURLYBRACE OPERATOR COMMA INTEGER COMMA SEND COMMA
+|   LCURLYBRACE OPERATOR COMMA anno COMMA SEND COMMA
          atom.dest COMMA message.message RCURLYBRACE process.next?
          {: return new Send(dest, message,next); :}
-|	LCURLYBRACE RECEIVE COMMA INTEGER COMMA
+|	LCURLYBRACE RECEIVE COMMA anno COMMA
     LBRACKET receive_clause_list.clauses RBRACKET RCURLYBRACE process.next?
  		{: return new Receive(clauses, next); :}
-|	LCURLYBRACE RECEIVE COMMA INTEGER COMMA
+|	LCURLYBRACE RECEIVE COMMA anno COMMA
     LBRACKET receive_clause_list.clauses RBRACKET RCURLYBRACE
     COMMA process.next?
  		{: return new Receive(clauses, next); :}
-|   LCURLYBRACE CASE COMMA INTEGER COMMA expression_list.matchingForm COMMA
+|   LCURLYBRACE CASE COMMA anno COMMA expression_list.matchingForm COMMA
     LBRACKET case_clause_list.clauses RBRACKET RCURLYBRACE process.next?
         {: return new Case(matchingForm, clauses, next); :}
-|   LCURLYBRACE CASE COMMA INTEGER COMMA expression_list.matchingForm COMMA
+|   LCURLYBRACE CASE COMMA anno COMMA expression_list.matchingForm COMMA
     LBRACKET case_clause_list.clauses RBRACKET RCURLYBRACE COMMA process.next?
         {: return new Case(matchingForm, clauses, next); :}
-|   LCURLYBRACE MATCH COMMA INTEGER COMMA variable.left
+|   LCURLYBRACE MATCH COMMA anno COMMA variable.left
                 COMMA expression.right RCURLYBRACE COMMA process.next
             {: return new Let(left, right, next); :}
 |   expression process.next?
@@ -167,13 +174,13 @@ Process process =
 
 Expression expression =
 operator
-|   LCURLYBRACE CALL COMMA INTEGER COMMA atom.method COMMA
+|   LCURLYBRACE CALL COMMA anno COMMA atom.method COMMA
     LBRACKET expression_list.arguments? RBRACKET RCURLYBRACE
        {: return new Call(method, arguments); :}
 |   register
 |   unregister
-|   LCURLYBRACE CALL COMMA INTEGER COMMA
-    LCURLYBRACE ATOM COMMA INTEGER_ COMMA SELF RCURLYBRACE
+|   LCURLYBRACE CALL COMMA anno COMMA
+    LCURLYBRACE ATOM COMMA anno.ann COMMA SELF RCURLYBRACE
     COMMA LBRACKET RBRACKET RCURLYBRACE
        {: return new Self(); :}
 |   pattern
@@ -181,26 +188,26 @@ operator
 ;
 
 Register register =
-   LCURLYBRACE CALL COMMA INTEGER COMMA
-    LCURLYBRACE ATOM COMMA INTEGER COMMA REGISTER.reg RCURLYBRACE
+   LCURLYBRACE CALL COMMA anno COMMA
+    LCURLYBRACE ATOM COMMA anno COMMA REGISTER.reg RCURLYBRACE
     COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE
        {: return new Call(new Atom(reg), arguments); :};
 
 Unregister unregister =
-  LCURLYBRACE CALL COMMA INTEGER COMMA
-           LCURLYBRACE ATOM COMMA INTEGER COMMA UNREGISTER.reg RCURLYBRACE
+  LCURLYBRACE CALL COMMA anno COMMA
+           LCURLYBRACE ATOM COMMA anno COMMA UNREGISTER.reg RCURLYBRACE
            COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE
               {: return new Call(new Atom(reg), arguments); :}
 ;
 
 Operator operator =
-    LCURLYBRACE OPERATOR COMMA INTEGER COMMA SYMBOL.sym COMMA
+    LCURLYBRACE OPERATOR COMMA anno COMMA SYMBOL.sym COMMA
     expression.op1 COMMA expression.op2 RCURLYBRACE
     {: return new Operator(sym,op1, op2); :}
-|    LCURLYBRACE OPERATOR COMMA INTEGER COMMA DIVISION.sym COMMA
+|    LCURLYBRACE OPERATOR COMMA anno COMMA DIVISION.sym COMMA
      expression.op1 COMMA expression.op2 RCURLYBRACE
      {: return new Operator(sym,op1, op2); :}
-|    LCURLYBRACE OPERATOR COMMA INTEGER COMMA LESS.sym COMMA
+|    LCURLYBRACE OPERATOR COMMA anno COMMA LESS.sym COMMA
      expression.op1 COMMA expression.op2 RCURLYBRACE
      {: return new Operator(sym,op1, op2); :}
 ;
@@ -240,26 +247,26 @@ SenderId sender_id =
 ;
 
 Number number =
-    LCURLYBRACE INT COMMA INTEGER COMMA INTEGER.val RCURLYBRACE
+    LCURLYBRACE INT COMMA anno COMMA INTEGER.val RCURLYBRACE
     {: return new Number(Integer.parseInt(val)); :}
 ;
 
 
-CharList charlist = LCURLYBRACE STRING COMMA INTEGER COMMA STRINGVALUE RCURLYBRACE
+CharList charlist = LCURLYBRACE STRING COMMA anno COMMA STRINGVALUE RCURLYBRACE
       {: return new CharList(STRINGVALUE); :}
 ;
 
 Boolean boolean =
-    LCURLYBRACE ATOM COMMA INTEGER COMMA TRUE RCURLYBRACE
+    LCURLYBRACE ATOM COMMA anno COMMA TRUE RCURLYBRACE
     {: return new Boolean(true); :}
-|   LCURLYBRACE ATOM COMMA INTEGER COMMA FALSE RCURLYBRACE
+|   LCURLYBRACE ATOM COMMA anno COMMA FALSE RCURLYBRACE
      {: return new Boolean(false); :}
 ;
 
 Atom atom =
-LCURLYBRACE ATOM COMMA INTEGER COMMA IDENTIFIER.i RCURLYBRACE
+LCURLYBRACE ATOM COMMA anno COMMA IDENTIFIER.i RCURLYBRACE
         {: return new Atom(i); :}
-|LCURLYBRACE ATOM COMMA INTEGER COMMA ATOMID RCURLYBRACE
+|LCURLYBRACE ATOM COMMA anno COMMA ATOMID RCURLYBRACE
         {: return new Atom(ATOMID); :}
 ;
 
@@ -268,7 +275,7 @@ Pid pid = PID.mypid
 ;
 
 Variable variable =
-    LCURLYBRACE VAR COMMA INTEGER COMMA ATOMID RCURLYBRACE
+    LCURLYBRACE VAR COMMA anno COMMA ATOMID RCURLYBRACE
     {: return new Variable(ATOMID.replace("'","")); :}
 ;
 

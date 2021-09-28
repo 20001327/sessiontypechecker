@@ -46,8 +46,9 @@ Just run
 
 to build a working jar file in the `jar` directory. then execute by simple java command
 
-    $ java -jar threeBuyer.jar
+    $ java -jar threeBuyer.jar <AST-DIR>
 
+where <AST-DIR> have to be replaced with the directory cointaing erlang extracted ast
 ## Cleaning
 
 Run

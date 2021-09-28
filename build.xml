@@ -48,8 +48,9 @@
 
     <target name="build" depends="generate">
         <mkdir dir="build" />
+        <unzip src="./tools/beaver-rt.jar" dest="./tools/"/>
         <copy todir="./build/beaver/">
-            <fileset dir="./tools/beaver-rt/beaver">
+            <fileset dir="./tools/beaver">
             </fileset>
         </copy>
         <copy todir="./src/ast/">
