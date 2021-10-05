@@ -36,7 +36,7 @@ import miniErlang.ErlangParser.Terminals;
 
 LineTerminator = \r|\n|\r\n
 WhiteSpace     = {LineTerminator} | [ \t\f]
-Symbol         = '\='|'\-'|'\*'|'\+'|'\\'
+Symbol         = '\='|'\-'|'\*'|'\+'|'\\'|'=='|'=<'
 StringValue    = \"(.[^\"]*)\"
 Integer        = [1-9][0-9]* | 0
 Identifier     = [a-zA-Z][a-zA-Z0-9_]*

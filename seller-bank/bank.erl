@@ -22,11 +22,11 @@ init() ->
               register(Name,From),
               register(bank, self()),
               seller ! {bank, end_delegation},
-              case length(CardNumber) of
-                16 ->
+              case length(CardNumber)==16 of
+                true ->
                   seller ! {bank, ok},
                   'End';
-                _ ->
+                false ->
                   seller ! {bank, ko},
                   'End'
               end

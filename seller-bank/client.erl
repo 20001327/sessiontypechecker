@@ -17,7 +17,7 @@ init()->
             {seller, pay, Price} ->
               seller!{client,card,"0000000000000000"},
               receive
-                {seller, date, _Date} ->
+                {seller, date, Date} ->
                   ok,
                   'End';
                 {seller, ko} ->

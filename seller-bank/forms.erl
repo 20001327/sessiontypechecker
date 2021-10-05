@@ -541,8 +541,7 @@ read_to_binary(Module,Filename) ->
 
 get_ast()->
   read_to_binary(seller,"ast/seller.ast"),
-  read_to_binary(carol,"ast/carol.ast"),
-  read_to_binary(bob,"ast/bob.ast"),
-  read_to_binary(alice,"ast/alice.ast").
+  read_to_binary(client,"ast/client.ast"),
+  read_to_binary(bank,"ast/bank.ast").
 
 
