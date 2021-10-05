@@ -5,24 +5,29 @@
 start()->
   register(client,spawn(client, init, [])).
 
+-type init() :: 'seller!title<String>.seller?price<Int>.@(seller!ok.seller?pay<Int>.seller!card<String>.&(seller?date<String>.End,seller?ko.End),seller!ko.End)'.
 init()->
-  seller!({client,title,"Novecento"}),
+  seller!{client,title,"Novecento"},
   receive
-    {seller, price, Price} when Price =< 50 ->
-      io:format("client got price ~n"),
-      seller!{client,price,ok},
-      receive
-        {seller, pay, Price} ->
-          io:format("client got pay ~n"),
-          seller!{client,card,"0000000000000000"},
+    {seller, price, Price} ->
+    case Price =< 50 of
+      true ->
+          seller!{client,ok},
           receive
-            {seller, date, _Date} ->
-              ok;
-            {seller, ko} ->
-              ko
-          end
-      end;
-    {seller, price, Price} when Price > 50 ->
-      seller!{client,price,ok}
+            {seller, pay, Price} ->
+              seller!{client,card,"0000000000000000"},
+              receive
+                {seller, date, _Date} ->
+                  ok,
+                  'End';
+                {seller, ko} ->
+                  ko,
+                  'End'
+              end
+          end;
+      false ->
+          seller!{client,ko},
+          'End'
+      end
   end,
   unregister(client).

@@ -4,9 +4,8 @@
 
 start_protocol()->
     start_actor(seller),
-    start_actor(carol),
-    start_actor(bob),
-    start_actor(alice).
+    start_actor(bank),
+    start_actor(client).
 
 start_actor(Actor) ->
   Res = whereis(Actor),
@@ -15,4 +14,4 @@ start_actor(Actor) ->
       Actor:start();
     _ ->
       ok
-  end.).
+  end.

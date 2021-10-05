@@ -2,3 +2,4 @@
 {client,[debug_info]}.
 {bank,[debug_info]}.
 {main,[debug_info]}.
+{forms,[debug_info]}.

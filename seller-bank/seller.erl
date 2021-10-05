@@ -5,33 +5,29 @@
 start() ->
   register(seller, spawn(seller, init, [])).
 
--spec init() ->
-  'C?title<string>.
-      C!price<int>.... '.
-
+-type init() :: 'client?title<String>.client!price<Int>.&(client?ok.bank!price<Int>.<<bank.bank>>.@(bank?ok.client!date<String>.End,bank?ko.client!ko.End),client?ko.End)'.
 init() ->
   Price = 50,
   receive
     {client, title, _Title} ->
-      io:format("seller got title~n"),
       client ! {seller, price, Price},
       receive
-        {client, price, ok} ->
+        {client,ok} ->
           bank ! {seller, price, Price},
-          unregister(seller),
-          bank ! {seller, start_delegation, {seller, self()}},
+          bank ! {seller, start_delegation, seller, self()},
           receive
             {bank, end_delegation} ->
-              register(seller, self()),
               receive
+                {bank, ok} ->
+                  client ! {seller, date, now()},
+                  'End';
                 {bank, ko} ->
-                  client ! {seller, date, now()};
-                {bank, ko} ->
-                  client ! {seller, ko}
+                  client ! {seller, ko},
+                  'End'
               end
           end;
         {client, title, ko} ->
-          ok
+          'End'
       end
   end,
   unregister(seller).

@@ -6,28 +6,29 @@
 start() ->
   register(bank, spawn(bank, init, [])).
 
+-type init() :: 'seller?price<Int>.seller<<.client!pay<Int>.client?card<String>.>>seller.@(seller!ok.End,seller!ko.End)'.
 init() ->
   receive
     {seller, price, Price} ->
       receive
-        {seller, start_delegation, {Name, From}} ->
-          io:format("bank received start delegation~n"),
+        {seller, start_delegation, Name, From} ->
           unregister(bank),
+          unregister(seller),
           register(Name, self()),
           client ! {Name, pay, Price},
           receive
             {client, card, CardNumber} ->
-              io:format("bank cardReceived~n"),
               unregister(Name),
+              register(Name,From),
               register(bank, self()),
-              From ! {bank, end_delegation},
+              seller ! {bank, end_delegation},
               case length(CardNumber) of
                 16 ->
-                  io:format("bank ok, 16 digit~n"),
-                  From ! {bank, ok};
+                  seller ! {bank, ok},
+                  'End';
                 _ ->
-                  io:format("bank ko, wrong no. of digit~n"),
-                  From ! {bank, ko}
+                  seller ! {bank, ko},
+                  'End'
               end
           end
       end
