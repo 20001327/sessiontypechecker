@@ -43,9 +43,9 @@
     eq ReceiveClause.getActions().delegating() = this.delegating();
 
     eq Send.type(){
-        if(getMessage().getSender().getIdent().equals(getModuleName()) ||
-                getMessage().getSender().getClass().getName().equals(VarSender.class.getName())){
-           if(getMessage().getLabel().getIdent().equals("start_delegation")){
+        if((getMessage().getSender().getIdent().equals(getModuleName()))
+        || (getMessage().getSender().getClass().getName().equals(VarSender.class.getName()) && delegating().getName() != null)){
+              if(getMessage().getLabel().getIdent().equals("start_delegation")){
                if(((Atom)getMessage().getPayload(0)).getIdent().equals(getModuleName()) &&
                         getMessage().getPayload(1).type().isSameType(new PidType())){
                             delegating().setDelegateName(getRecipient());
@@ -61,6 +61,7 @@
                    return new SessionSend(getRecipient(),getMessage().getLabel(), types, getNext().type());
                }
            }
+
         }
        return null;
     }

@@ -12,8 +12,8 @@ init() ->
     {seller, price, Price} ->
       receive
         {seller, start_delegation, Name, From} ->
+          unregister(Name),
           unregister(bank),
-          unregister(seller),
           register(Name, self()),
           client ! {Name, pay, Price},
           receive
