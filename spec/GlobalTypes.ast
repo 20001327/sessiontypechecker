@@ -1,15 +1,17 @@
 abstract Global;
 
-CommunicationChoice:Global ::= <Actor:String> Others:CharList* Labels:CharList* Types:LiteralTypeList* next:Global*;
+CommunicationChoices:Global ::= Communications:CommunicationChoice*;
 StartDelegation:Global ::= <Delegate:String> <Delegating:String>;
 EndDelegation:Global ::= <Delegate:String> <Delegating:String>;
 Rec:Global ::= RecVariable:RecVariable FunType:FunctionGlobal Next:Global;
 RecVariable:Global;
 Terminal:Global;
 
-FunctionGlobal::= Terminals:Terminal* Session:Session;
+EndGlobal:Terminal;
+
+FunctionGlobal::= Arguments:LiteralType* SessionType:Session;
+CommunicationChoice ::= Communication:Communication next:Global;
 
 Communication:Global ::= <Sender:String> <Recipient:String> <Label:String> LiteralType*;
 
-LiteralTypeList ::= LiteralType*;
 

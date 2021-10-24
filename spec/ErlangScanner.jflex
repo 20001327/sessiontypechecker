@@ -73,7 +73,6 @@ IdInSingle     = '{Identifier}'
 "tuple"              { return sym(Terminals.TUPLE); }
 "nil"                { return sym(Terminals.NULL); }
 
-
 "{"                   { return sym(Terminals.LCURLYBRACE); }
 "}"                   { return sym(Terminals.RCURLYBRACE); }
 "["                   { return sym(Terminals.LBRACKET); }
@@ -82,6 +81,8 @@ IdInSingle     = '{Identifier}'
 ")"                   { return sym(Terminals.RQUAD); }
 
 "."                   { return sym(Terminals.DOT); }
+"-"                   { return sym(miniErlang.GlobalParser.Terminals.MINUS); }
+":"                   { return sym(miniErlang.GlobalParser.Terminals.COLONS); }
 ","                   { return sym(Terminals.COMMA); }
 "!"                   { return sym(Terminals.SESSIONSEND); }
 "?"                   { return sym(Terminals.SESSIONRECEIVE); }
