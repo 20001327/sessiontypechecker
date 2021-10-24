@@ -33,5 +33,5 @@ init() ->
           end
       end
   end,
-  unregister(?MODULE).
+  unregister(bank).
 
