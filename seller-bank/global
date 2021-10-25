@@ -2,12 +2,12 @@ client->seller:title<String>.
 seller->client:price<Int>.
     (client->seller:ok.
     seller->bank:+price<Int>.
-    seller<<bank
+    seller<<bank.
     seller->client:pay<Int>.
     client->seller:card<String>.
-    seller>>bank
+    seller>>bank.
         (bank->seller:ok.
-        seller→client:date<String>.End
+        seller->client:date<String>.End
         ,
         bank->seller:ko.
         seller->client:ko.End)

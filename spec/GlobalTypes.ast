@@ -1,8 +1,10 @@
+GProg:Goal ::= Global:Global;
+
 abstract Global;
 
-CommunicationChoices:Global ::= Communications:CommunicationChoice*;
-StartDelegation:Global ::= <Delegate:String> <Delegating:String>;
-EndDelegation:Global ::= <Delegate:String> <Delegating:String>;
+CommunicationChoices:Global ::= Communications:Communication*;
+StartDelegation:Global ::= <Delegate:String> <Delegating:String> Next:Global;
+EndDelegation:Global ::= <Delegate:String> <Delegating:String> Next:Global;
 Rec:Global ::= RecVariable:RecVariable FunType:FunctionGlobal Next:Global;
 RecVariable:Global;
 Terminal:Global;
@@ -10,8 +12,7 @@ Terminal:Global;
 EndGlobal:Terminal;
 
 FunctionGlobal::= Arguments:LiteralType* SessionType:Session;
-CommunicationChoice ::= Communication:Communication next:Global;
 
-Communication:Global ::= <Sender:String> <Recipient:String> <Label:String> LiteralType*;
+Communication:Global ::= <Sender:String> <Recipient:String> <Label:String> LiteralType* Next:Global;
 
 

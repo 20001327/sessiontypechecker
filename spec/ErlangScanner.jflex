@@ -81,8 +81,9 @@ IdInSingle     = '{Identifier}'
 ")"                   { return sym(Terminals.RQUAD); }
 
 "."                   { return sym(Terminals.DOT); }
-"-"                   { return sym(miniErlang.GlobalParser.Terminals.MINUS); }
-":"                   { return sym(miniErlang.GlobalParser.Terminals.COLONS); }
+"-"                   { return sym(Terminals.MINUS); }
+"+"                   { return sym(Terminals.PLUS); }
+":"                   { return sym(Terminals.COLONS); }
 ","                   { return sym(Terminals.COMMA); }
 "!"                   { return sym(Terminals.SESSIONSEND); }
 "?"                   { return sym(Terminals.SESSIONRECEIVE); }

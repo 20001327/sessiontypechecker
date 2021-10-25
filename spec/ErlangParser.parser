@@ -13,8 +13,9 @@
 %left SINGLEMARKS;
 /* Productions with semantic actions building the JastAdd AST */
 
-program goal =
+goal goal =
 	module_list 	    	    {: return new Program(module_list); :}
+|   global                      {: return new GProg(global);         :}
 ;
 
 Anno anno =
@@ -335,3 +336,37 @@ List literal_type_list =
     literaltype                             {: return new List(literaltype); :}
 |   literal_type_list COMMA literaltype     {: return literal_type_list.add(literaltype); :}
 ;
+
+Global global =
+    communication
+|   LQUAD communication_list.clist RQUAD
+    {: return new CommunicationChoices(clist); :}
+|   IDENTIFIER.delegating OPENANGULAR OPENANGULAR IDENTIFIER.delegate DOT global.next
+    {: return new StartDelegation(delegating, delegate, next); :}
+|   IDENTIFIER.delegating CLOSEANGULAR CLOSEANGULAR IDENTIFIER.delegate DOT global.next
+    {: return new EndDelegation(delegating, delegate, next); :}
+|   terminal
+;
+
+Communication communication =
+    IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR DOT global.next
+    {: return new Communication(sender, receiver, label, l, next); :}
+|   IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS IDENTIFIER.label DOT global.next
+     {: return new Communication(sender, receiver, label, new List(), next); :}
+    IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS PLUS IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR DOT global.next
+    {: return new Communication(sender, receiver, label, l, next); :}
+|   IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS PLUS IDENTIFIER.label DOT global.next
+     {: return new Communication(sender, receiver, label, new List(), next); :}
+;
+
+
+List communication_list =
+    communication.c                            {:  return new List().add(c);  :}
+|   communication_list COMMA communication.c  {:  return communication_list.add(c);  :}
+;
+
+Terminal terminal =
+    end_global;
+
+EndGlobal end_global =
+  END          {: return new EndGlobal(); :};

@@ -9,7 +9,6 @@
         <delete dir="build" />
         <delete dir="miniErlang" />
         <delete file="spec/ErlangParser.beaver" />
-        <delete file="spec/GlobalParser.beaver" />
     </target>
 
     <target name="scanner">
@@ -28,19 +27,7 @@
         <beaver file="spec/ErlangParser.beaver" destdir="miniErlang/" />
     </target>
 
-
-    <target name="global_parser">
-        <java classpath="tools/JastAddParser.jar:tools/beaver-rt.jar"
-              classname="org.jastadd.jastaddparser.Main" fork="true">
-            <arg value="--no-beaver-symbol" />
-            <arg value="spec/GlobalParser.parser" />
-            <arg value="spec/GlobalParser.beaver" />
-        </java>
-
-        <beaver file="spec/GlobalParser.beaver" destdir="miniErlang/" />
-    </target>
-
-    <target name="generate" depends="scanner,parser,global_parser">
+    <target name="generate" depends="scanner,parser">
         <fileset dir="spec" id="jastAddSpecs">
             <include name="*.ast" />
             <include name="**/*.jrag" />

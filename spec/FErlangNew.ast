@@ -1,6 +1,8 @@
 /*  Abstract syntax for two buyer in erlang */
 
-Program ::= Modules:Module*;
+abstract Goal;
+Program:Goal ::= Modules:Module*;
+
 Module::= <Partecipant:String> <RegisteredName:String> <ModuleName:String> <FunName:String> Functions:Function*;
 
 Function ::= [Type:FunType] <FunctionName:String> Parameters:Variable* Body:Process;  /* funType di tipo funType */
