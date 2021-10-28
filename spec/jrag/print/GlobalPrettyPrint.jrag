@@ -1,12 +1,73 @@
 aspect SessionPrettyPrint{
 
 
-    syn lazy PrettyPrinter Global.globalPrinter() {
+    syn lazy PrettyPrinter GProg.stampante() {
         return new PrettyPrinter();
     }
 
     public void Global.stampa(){
-       globalPrinter().append("global");
+       stampante().append("global");
+    }
+
+    eq GProg.getGlobal().stampante() = this.stampante();
+    eq Communication.getTypes().stampante() = this.stampante();
+    inh lazy PrettyPrinter Global.stampante();
+
+    eq CommunicationChoices.addsIndentationLevel()=true;
+
+    public void Communication.stampa(){
+        stampante().append("\n");
+        stampante().append(getSender());
+        stampante().append("->");
+        stampante().append(getRecipient() + ":");
+        stampante().append(getLabel());
+        if(getNumTypes()>0){
+            stampante().append("<");
+            for(int i=0;i<getNumTypes();i++){
+                getTypes(i).stampa();
+                if(i<getNumTypes()-1){
+                    stampante().append(",");
+                }
+            }
+            stampante().append(">");
+        }
+        stampante().append(".");
+        getNext().stampa();
+    }
+
+    public void CommunicationChoices.stampa(){
+        stampante().append("\n");
+        stampante().append("(");
+        for(int i=0;i<getNumCommunications();i++){
+            getCommunications(i).stampa();
+            if(i<getNumCommunications()-1){
+                stampante().append(",");
+            }
+        }
+        stampante().append(")");
+
+    }
+
+    public void StartDelegation.stampa(){
+        stampante().append("\n");
+        stampante().append(getDelegating());
+        stampante().append("<<");
+        stampante().append(getDelegate());
+        stampante().append(".");
+        getNext().stampa();
+    }
+
+    public void EndDelegation.stampa(){
+        stampante().append("\n");
+        stampante().append(getDelegating());
+        stampante().append(">>");
+        stampante().append(getDelegate());
+        stampante().append(".");
+        getNext().stampa();
+    }
+
+    public void EndGlobal.stampa(){
+       stampante().append("End");
     }
 
 

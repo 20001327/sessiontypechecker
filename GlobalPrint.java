@@ -26,7 +26,7 @@ public class GlobalPrint {
             GProg g = (GProg) parser.parse(scanner);
             reader.close();
 
-            PrettyPrinter printer = g.getGlobal().globalPrinter();
+            PrettyPrinter printer = g.getGlobal().stampante();
             g.getGlobal().stampa();
             System.out.println(printer.getString());
 
