@@ -1,0 +1,66 @@
+aspect Actors{
+
+    syn lazy ArrayList<String> GProg.getActors() {
+        return getGlobal().actors();
+    }
+
+    public static void GProg.addAbsent(String actor, ArrayList<String> actors){
+        if(!actors.contains(actor)){
+            actors.add(actor);
+        }
+    }
+
+    public ArrayList<String> Global.actors(){
+        return new ArrayList<>();
+    }
+
+    public ArrayList<String> Communication.actors(){
+        ArrayList<String> actors = new ArrayList();
+        GProg.addAbsent(getSender(), actors);
+        GProg.addAbsent(getRecipient(), actors);
+
+        for(String actor: getNext().actors()){
+            GProg.addAbsent(actor, actors);
+        }
+
+        return actors;
+    }
+
+    public ArrayList<String> CommunicationChoices.actors(){
+        ArrayList<String> actors = new ArrayList();
+        for(Communication c :  getCommunicationss()){
+            for(String actor: c.actors()){
+                GProg.addAbsent(actor, actors);
+            }
+        }
+        return actors;
+    }
+
+  public ArrayList<String>  StartDelegation.actors(){
+        ArrayList<String> actors = new ArrayList();
+        GProg.addAbsent(getDelegating(),actors);
+        GProg.addAbsent(getDelegate(),actors);
+
+        for(String actor: getNext().actors()){
+            GProg.addAbsent(actor, actors);
+        }
+
+        return actors;
+    }
+
+  public ArrayList<String>  EndDelegation.actors(){
+        ArrayList<String> actors = new ArrayList();
+        GProg.addAbsent(getDelegating(),actors);
+        GProg.addAbsent(getDelegate(),actors);
+
+        for(String actor: getNext().actors()){
+            GProg.addAbsent(actor, actors);
+        }
+
+        return actors;
+    }
+
+    public ArrayList<String>  EndGlobal.actors(){
+       return new ArrayList<>();
+    }
+}

@@ -1,0 +1,13 @@
+aspect Projection{
+
+    syn Session GProg.project(String actor) {
+        return getGlobal().project(actor);
+    }
+
+    syn lazy Session Global.project(String actor){
+        return null;
+    }
+
+
+
+}

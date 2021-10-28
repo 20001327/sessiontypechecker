@@ -29,6 +29,11 @@ public class GlobalPrint {
             PrettyPrinter printer = g.getGlobal().stampante();
             g.getGlobal().stampa();
             System.out.println(printer.getString());
+            System.out.println(String.join(",",g.getActors()));
+
+            for (String s : g.getActors()){
+                System.out.println(g.project(s)!=null?g.project(s):"null");
+            }
 
 
         } catch (Exception e) {
