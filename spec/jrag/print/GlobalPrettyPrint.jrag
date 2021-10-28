@@ -1,0 +1,13 @@
+aspect SessionPrettyPrint{
+
+
+    syn lazy PrettyPrinter Global.globalPrinter() {
+        return new PrettyPrinter();
+    }
+
+    public void Global.stampa(){
+       globalPrinter().append("global");
+    }
+
+
+}

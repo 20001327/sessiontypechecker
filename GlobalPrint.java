@@ -1,12 +1,6 @@
-import miniErlang.ErlangParser;
-import miniErlang.ErlangScanner;
-import miniErlang.GProg;
-import miniErlang.Global;
+import miniErlang.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.*;
 
 public class GlobalPrint {
 
@@ -32,10 +26,10 @@ public class GlobalPrint {
             GProg g = (GProg) parser.parse(scanner);
             reader.close();
 
-//            PrettyPrinter printer = g.print();
-//            try (PrintWriter out = new PrintWriter("prettyPrint.txt")) {
-//                out.println(printer.getString());
-//            }
+            PrettyPrinter printer = g.getGlobal().globalPrinter();
+            g.getGlobal().stampa();
+            System.out.println(printer.getString());
+
 
         } catch (Exception e) {
             System.err.println("error (PrettyPrint) : " + e.getMessage());
