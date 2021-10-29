@@ -26,6 +26,5 @@ init() ->
           'End'
       %%io:format("seller: quit from bob ~n")
       end
-  end,
-  unregister(seller).
+  end.
 

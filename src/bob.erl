@@ -31,5 +31,4 @@ init() ->
               end
           end
       end
-  end,
-  unregister(bob).
+  end.

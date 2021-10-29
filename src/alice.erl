@@ -21,6 +21,5 @@ init() ->
           'End'
           %%io:format("ALICE: quit from bob ~n")
       end
-  end,
-  unregister(alice).
+  end.
 

@@ -36,5 +36,4 @@ init() ->
               'End'
           end
       end
-  end,
-  unregister(carol).
+  end.

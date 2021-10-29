@@ -32,6 +32,5 @@ init() ->
               end
           end
       end
-  end,
-  unregister(bank).
+  end.
 

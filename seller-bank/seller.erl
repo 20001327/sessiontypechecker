@@ -29,5 +29,4 @@ init() ->
         {client, ko} ->
           'End'
       end
-  end,
-  unregister(seller).
+  end.
