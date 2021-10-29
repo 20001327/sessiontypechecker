@@ -8,6 +8,15 @@ aspect Projection{
         return null;
     }
 
+    syn Session Communication.project(String actor){
+        if(actor.equals(getSender())){
+            return new SessionSend(new Atom(getSender()), new Atom(getLabel()), getTypess(), getNext().project(actor));
+        }else if(actor.equals(getRecipient())){
+            return new SessionReceive(new Atom(getRecipient()), new Atom(getLabel()), getTypess(), getNext().project(getRecipient()));
+        }
+
+        return getNext().project(actor);
+    }
 
 
 }
