@@ -88,6 +88,9 @@
         return null;
     }
 
+    eq Register.type(){
+    return null;
+    }
     eq ReceiveClause.type(){
         List<LiteralType> sessions = new List();
 
@@ -114,9 +117,9 @@
 
                            Atom d = (Atom)s.getMessage().getPayload(0);
 
-                           Call unreg1 = new Call(new Atom("unregister"),new List(new Atom(getModuleName())));
-                           Call unreg2 = new Call(new Atom("unregister"), new List(d));
-                           Call reg1 = new Call(new Atom("register"), new List(d,new Call(new Atom("self"), new List())));
+                           Unregister unreg1 = new Unregister(new Atom("unregister"),new List(new Atom(getModuleName())),null);
+                           Unregister unreg2 = new Unregister(new Atom("unregister"), new List(d), null);
+                           Register reg1 = new Register(new Atom("register"), new List(d,new Call(new Atom("self"), new List())), null);
 
                            boolean differ = !p.equals(p1);
                            boolean b1 = (p.equals(unreg1) || p.equals(unreg2));
@@ -150,13 +153,6 @@
 
     eq ExpressionProcess.type(){
         Session s = getExpression().type();
-        if(s.getClass().getName().equals(AcceptBackwardDelegation.class.getName())){
-            return s;
-        }else{
-            if(hasNext()){
-                return getNext().type();
-            }
-        }
         return s;
     }
 
@@ -178,18 +174,45 @@
        return getActions().type();
     }
 
+    eq Unregister.type(){
+    // anche qui le info non le riesco a desumere dal tipo annotato, devo fare un check con le info
+            // che mi sono tirato giù prima
+        if(delegating().getName()!=null){
+            Process p = getNextProcess((Process)getParent());
+            Process p1 = getNextProcess(p);
+            Process p2 = getNextProcess(p1);
+            Session next = getNextProcess(p2)!=null?getNextProcess(p2).type():null;
+
+            Register reg1 = new Register(new Atom("register"),
+                                    new List(new Atom(getModuleName()),new Call(new Atom("self"), new List())), null);
+            Register reg2 = new Register(new Atom("register"), new List(delegating().getName(),new Call(new Atom("self"), new List())), null);
+
+            boolean differ = !p.equals(p1);
+            boolean b1 = this.equals(new Unregister(new Atom("unregister"),new List(delegating().getName()), null));
+            boolean b2 = (p.equals(reg1) || p.equals(reg2));
+            boolean b3 = (p1.equals(reg1) || p1.equals(reg2));
+            boolean b4 = p2.equals(new Send(delegating().getName(),
+                    new Message(new AtomSender(getModuleName()), new Atom("end_delegation"),new List()), null));
+
+            if(b1 && b2 && b3 && b4 && differ){
+                return new AcceptBackwardDelegation(delegating().getName(),next);
+            }
+        }
+
+        return null;
+    }
+
      Process Process.getNextProcess(Process p){
         String className = p.getClass().getName();
-        if(className.equals(ExpressionProcess.class.getName())){
-            ExpressionProcess exp = (ExpressionProcess) p;
-            if(exp.hasNext()){
-                return exp.getNext();
-            }
-        }else if(className.equals(Send.class.getName())){
+        if(className.equals(Send.class.getName())){
             Send exp = (Send) p;
-            if(exp.hasNext()){
-                return exp.getNext();
-            }
+            return exp.getNext();
+        } else if(className.equals(Register.class.getName())){
+            Register exp = (Register) p;
+            return exp.getNext();
+        }else if(className.equals(Unregister.class.getName())){
+           Unregister exp = (Unregister) p;
+           return exp.getNext();
         }
 
         return null;
@@ -217,7 +240,7 @@
             if(s.getRecipient().getIdent().equals(dest)
                 && s.getMessage().getLabel().getIdent().equals(label)){
                 return s;
-            }else if(s.hasNext()) {
+            }else {
                 return searchSend(s.getNext(),dest,label);
             }
         }else if(className.equals(Receive.class.getName())){
@@ -239,9 +262,6 @@
         }else if(className.equals(Let.class.getName())){
             Let s = (Let) process;
             return searchSend(s.getNext(),dest,label);
-        }else if(className.equals(ExpressionProcess.class.getName())){
-            ExpressionProcess s = (ExpressionProcess) process;
-            if(s.hasNext()) return searchSend(s.getNext(),dest,label);
         }
 
         return null;

@@ -18,11 +18,9 @@ init()->
               seller!{client,card,"0000000000000000"},
               receive
                 {seller, date, Date} ->
-                  ok,
-                  'End';
+                  ok;
                 {seller, ko} ->
-                  ko,
-                  'End'
+                  ko
               end
           end;
       false ->

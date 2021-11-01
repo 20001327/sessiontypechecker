@@ -3,36 +3,11 @@ aspect ExpressionTypes {
     syn lazy Session Expression.type();
 
     inh lazy FunType Expression.getFunType();
-    inh lazy Process Expression.getNextProcess(Process p);
     inh lazy String Expression.getModuleName();
 
     inh lazy Delegating Call.delegating();
 
     eq Call.type(){
-        // anche qui le info non le riesco a desumere dal tipo annotato, devo fare un check con le info
-        // che mi sono tirato giù prima
-        if(getFunctionName().getIdent().equals("unregister") && delegating().getName()!=null){
-            Process p = getNextProcess((Process)getParent());
-            Process p1 = getNextProcess(p);
-            Process p2 = getNextProcess(p1);
-            Session next = getNextProcess(p2)!=null?getNextProcess(p2).type():null;
-
-            Call reg1 = new Call(new Atom("register"),
-                            new List(new Atom(getModuleName()),new Call(new Atom("self"), new List())));
-            Call reg2 = new Call(new Atom("register"), new List(delegating().getName(),new Call(new Atom("self"), new List())));
-
-            boolean differ = !p.equals(p1);
-            boolean b1 = this.equals(new Call(new Atom("unregister"),new List(delegating().getName())));
-            boolean b2 = (p.equals(reg1) || p.equals(reg2));
-            boolean b3 = (p1.equals(reg1) || p1.equals(reg2));
-            boolean b4 = p2.equals(new Send(delegating().getName(),
-                    new Message(new AtomSender(getModuleName()), new Atom("end_delegation"),new List()), null));
-
-            if(b1 && b2 && b3 && b4 && differ){
-                return new AcceptBackwardDelegation(delegating().getName(),next);
-            }
-        }
-
         if(getFunctionName().getIdent().equals("self")){
             return new PidType();
         }else{
@@ -41,8 +16,6 @@ aspect ExpressionTypes {
                  return ((FunType)type).getSessionType();
              }
          }
-
-
         return null;
     }
 

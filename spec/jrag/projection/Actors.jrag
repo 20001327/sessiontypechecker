@@ -19,16 +19,12 @@ aspect Actors{
         GProg.addAbsent(getSender(), actors);
         GProg.addAbsent(getRecipient(), actors);
 
-        for(String actor: getNext().actors()){
-            GProg.addAbsent(actor, actors);
-        }
-
         return actors;
     }
 
     public ArrayList<String> CommunicationChoices.actors(){
         ArrayList<String> actors = new ArrayList();
-        for(Communication c :  getCommunicationss()){
+        for(CommunicationChoice c :  getCommunicationss()){
             for(String actor: c.actors()){
                 GProg.addAbsent(actor, actors);
             }

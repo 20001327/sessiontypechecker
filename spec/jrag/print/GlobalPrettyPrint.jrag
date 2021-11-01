@@ -31,8 +31,24 @@ aspect SessionPrettyPrint{
             }
             stampante().append(">");
         }
-        stampante().append(".");
-        getNext().stampa();
+    }
+
+    public void Connecting.stampa(){
+        stampante().append("\n");
+        stampante().append(getSender());
+        stampante().append("->");
+        stampante().append(getRecipient() + ":+");
+        stampante().append(getLabel());
+        if(getNumTypes()>0){
+            stampante().append("<");
+            for(int i=0;i<getNumTypes();i++){
+                getTypes(i).stampa();
+                if(i<getNumTypes()-1){
+                    stampante().append(",");
+                }
+            }
+            stampante().append(">");
+        }
     }
 
     public void CommunicationChoices.stampa(){

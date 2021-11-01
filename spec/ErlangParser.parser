@@ -143,10 +143,10 @@ Message message =
 
 Process process =
    LCURLYBRACE OPERATOR COMMA anno COMMA SEND COMMA
-        atom.dest COMMA message.message RCURLYBRACE COMMA process.next?
+        atom.dest COMMA message.message RCURLYBRACE COMMA process.next
         {: return new Send(dest, message,next); :}
 |   LCURLYBRACE OPERATOR COMMA anno COMMA SEND COMMA
-         atom.dest COMMA message.message RCURLYBRACE process.next?
+         atom.dest COMMA message.message RCURLYBRACE process.next
          {: return new Send(dest, message,next); :}
 |	LCURLYBRACE RECEIVE COMMA anno COMMA
     LBRACKET receive_clause_list.clauses RBRACKET RCURLYBRACE process.next?
@@ -164,10 +164,10 @@ Process process =
 |   LCURLYBRACE MATCH COMMA anno COMMA variable.left
                 COMMA expression.right RCURLYBRACE COMMA process.next
             {: return new Let(left, right, next); :}
-|   expression process.next?
-        {: return new ExpressionProcess(expression, next); :}
-|   expression COMMA process.next?
-        {: return new ExpressionProcess(expression, next); :}
+|   expression
+        {: return new ExpressionProcess(expression); :}
+|   register
+|   unregister
 ;
 
 
@@ -178,8 +178,6 @@ operator
 |   LCURLYBRACE CALL COMMA anno COMMA atom.method COMMA
     LBRACKET expression_list.arguments? RBRACKET RCURLYBRACE
        {: return new Call(method, arguments); :}
-|   register
-|   unregister
 |   LCURLYBRACE CALL COMMA anno COMMA
     LCURLYBRACE ATOM COMMA anno.ann COMMA SELF RCURLYBRACE
     COMMA LBRACKET RBRACKET RCURLYBRACE
@@ -191,14 +189,14 @@ operator
 Register register =
    LCURLYBRACE CALL COMMA anno COMMA
     LCURLYBRACE ATOM COMMA anno COMMA REGISTER.reg RCURLYBRACE
-    COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE
-       {: return new Call(new Atom(reg), arguments); :};
+    COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE COMMA process.next
+       {: return new Register(new Atom(reg), arguments, next); :};
 
 Unregister unregister =
   LCURLYBRACE CALL COMMA anno COMMA
            LCURLYBRACE ATOM COMMA anno COMMA UNREGISTER.reg RCURLYBRACE
-           COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE
-              {: return new Call(new Atom(reg), arguments); :}
+           COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE COMMA process.next
+              {: return new Unregister(new Atom(reg), arguments, next); :}
 ;
 
 Operator operator =
@@ -338,8 +336,7 @@ List literal_type_list =
 ;
 
 Global global =
-    communication
-|   LQUAD communication_list.clist RQUAD
+    LQUAD communication_list.clist RQUAD
     {: return new CommunicationChoices(clist); :}
 |   IDENTIFIER.delegating OPENANGULAR OPENANGULAR IDENTIFIER.delegate DOT global.next
     {: return new StartDelegation(delegating, delegate, next); :}
@@ -348,21 +345,21 @@ Global global =
 |   terminal
 ;
 
-Communication communication =
-    IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR DOT global.next
-    {: return new Communication(sender, receiver, label, l, next); :}
-|   IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS IDENTIFIER.label DOT global.next
-     {: return new Communication(sender, receiver, label, new List(), next); :}
-    IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS PLUS IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR DOT global.next
-    {: return new Communication(sender, receiver, label, l, next); :}
+CommunicationChoice communication_choice =
+    IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS IDENTIFIER.label OPENANGULAR literal_type_list.l
+    {: return new Communication(sender, receiver, label, l); :}
+|   IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS IDENTIFIER.label
+     {: return new Communication(sender, receiver, label, new List()); :}
+|    IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS PLUS IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR
+    {: return new Connecting(sender, receiver, label, l); :}
 |   IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS PLUS IDENTIFIER.label DOT global.next
-     {: return new Communication(sender, receiver, label, new List(), next); :}
+     {: return new Connecting(sender, receiver, label, new List()); :}
 ;
 
 
 List communication_list =
-    communication.c                            {:  return new List().add(c);  :}
-|   communication_list COMMA communication.c  {:  return communication_list.add(c);  :}
+    communication_choice.c                            {:  return new List().add(c);  :}
+|   communication_list COMMA communication_choice.c   {:  return communication_list.add(c);  :}
 ;
 
 Terminal terminal =

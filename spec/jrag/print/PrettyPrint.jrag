@@ -242,10 +242,9 @@ aspect PrettyPrint {
         getRecipient().print();
         printer().append("!");
         getMessage().print();
-        if(hasNext()){
-            printer().append(",");
-            getNext().print();
-        }
+        printer().append(",");
+        getNext().print();
+
     }
 
     public void Operator.print() {
@@ -400,10 +399,6 @@ aspect PrettyPrint {
     public void ExpressionProcess.print(){
        printer().append(indent());
        getExpression().print();
-       if(hasNext()){
-           printer().append(",");
-           getNext().print();
-       }
     }
 
     public void Process.print() {
