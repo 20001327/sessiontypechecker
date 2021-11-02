@@ -90,9 +90,9 @@ aspect Equals{
         return false;
     }
 
-    public boolean Unregister.equals(Object o){
+  public boolean Call.equals(Object o){
         if(this.getClass().getName().equals(o.getClass().getName())){
-            Unregister other = (Unregister) o;
+            Call other = (Call) o;
             boolean temp = getFunctionName().equals(other.getFunctionName());
             boolean foundAll = true;
             for(Expression e : getArgumentss()){
@@ -120,6 +120,39 @@ aspect Equals{
 
             }
             return temp && foundAll;
+            }
+        return false;
+    }
+
+    public boolean Unregister.equals(Object o){
+        if(this.getClass().getName().equals(o.getClass().getName())){
+            Unregister other = (Unregister) o;
+            boolean foundAll = true;
+            for(Expression e : getArgumentss()){
+                    boolean found = false;
+                    for(Expression it : other.getArgumentss()){
+                        if(e.getClass().getName().equals(Variable.class.getName())){
+                           for (VarDeclaration d : getDeclarations()) {
+                           if(d.getName().equals(((Variable)e).getIdent())){
+                                  if(!found && d.getType().isSameType(new PidType())){
+                                    found = d.getType().isSameType(it.type());
+                                  }
+
+                                  if(!found){
+                                    found = d.getValue().equals(it);
+                                  }
+                                }
+                            }
+                        }
+
+                        if(!found){
+                            found = e.equals(it);
+                        }
+                    }
+                    foundAll = foundAll && found;
+
+            }
+            return foundAll;
             }
         return false;
     }

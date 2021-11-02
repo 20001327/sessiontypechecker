@@ -89,8 +89,9 @@
     }
 
     eq Register.type(){
-    return null;
+        return null;
     }
+
     eq ReceiveClause.type(){
         List<LiteralType> sessions = new List();
 
@@ -178,7 +179,7 @@
     // anche qui le info non le riesco a desumere dal tipo annotato, devo fare un check con le info
             // che mi sono tirato giù prima
         if(delegating().getName()!=null){
-            Process p = getNextProcess((Process)getParent());
+            Process p = getNextProcess(this);
             Process p1 = getNextProcess(p);
             Process p2 = getNextProcess(p1);
             Session next = getNextProcess(p2)!=null?getNextProcess(p2).type():null;
