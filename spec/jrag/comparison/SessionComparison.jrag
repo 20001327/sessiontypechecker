@@ -119,4 +119,8 @@ aspect SessionComparison{
         return Program.sameClass(this,other);
     }
 
+     public boolean End.equals(Object other){
+        return other instanceof LiteralType;
+    }
+
 }

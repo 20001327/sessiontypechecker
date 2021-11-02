@@ -17,9 +17,7 @@ aspect PrimitiveTypes {
 
 
     eq Atom.type(){
-        if(!getParent().getClass().getName().equals(List.class.getName())){
-            return new End();
-        }else if(getParent().getClass().getName().equals(Send.class.getName())){
+        if(getParent().getClass().getName().equals(Send.class.getName())){
             Send s = (Send) getParent();
             if(s.getMessage().getLabel().getIdent().equals("start_delegation")){
                 return new AtS(s.getMessage().getSender().getIdent());

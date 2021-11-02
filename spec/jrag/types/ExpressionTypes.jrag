@@ -2,6 +2,7 @@ aspect ExpressionTypes {
 
     syn lazy Session Expression.type();
 
+
     inh lazy FunType Expression.getFunType();
     inh lazy String Expression.getModuleName();
 
