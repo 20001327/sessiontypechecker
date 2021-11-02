@@ -118,9 +118,9 @@
 
                            Atom d = (Atom)s.getMessage().getPayload(0);
 
-                           Unregister unreg1 = new Unregister(new Atom("unregister"),new List(new Atom(getModuleName())),null);
-                           Unregister unreg2 = new Unregister(new Atom("unregister"), new List(d), null);
-                           Register reg1 = new Register(new Atom("register"), new List(d,new Call(new Atom("self"), new List())), null);
+                           Unregister unreg1 = new Unregister(new List(new Atom(getModuleName())),null);
+                           Unregister unreg2 = new Unregister( new List(d), null);
+                           Register reg1 = new Register(new List(d,new Call(new Atom("self"), new List())), null);
 
                            boolean differ = !p.equals(p1);
                            boolean b1 = (p.equals(unreg1) || p.equals(unreg2));
@@ -184,12 +184,11 @@
             Process p2 = getNextProcess(p1);
             Session next = getNextProcess(p2)!=null?getNextProcess(p2).type():null;
 
-            Register reg1 = new Register(new Atom("register"),
-                                    new List(new Atom(getModuleName()),new Call(new Atom("self"), new List())), null);
-            Register reg2 = new Register(new Atom("register"), new List(delegating().getName(),new Call(new Atom("self"), new List())), null);
+            Register reg1 = new Register(new List(new Atom(getModuleName()),new Call(new Atom("self"), new List())), null);
+            Register reg2 = new Register(new List(delegating().getName(),new Call(new Atom("self"), new List())), null);
 
             boolean differ = !p.equals(p1);
-            boolean b1 = this.equals(new Unregister(new Atom("unregister"),new List(delegating().getName()), null));
+            boolean b1 = this.equals(new Unregister(new List(delegating().getName()), null));
             boolean b2 = (p.equals(reg1) || p.equals(reg2));
             boolean b3 = (p1.equals(reg1) || p1.equals(reg2));
             boolean b4 = p2.equals(new Send(delegating().getName(),

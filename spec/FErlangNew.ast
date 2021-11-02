@@ -14,8 +14,8 @@ CaseClause ::= Patterns:Pattern* Actions:Process;
 
 abstract Process;
 Send:Process ::= Recipient:Atom Message:Message Next:Process;
-Register:Process ::= FunctionName:Atom Arguments:Expression* Next:Process;
-Unregister:Process ::= FunctionName:Atom Arguments:Expression* Next:Process;
+Register:Process ::= Arguments:Expression* Next:Process;
+Unregister:Process ::= Arguments:Expression* Next:Process;
 Receive:Process ::= Clauses:ReceiveClause* [Next:Process];
 Case:Process ::= Matching:Expression* Clauses:CaseClause* [Next:Process];
 Let:Process ::= Left:Variable Right:Expression Next:Process;

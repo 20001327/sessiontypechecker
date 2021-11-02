@@ -10,16 +10,13 @@ init() ->
   seller!{alice,title,"Toy Story"},
   receive
     {seller, quote, Quote} ->
-      %%io:format("ALICE: quote receive from seller ~p~n", [Quote]),
       BobQuote = Quote / 2,
       bob ! {alice, myquote, BobQuote},
       receive
         {bob, ok} ->
           'End';
-          %%io:format("ALICE: ok from bob ~n");
         {bob, quit} ->
           'End'
-          %%io:format("ALICE: quit from bob ~n")
       end
   end.
 

@@ -190,13 +190,13 @@ Register register =
    LCURLYBRACE CALL COMMA anno COMMA
     LCURLYBRACE ATOM COMMA anno COMMA REGISTER.reg RCURLYBRACE
     COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE COMMA process.next
-       {: return new Register(new Atom(reg), arguments, next); :};
+       {: return new Register(arguments, next); :};
 
 Unregister unregister =
   LCURLYBRACE CALL COMMA anno COMMA
            LCURLYBRACE ATOM COMMA anno COMMA UNREGISTER.reg RCURLYBRACE
            COMMA LBRACKET expression_list.arguments RBRACKET RCURLYBRACE COMMA process.next
-              {: return new Unregister(new Atom(reg), arguments, next); :}
+              {: return new Unregister(arguments, next); :}
 ;
 
 Operator operator =

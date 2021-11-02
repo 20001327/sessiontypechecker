@@ -79,5 +79,4 @@
                  {op,35,'!',
                   {atom,35,bob},
                   {tuple,35,[{atom,35,carol},{atom,35,end_delegation}]}},
-                 {atom,36,'End'}]}]}]}]}]}]},
-     {call,40,{atom,40,unregister},[{atom,40,carol}]}]}]}]
+                 {atom,36,'End'}]}]}]}]}]}]}]}]}]

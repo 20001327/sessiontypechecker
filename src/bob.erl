@@ -20,7 +20,6 @@ init() ->
               receive
                 {seller, date, Date} ->
                   'End'
-              %%io:format("BOB: received Date ~n")
               end;
             false ->
               carol ! {bob, quote,Quote - MyQuote - 99},
