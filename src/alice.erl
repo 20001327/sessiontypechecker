@@ -14,9 +14,14 @@ init() ->
       bob ! {alice, myquote, BobQuote},
       receive
         {bob, ok} ->
-          'End';
+          case 10 < 4 of
+            true ->
+                ok;
+            false ->
+                ok
+          end;
         {bob, quit} ->
           'End'
-      end
+      end,
   end.
 

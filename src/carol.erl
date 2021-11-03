@@ -36,4 +36,5 @@ init() ->
               'End'
           end
       end
-  end.
+  end,
+  ok.

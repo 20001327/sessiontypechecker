@@ -9,7 +9,8 @@
 
 /* Just to shut up Beaver warnings */
 %goal goal;
-%left RBRACKET;
+%nonassoc LBRACKET, RBRACKET;
+%left LBRACKET, RBRACKET;
 %left SINGLEMARKS;
 /* Productions with semantic actions building the JastAdd AST */
 
@@ -183,7 +184,6 @@ operator
     COMMA LBRACKET RBRACKET RCURLYBRACE
        {: return new Self(); :}
 |   pattern
-
 ;
 
 Register register =
@@ -212,7 +212,7 @@ Operator operator =
 ;
 
 List expression_list =
-	expression   		                    {: return new List().add(expression);	:}
+	expression   		                    {: return new List().add(expression);	   :}
 |	expression_list COMMA expression    	{: return expression_list.add(expression); :}
  ;
 
@@ -346,13 +346,13 @@ Global global =
 ;
 
 CommunicationChoice communication_choice =
-    IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS IDENTIFIER.label OPENANGULAR literal_type_list.l
+    IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR
     {: return new Communication(sender, receiver, label, l); :}
 |   IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS IDENTIFIER.label
      {: return new Communication(sender, receiver, label, new List()); :}
 |    IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS PLUS IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR
     {: return new Connecting(sender, receiver, label, l); :}
-|   IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS PLUS IDENTIFIER.label DOT global.next
+|   IDENTIFIER.sender MINUS CLOSEANGULAR IDENTIFIER.receiver COLONS PLUS IDENTIFIER.label
      {: return new Connecting(sender, receiver, label, new List()); :}
 ;
 

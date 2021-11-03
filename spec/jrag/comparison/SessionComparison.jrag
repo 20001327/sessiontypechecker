@@ -110,7 +110,6 @@ aspect SessionComparison{
         return false;
     }
 
-
      public boolean Session.equals(Object other){
         return Program.sameClass(this,other);
     }

@@ -159,15 +159,26 @@
 
     eq Case.type(){
         List<SessionSend> types = new List();
+        Session found = null;
         for(int i=0; i<getNumClauses();i++){
             Session t = getClauses(i).type();
             if(t.isSameType(new SessionSend())){
                 types.add((SessionSend)t);
             }
         }
-        if(types.getNumChild()==1) {
-            return types.getChild(0);
+
+        if(types.getNumChild()==0) {
+            for(int i=0; i<getNumClauses();i++){
+                Session t = getClauses(i).type();
+                if(found == null){
+                    found = t;
+                }else if(!found.isSameType(t)){
+                    return null;
+                }
+            }
+            return found;
         }
+
         return new InternalChoice(types);
     }
 

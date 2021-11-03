@@ -20,7 +20,6 @@ aspect ExpressionTypes {
         return null;
     }
 
-
     eq Self.type() {
         return new PidType();
     }

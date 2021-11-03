@@ -42,4 +42,5 @@
            {clause,22,
             [{tuple,22,[{atom,22,bob},{atom,22,quit}]}],
             [],
-            [{atom,23,'End'}]}]}]}]}]}]}]
+            [{atom,23,'End'}]}]}]}]},
+     {atom,26,ok}]}]}]

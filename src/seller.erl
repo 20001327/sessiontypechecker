@@ -22,5 +22,6 @@ init() ->
         {bob, quit} ->
           'End'
       end
-  end.
+  end,
+  ok.
 
