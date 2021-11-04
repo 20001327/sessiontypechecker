@@ -4,15 +4,17 @@ aspect TypeChecking{
         for (Module module: getModuless()){
             System.out.println("_______________________" + module.getPartecipant() + "________________________");
             for (Function function : module.getFunctionss()){
-                FunType type1 = function.getType();
-                printer().reset();
-                type1.print();
-                System.out.println("tipo atteso: " + printer().getString());
-                Session t = function.getBody().type();
-                FunctionType type2 = new FunctionType(function.getFunctionName(),
-                                            function.getType().getArgumentss(),t);
-                System.out.println("tipo calcolato: " + type2.stampa().getString());
-                System.out.println("Risultato Compare: " + type1.compareWith(type2));
+                if(function.getFunctionName().equals("init")){
+                    FunType type1 = function.getType();
+                    printer().reset();
+                    type1.print();
+                    System.out.println("tipo atteso: " + printer().getString());
+                    Session t = function.getBody().type();
+                    FunctionType type2 = new FunctionType(function.getFunctionName(),
+                                                function.getType().getArgumentss(),t);
+                    System.out.println("tipo calcolato: " + type2.stampa().getString());
+                    System.out.println("Risultato Compare: " + type1.compareWith(type2));
+                }
             }
 
         }

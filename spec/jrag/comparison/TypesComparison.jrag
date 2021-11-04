@@ -4,6 +4,10 @@ aspect TypesComparison{
         return isSubtypeOf(t);
     }
 
+    public boolean LiteralType.isSubtypeOf(Session t) {
+            return t instanceof LiteralType;
+    }
+
     public boolean IntType.isSubtypeOf(Session t) {
             return t instanceof IntType;
     }

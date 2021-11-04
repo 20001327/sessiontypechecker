@@ -13,6 +13,9 @@
     eq Module.getFunctions().getModuleName() = this.getPartecipant();
     inh lazy String Process.getModuleName();
     inh lazy String ReceiveClause.getModuleName();
+    eq Module.getFunctions().getFunctionss() = this.getFunctionss();
+    inh lazy List<Function> Process.getFunctionss();
+    inh lazy List<Function> Expression.getFunctionss();
 
     eq Function.getBody().getFunType() = this.getType();
     inh lazy FunType Process.getFunType();
@@ -158,6 +161,17 @@
     }
 
     eq Case.type(){
+/*      manca check su tipi di del matching form e dei valori associati
+        il codice sarebbe più o meno questo, ma ci vorrebbe la valutazione delle espressioni
+        for(int i=0; i<getNumMatching();i++){
+            for(int j=0; j<getNumClauses();j++){
+                if(!getMatching(i).type().isSameType(getClauses(j).getPatterns(i).type())){
+                    return null;
+                }
+            }
+        }
+*/
+
         List<SessionSend> types = new List();
         Session found = null;
         for(int i=0; i<getNumClauses();i++){

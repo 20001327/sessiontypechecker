@@ -14,14 +14,18 @@ init() ->
       bob ! {alice, myquote, BobQuote},
       receive
         {bob, ok} ->
-          case 10 < 4 of
-            true ->
-                ok;
-            false ->
-                ok
-          end;
+           funny(2);
         {bob, quit} ->
           'End'
-      end,
+      end
   end.
+
+funny(Exp) ->
+  case Exp < 10 of
+    true ->
+        ok;
+    false ->
+        ok
+  end.
+
 

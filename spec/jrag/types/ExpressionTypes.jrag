@@ -12,12 +12,15 @@ aspect ExpressionTypes {
         if(getFunctionName().getIdent().equals("self")){
             return new PidType();
         }else{
-             Session type = getFunType();
-             if(type.isSubtypeOf(new FunType())){
-                 return ((FunType)type).getSessionType();
+             Session type = null;
+             for(Function f : getFunctionss()){
+                if(f.getFunctionName().equals(getFunctionName().getIdent())) {
+                    type = f.getBody().type();
+                }
              }
+
+             return type;
          }
-        return null;
     }
 
     eq Self.type() {
