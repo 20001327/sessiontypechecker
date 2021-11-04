@@ -15,7 +15,11 @@ aspect ExpressionTypes {
              Session type = null;
              for(Function f : getFunctionss()){
                 if(f.getFunctionName().equals(getFunctionName().getIdent())) {
-                    type = f.getBody().type();
+                    if(f.getNumParameters() == getNumArguments()){
+                        // ci sarebbe da verificare il tipo degli argomenti,
+                        // o scriviamo il tipo oppure non posso derivare il tipo
+                        type = f.getBody().type();
+                    }
                 }
              }
 
