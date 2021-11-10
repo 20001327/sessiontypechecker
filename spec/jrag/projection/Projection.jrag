@@ -21,10 +21,7 @@ aspect Projection{
                 if(projected.isSubtypeOf(new SessionReceive())){
                     receives.add((SessionReceive)projected);
                 }else if(projected.isSubtypeOf(new SessionSend())){
-                    SessionSend send = (SessionSend) projected;
-                    if(send.getSender().getIdent().equals(actor)){
-                        sends.add(send);
-                    }
+                    sends.add((SessionSend) projected);
                 }
             }
 
