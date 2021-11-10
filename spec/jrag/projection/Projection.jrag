@@ -23,7 +23,7 @@ aspect Projection{
 
     syn Session Communication.project(String actor){
         if(actor.equals(getMessage().getSender())){
-              return new SessionSend(new Atom(getMessage().getSender()),
+              return new SessionSend(new Atom(getMessage().getRecipient()),
                                     new Atom(getMessage().getLabel()),
                                     getMessage().getTypess(), getNext().project(actor));
         }else if(actor.equals(getMessage().getRecipient())){
