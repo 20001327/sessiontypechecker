@@ -1,0 +1,32 @@
+aspect Merge{
+
+    public static List<SessionReceive> Session.merge(List<SessionReceive> recs){
+        List<SessionReceive> ret = new List();
+        ret.add(recs.getChild(0));
+
+        for(int i = 1; i<recs.getNumChild();i++){
+            boolean add = true;
+
+            for(int j=0; j<ret.getNumChild();j++){
+                add = add && Session.toBeAdded(recs.getChild(i), ret.getChild(j));
+            }
+
+            if(add){
+                ret.add(recs.getChild(i));
+            }
+        }
+
+        return ret;
+    }
+
+    public static boolean Session.toBeAdded(SessionReceive toAdd, SessionReceive present){
+        if(toAdd.getRecipient().equals(present.getRecipient()) &&
+            toAdd.getLabel().equals(present.getLabel()) &&
+            toAdd.getNext().equals(present.getNext())){
+            return false;
+        }
+
+        return true;
+    }
+
+}

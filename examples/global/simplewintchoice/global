@@ -1,0 +1,4 @@
+client->seller:title<String>.
+seller->client:price<Int>.
+(client->seller:ok.End,
+ client->seller:ko.End)
