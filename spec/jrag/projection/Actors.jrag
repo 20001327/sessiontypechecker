@@ -14,21 +14,28 @@ aspect Actors{
         return new ArrayList<>();
     }
 
-    public ArrayList<String> Communication.actors(){
+    public ArrayList<String> CommunicationChoices.actors(){
+        ArrayList<String> actors = new ArrayList();
+        for(Communication c :  getCommunicationss()){
+            for(String actor: c.getMessage().actors()){
+                GProg.addAbsent(actor, actors);
+            }
+        }
+        return actors;
+    }
+
+    public ArrayList<String> CommunicationChoice.actors(){
+        ArrayList<String> actors = new ArrayList();
+        GProg.addAbsent(getSender(), actors);
+        GProg.addAbsent(getRecipient(), actors);
+        return actors;
+    }
+
+    public ArrayList<String> Connecting.actors(){
         ArrayList<String> actors = new ArrayList();
         GProg.addAbsent(getSender(), actors);
         GProg.addAbsent(getRecipient(), actors);
 
-        return actors;
-    }
-
-    public ArrayList<String> CommunicationChoices.actors(){
-        ArrayList<String> actors = new ArrayList();
-        for(CommunicationChoice c :  getCommunicationss()){
-            for(String actor: c.actors()){
-                GProg.addAbsent(actor, actors);
-            }
-        }
         return actors;
     }
 

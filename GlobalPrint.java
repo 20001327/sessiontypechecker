@@ -32,7 +32,12 @@ public class GlobalPrint {
             System.out.println(String.join(",",g.getActors()));
 
             for (String s : g.getActors()){
-                System.out.println(g.project(s)!=null?g.project(s):"null");
+                if(g.project(s)!=null) {
+                    Session session = g.project(s);
+                    printer.reset();
+                    FunctionType type2 = new FunctionType(s,new List<>(),session);
+                    System.out.println(type2.stampa().getString());
+                }
             }
 
 

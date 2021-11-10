@@ -10,12 +10,33 @@ aspect SessionPrettyPrint{
     }
 
     eq GProg.getGlobal().stampante() = this.stampante();
-    eq Communication.getTypes().stampante() = this.stampante();
+    eq CommunicationChoices.getCommunications().stampante() = this.stampante();
+    inh lazy PrettyPrinter Communication.stampante();
+    eq Communication.getMessage().stampante() = this.stampante();
+    inh lazy PrettyPrinter CommunicationChoice.stampante();
     inh lazy PrettyPrinter Global.stampante();
 
     eq CommunicationChoices.addsIndentationLevel()=true;
 
     public void Communication.stampa(){
+        getMessage().stampa();
+        stampante().append(".");
+        getNext().stampa();
+    }
+
+    public void CommunicationChoices.stampa(){
+        if(getNumCommunications()>1)stampante().append("(");
+        for(int i=0;i<getNumCommunications();i++){
+            getCommunications(i).stampa();
+            if(i<getNumCommunications()-1){
+                stampante().append(",");
+            }
+        }
+        if(getNumCommunications()>1)stampante().append(")");
+
+    }
+
+    public void CommunicationChoice.stampa(){
         stampante().append("\n");
         stampante().append(getSender());
         stampante().append("->");
@@ -24,7 +45,7 @@ aspect SessionPrettyPrint{
         if(getNumTypes()>0){
             stampante().append("<");
             for(int i=0;i<getNumTypes();i++){
-                getTypes(i).stampa();
+                Program.printLiteral(stampante(),getTypes(i));
                 if(i<getNumTypes()-1){
                     stampante().append(",");
                 }
@@ -42,7 +63,7 @@ aspect SessionPrettyPrint{
         if(getNumTypes()>0){
             stampante().append("<");
             for(int i=0;i<getNumTypes();i++){
-                getTypes(i).stampa();
+                Program.printLiteral(stampante(),getTypes(i));
                 if(i<getNumTypes()-1){
                     stampante().append(",");
                 }
@@ -51,18 +72,6 @@ aspect SessionPrettyPrint{
         }
     }
 
-    public void CommunicationChoices.stampa(){
-        stampante().append("\n");
-        stampante().append("(");
-        for(int i=0;i<getNumCommunications();i++){
-            getCommunications(i).stampa();
-            if(i<getNumCommunications()-1){
-                stampante().append(",");
-            }
-        }
-        stampante().append(")");
-
-    }
 
     public void StartDelegation.stampa(){
         stampante().append("\n");

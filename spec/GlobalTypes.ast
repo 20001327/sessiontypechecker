@@ -13,8 +13,10 @@ EndGlobal:Terminal;
 
 FunctionGlobal::= Arguments:LiteralType* SessionType:Session;
 
-abstract CommunicationChoice:Global;
-Communication:CommunicationChoice ::= <Sender:String> <Recipient:String> <Label:String> Types:LiteralType*;
-Connecting:CommunicationChoice ::= <Sender:String> <Recipient:String> <Label:String> Types:LiteralType*;
+Communication ::= Message:CommunicationChoice Next:Global;
+
+CommunicationChoice ::= <Sender:String> <Recipient:String> <Label:String> Types:LiteralType*;
+Simply:CommunicationChoice;
+Connecting:CommunicationChoice;
 
 

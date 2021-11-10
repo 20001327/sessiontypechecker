@@ -20,4 +20,12 @@ aspect TypeChecking{
         }
     }
 
+    public static void Program.printLiteral(PrettyPrinter p, LiteralType l){
+         if(l.getClass().equals(StringType.class))
+             p.append("String");
+         else if(l.getClass().equals(IntType.class))
+             p.append("Int");
+         else if(l.getClass().equals(AtomType.class))
+             p.append("Atom");
+    }
 }

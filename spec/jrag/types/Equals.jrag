@@ -71,7 +71,12 @@ aspect Equals{
                for(Expression it : argOth){
                    if(e.getClass().getName().equals(Variable.class.getName())){
                       for (VarDeclaration d : decls) {
-                      if(d.getName().equals(((Variable)e).getIdent())){
+                        if(d.getName().equals(((Variable)e).getIdent())){
+                             // da verificare: qui faccio la verifica che la variabile dichiarata sia
+                             // di tipo Pid e che anche quella con cui comparo abbia il tipo Pid
+                             // ma non verifico il valore:
+                             // questa verifica andrebbe fatto solo nel caso io sia nella start/end_delegation
+                             // in questo caso usando reg e unreg solo nella delegation è corretto
                              if(!found && d.getType().isSameType(new PidType())){
                                found = d.getType().isSameType(it.type());
                              }
@@ -80,7 +85,7 @@ aspect Equals{
                                found = d.getValue().equals(it);
                              }
                            }
-                       }
+                        }
                    }
 
                    if(!found){
@@ -96,7 +101,24 @@ aspect Equals{
         if(this.getClass().getName().equals(o.getClass().getName())){
             Call other = (Call) o;
             boolean temp = getFunctionName().equals(other.getFunctionName());
-            return temp && Program.compareExpressions(getArgumentss(),other.getArgumentss(), getDeclarations());
+               boolean foundAll = true;
+               for(Expression e : getArgumentss()){
+                   boolean found = false;
+                   for(Expression it : other.getArgumentss()){
+                       if(e.getClass().getName().equals(Variable.class.getName())){
+                          for (VarDeclaration d : getDeclarations()) {
+                            if(d.getName().equals(((Variable)e).getIdent())){
+                                   found = found || d.getValue().equals(it);
+                               }
+                            }
+                       }
+                       if(!found){
+                           found = e.equals(it);
+                       }
+                   }
+                   foundAll = foundAll && found;
+               }
+            return temp && foundAll;
         }
         return false;
     }
@@ -145,7 +167,5 @@ aspect Equals{
     public boolean Boolean.equals(Object other){
         return this.getBooleanValue() == ((Boolean)other).getBooleanValue();
     }
-
-
 
 }

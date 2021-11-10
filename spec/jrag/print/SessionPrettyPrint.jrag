@@ -38,7 +38,7 @@ aspect SessionPrettyPrint{
         if(getNumType()>0){
             stampante().append("<");
             for (int i=0; i<getNumType(); i++) {
-                getType(i).stampa();
+                Program.printLiteral(stampante(),getType(i));
                 if(i<getNumType()-1){
                     stampante().append(",");
                 }
@@ -56,7 +56,7 @@ aspect SessionPrettyPrint{
         if(getNumType()>0){
         stampante().append("<");
             for (int i=0; i<getNumType(); i++) {
-                getType(i).stampa();
+                Program.printLiteral(stampante(),getType(i));
                 if(i<getNumType()-1){
                     stampante().append(",");
                 }
@@ -125,15 +125,6 @@ aspect SessionPrettyPrint{
        stampante().append("End");
     }
 
-    public void AtomType.stampa(){
-        stampante().append("Atom");
-    }
-    public void IntType.stampa(){
-        stampante().append("Int");
-    }
-    public void StringType.stampa(){
-        stampante().append("String");
-    }
     public void Atom.stampa() {
         stampante().append(getIdent());
     }
