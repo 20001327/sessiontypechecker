@@ -338,8 +338,8 @@ List literal_type_list =
 Global global =
     LQUAD communication_list.clist RQUAD
     {: return new CommunicationChoices(clist); :}
-|   communication_list.clist
-    {: return new CommunicationChoices(clist); :}
+|   communication
+    {: return new CommunicationChoices(new List().add(communication)); :}
 |   IDENTIFIER.delegating OPENANGULAR OPENANGULAR IDENTIFIER.delegate DOT global.next
     {: return new StartDelegation(delegating, delegate, next); :}
 |   IDENTIFIER.delegating CLOSEANGULAR CLOSEANGULAR IDENTIFIER.delegate DOT global.next
