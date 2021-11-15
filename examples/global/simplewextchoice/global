@@ -1,3 +1,0 @@
-client->seller:title<String>.
-(seller->client:not_found.End,
- seller->client:price<Int>.End)
