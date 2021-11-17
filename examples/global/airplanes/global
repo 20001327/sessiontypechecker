@@ -1,0 +1,4 @@
+(S->R:data.
+    (R->S:yes.S->A:double.A->S:dTkt.S->R:done.End,
+     R->S:no.S->A:single.A->S:sTkt.End),
+ S->A:double.A->S:dTkt.S->R:done.End)

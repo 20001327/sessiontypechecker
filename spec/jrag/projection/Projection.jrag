@@ -18,7 +18,11 @@ aspect Projection{
             List<SessionReceive> receives = new List();
             for(Communication c : getCommunicationss()){
                 Session projected = c.project(actor);
-                if(projected.isSubtypeOf(new SessionReceive())){
+                if(projected.isSubtypeOf(new ExternalChoice())){
+                    for(SessionReceive rcv: ((ExternalChoice)projected).getReceivess()){
+                        receives.add(rcv);
+                    }
+                }if(projected.isSubtypeOf(new SessionReceive())){
                     receives.add((SessionReceive)projected);
                 }else if(projected.isSubtypeOf(new SessionSend())){
                     sends.add((SessionSend) projected);
