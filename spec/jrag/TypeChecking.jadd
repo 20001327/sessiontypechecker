@@ -20,6 +20,26 @@ aspect TypeChecking{
         }
     }
 
+    public void Program.checkType(String actor, FunctionType type1){
+        for (Module module: getModuless()){
+            if(actor.equals(module.getPartecipant())){
+                System.out.println("_______________________" + module.getPartecipant() + "________________________");
+                for (Function function : module.getFunctionss()){
+                    if(function.getFunctionName().equals("init")){
+                        printer().reset();
+                        type1.stampa();
+                        System.out.println("tipo atteso: " + printer().getString());
+                        Session t = function.getBody().type();
+                        FunctionType type2 = new FunctionType(function.getFunctionName(),
+                                                    function.getType().getArgumentss(),t);
+                        System.out.println("tipo calcolato: " + type2.stampa().getString());
+                        System.out.println("Risultato Compare: " + type1.compareWith(type2));
+                    }
+                }
+            }
+        }
+    }
+
     public static void Program.printLiteral(PrettyPrinter p, LiteralType l){
          if(l.getClass().equals(StringType.class))
              p.append("String");
