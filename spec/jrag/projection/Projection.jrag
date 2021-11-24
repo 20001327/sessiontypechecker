@@ -33,7 +33,12 @@ aspect Projection{
             if(receives.getNumChild()>0){
                 List<SessionReceive> lis = Session.merge(receives);
                 if(lis.getNumChild()==1) return lis.getChild(0);
-                else return new ExternalChoice(lis);
+                else{
+                    ExternalChoice ext = new ExternalChoice(lis);
+                    if(ext.isWellFormed()){
+                        return ext;
+                    }
+                }
             }
         }
 

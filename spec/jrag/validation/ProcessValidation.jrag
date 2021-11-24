@@ -1,0 +1,7 @@
+aspect ProcessValidation{
+
+    syn boolean ExternalChoice.isWellFormed(){
+        return true;
+    }
+
+}

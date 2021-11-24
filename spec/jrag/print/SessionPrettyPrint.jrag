@@ -129,4 +129,8 @@ aspect SessionPrettyPrint{
         stampante().append(getIdent());
     }
 
+    public void AtomType.stampa() {
+        stampante().append("End");
+    }
+
 }
