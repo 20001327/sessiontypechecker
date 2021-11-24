@@ -1,0 +1,52 @@
+aspect ProjectDelegating{
+
+    syn lazy Session Global.projectDelegating(String p, String q){
+        return null;
+    }
+
+
+    syn Session CommunicationChoices.projectDelegating(String p, String q){
+
+        if(getNumCommunications()==1){
+            return getCommunications(0).projectDelegating(p, q);
+        }else{
+            Session s = null;
+            for(Communication c : getCommunicationss()){
+                if(s == null || s == c.projectDelegating(p,q)){
+                    s = c.projectDelegating(p,q);
+                }else{
+                    return null;
+                }
+            }
+        }
+
+        return null;
+
+    }
+
+    syn Session Communication.projectDelegating(String p, String q){
+        if(!q.equals(getMessage().getRecipient()) && !q.equals(getMessage().getSender())){
+            return getNext().projectDelegating(p,q);
+        }
+
+        return null;
+
+    }
+
+    syn Session Terminal.projectDelegating(String p, String q){
+        return new End();
+    }
+
+    syn Session StartDelegation.projectDelegating(String p, String q){
+        return null;
+    }
+
+    syn Session EndDelegation.projectDelegating(String p, String q){
+        return new RequestBackwardDelegation(new Atom(q),getNext().project(p));
+    }
+
+
+
+
+
+}

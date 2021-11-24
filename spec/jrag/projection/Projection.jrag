@@ -15,15 +15,12 @@ aspect Projection{
             return getCommunications(0).project(actor);
         }else{
             List<SessionSend> sends = new List();
-            List<SessionReceive> receives = new List();
+            List<Session> receives = new List();
             for(Communication c : getCommunicationss()){
                 Session projected = c.project(actor);
-                if(projected.isSubtypeOf(new ExternalChoice())){
-                    for(SessionReceive rcv: ((ExternalChoice)projected).getReceivess()){
-                        receives.add(rcv);
-                    }
-                }if(projected.isSubtypeOf(new SessionReceive())){
-                    receives.add((SessionReceive)projected);
+                if(projected.isSubtypeOf(new ExternalChoice())
+                    || projected.isSubtypeOf(new SessionReceive())){
+                    receives.add(projected);
                 }else if(projected.isSubtypeOf(new SessionSend())){
                     sends.add((SessionSend) projected);
                 }
@@ -34,7 +31,9 @@ aspect Projection{
             }
 
             if(receives.getNumChild()>0){
-                return new ExternalChoice(Session.merge(receives));
+                List<SessionReceive> lis = Session.merge(receives);
+                if(lis.getNumChild()==1) return lis.getChild(0);
+                else return new ExternalChoice(lis);
             }
         }
 
@@ -61,6 +60,21 @@ aspect Projection{
         return new End();
     }
 
+    syn Session StartDelegation.project(String actor){
+        if(getDelegating().equals(actor)){
+            return new RequestForwardDelegation(new Atom(getDelegate()), getNext().projectDelegating(getDelegating(),getDelegate()));
+        }else if(getDelegate().equals(actor)){
+            return new AcceptForwardDelegation(new Atom(getDelegating()), getNext().projectDelegate(actor, getDelegating()));
+        }
 
+        return getNext().project(actor);
+    }
+
+    syn Session EndDelegation.project(String actor) {
+        if(!getDelegate().equals(actor) && !getDelegating().equals(actor))
+            return getNext().project(actor);
+
+        return null;
+    }
 
 }

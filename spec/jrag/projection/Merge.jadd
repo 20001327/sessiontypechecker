@@ -1,7 +1,17 @@
 aspect Merge{
 
-    public static List<SessionReceive> Session.merge(List<SessionReceive> recs){
+    public static List<SessionReceive> Session.merge(List<Session> sessions){
         List<SessionReceive> ret = new List();
+        List<SessionReceive> recs = new List();
+
+        for(int i = 0; i<sessions.getNumChild();i++){
+            if(sessions.getChild(i).isSubtypeOf(new ExternalChoice())){
+                ExternalChoice ext = (ExternalChoice)sessions.getChild(i);
+                ext.getReceivess().forEach(r->recs.add(r));
+            }else{
+                recs.add((SessionReceive)sessions.getChild(i));
+            }
+        }
 
         for(int i = 0; i<recs.getNumChild();i++){
             boolean add = true;

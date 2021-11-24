@@ -341,9 +341,9 @@ Global global =
 |   communication
     {: return new CommunicationChoices(new List().add(communication)); :}
 |   IDENTIFIER.delegating OPENANGULAR OPENANGULAR IDENTIFIER.delegate DOT global.next
-    {: return new StartDelegation(delegating, delegate, next); :}
+    {: return new StartDelegation(delegate, delegating, next); :}
 |   IDENTIFIER.delegating CLOSEANGULAR CLOSEANGULAR IDENTIFIER.delegate DOT global.next
-    {: return new EndDelegation(delegating, delegate, next); :}
+    {: return new EndDelegation(delegate, delegating, next); :}
 |   terminal
 ;
 

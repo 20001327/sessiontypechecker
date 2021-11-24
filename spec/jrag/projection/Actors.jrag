@@ -19,6 +19,10 @@ aspect Actors{
         for(Communication c :  getCommunicationss()){
             for(String actor: c.getMessage().actors()){
                 GProg.addAbsent(actor, actors);
+
+                for(String act: c.getNext().actors()){
+                    GProg.addAbsent(act, actors);
+                }
             }
         }
         return actors;
