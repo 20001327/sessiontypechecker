@@ -57,7 +57,7 @@
 
         <javac srcdir="." destdir="build" debug="true"
                classpath=".:tools/beaver-rt.jar:tools/beaver-ant.jar" includeantruntime="true" />
-        <jar destfile="./jar/threeBuyer.jar" basedir="./build">
+        <jar destfile="./jar/type-checker.jar" basedir="./build">
             <manifest>
                 <attribute name="Main-Class" value="upo.GlobalTypeChecker"/>
             </manifest>
