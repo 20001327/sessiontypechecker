@@ -64,7 +64,7 @@ public class GlobalTypeChecker {
             Process process = Runtime.getRuntime().exec("erl -noshell " +
                     "-eval \"make:all().\" " +
                     "-eval 'init:stop().'", null, file);
-            process.waitFor(5, TimeUnit.SECONDS);
+            process.waitFor(3, TimeUnit.SECONDS);
             process.destroy();
 
             if(g!=null) {
@@ -73,7 +73,7 @@ public class GlobalTypeChecker {
                     Process p = Runtime.getRuntime().exec("erl -noshell " +
                             "-eval \"forms:read_to_binary(" + s + ",'ast/" + s + ".ast').\" " +
                             "-eval 'init:stop().'", null, file);
-                    p.waitFor(3, TimeUnit.SECONDS);
+                    p.waitFor(1, TimeUnit.SECONDS);
                     p.destroy();
                 }
             }else{

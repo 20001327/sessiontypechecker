@@ -14,6 +14,19 @@ aspect SessionComparison{
         return name && arguments && sessions;
     }
 
+    public List<SessionSend> SessionSend.getNextSendList(){
+        return getNextSendList(new List());
+    }
+
+    public List<SessionSend> SessionSend.getNextSendList(List<SessionSend> list){
+        list.add(this);
+        if(getNext().isSubtypeOf(new SessionSend())){
+            return ((SessionSend)getNext()).getNextSendList(list);
+        }else{
+            return list;
+        }
+    }
+
     public static boolean Program.checkListsByClassName(List<? extends ASTNode> l1, List<? extends ASTNode> l2){
          Map<String, Integer> freq1 = new HashMap<>();
          l1.forEach(it -> freq1.merge(it.getClass().getName(), 1, (a, b) -> a + b));
@@ -22,13 +35,53 @@ aspect SessionComparison{
          return freq1.equals(freq2);
     }
 
-    public boolean SessionSend.equals(Object other){
+    public static boolean Program.checkSendLists(List<SessionSend> l1, List<SessionSend> l2){
+         Map<SessionSend, Integer> freq1 = Program.buildSendMap(l1);
+         Map<SessionSend, Integer> freq2 = Program.buildSendMap(l2);
+         return freq1.equals(freq2);
+    }
 
+    private static Map<SessionSend, Integer> Program.buildSendMap(List<SessionSend> l1) {
+        Map<SessionSend, Integer> freq1 = new HashMap<>();
+        for (SessionSend s:l1){
+            boolean found = false;
+            for (Map.Entry<SessionSend,Integer> m: freq1.entrySet()){
+                if (m.getKey().equalsNoNext(s)){
+                    m.setValue(m.getValue()+1);
+                    found = true;
+                }
+            }
+            if (!found){
+                freq1.put(new SessionSend(s.getSender(),s.getLabel(),s.getTypeList(),null),1);
+            }
+        }
+        return freq1;
+    }
+
+    public boolean SessionSend.equals(Object other){
         if(Program.sameClass(this, other)){
             SessionSend send = (SessionSend) other;
             if(getSender().equals(send.getSender()) && getLabel().equals(send.getLabel())){
                 boolean list = Program.checkListsByClassName(getTypes(), send.getTypes());
-                return list && getNext().equals(send.getNext());
+                if(list && getNext().equals(send.getNext())){
+                    return true;
+                }
+            }
+
+             List<SessionSend> list1 = getNextSendList();
+             List<SessionSend> list2 = send.getNextSendList();
+             Session s1 = list1.getChild(list1.getNumChild()-1).getNext();
+             Session s2 = list2.getChild(list2.getNumChild()-1).getNext();
+             return Program.checkSendLists(list1, list2) && ((s1==null && s2==null) || s1.equals(s2));
+        }
+        return false;
+    }
+
+    public boolean SessionSend.equalsNoNext(Object other){
+        if(Program.sameClass(this, other)){
+            SessionSend send = (SessionSend) other;
+            if(getSender().equals(send.getSender()) && getLabel().equals(send.getLabel())){
+                return Program.checkListsByClassName(getTypes(), send.getTypes());
             }
         }
         return false;
