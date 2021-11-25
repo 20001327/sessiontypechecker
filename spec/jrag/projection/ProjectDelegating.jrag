@@ -12,16 +12,15 @@ aspect ProjectDelegating{
         }else{
             Session s = null;
             for(Communication c : getCommunicationss()){
-                if(s == null || s == c.projectDelegating(p,q)){
-                    s = c.projectDelegating(p,q);
-                }else{
-                    return null;
-                }
+               Session s1 = c.projectDelegating(p,q);
+               if(s == null || s1.isSameType(s)){
+                   s = c.projectDelegating(p,q);
+               }else{
+                   return null;
+               }
             }
+            return s;
         }
-
-        return null;
-
     }
 
     syn Session Communication.projectDelegating(String p, String q){
