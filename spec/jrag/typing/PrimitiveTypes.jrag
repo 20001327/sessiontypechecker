@@ -15,7 +15,6 @@ aspect PrimitiveTypes {
     eq Number.type() = new IntType();
     eq Boolean.type() = new BoolType();
 
-
     eq Atom.type(){
         if(getParent().getClass().getName().equals(Send.class.getName())){
             Send s = (Send) getParent();

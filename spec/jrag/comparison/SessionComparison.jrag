@@ -36,26 +36,19 @@ aspect SessionComparison{
     }
 
     public static boolean Program.checkSendLists(List<SessionSend> l1, List<SessionSend> l2){
-         Map<SessionSend, Integer> freq1 = Program.buildSendMap(l1);
-         Map<SessionSend, Integer> freq2 = Program.buildSendMap(l2);
+         Map<String, Integer> freq1 = new HashMap();
+         l1.forEach(it -> freq1.merge(it.getKey(), 1, (a, b) -> a + b));
+         Map<String, Integer> freq2 = new HashMap();
+         l2.forEach(it -> freq2.merge(it.getKey(), 1, (a, b) -> a + b));
          return freq1.equals(freq2);
     }
 
-    private static Map<SessionSend, Integer> Program.buildSendMap(List<SessionSend> l1) {
-        Map<SessionSend, Integer> freq1 = new HashMap<>();
-        for (SessionSend s:l1){
-            boolean found = false;
-            for (Map.Entry<SessionSend,Integer> m: freq1.entrySet()){
-                if (m.getKey().equalsNoNext(s)){
-                    m.setValue(m.getValue()+1);
-                    found = true;
-                }
-            }
-            if (!found){
-                freq1.put(new SessionSend(s.getSender(),s.getLabel(),s.getTypeList(),null),1);
-            }
+    public String SessionSend.getKey(){
+        String s = getSender().getIdent()+getLabel().getIdent();
+        for(LiteralType ss : getTypes()){
+            s += ss.toString();
         }
-        return freq1;
+        return s;
     }
 
     public boolean SessionSend.equals(Object other){
@@ -68,21 +61,11 @@ aspect SessionComparison{
                 }
             }
 
-             List<SessionSend> list1 = getNextSendList();
-             List<SessionSend> list2 = send.getNextSendList();
-             Session s1 = list1.getChild(list1.getNumChild()-1).getNext();
-             Session s2 = list2.getChild(list2.getNumChild()-1).getNext();
-             return Program.checkSendLists(list1, list2) && ((s1==null && s2==null) || s1.equals(s2));
-        }
-        return false;
-    }
-
-    public boolean SessionSend.equalsNoNext(Object other){
-        if(Program.sameClass(this, other)){
-            SessionSend send = (SessionSend) other;
-            if(getSender().equals(send.getSender()) && getLabel().equals(send.getLabel())){
-                return Program.checkListsByClassName(getTypes(), send.getTypes());
-            }
+            List<SessionSend> list1 = getNextSendList();
+            List<SessionSend> list2 = send.getNextSendList();
+            Session s1 = list1.getChild(list1.getNumChild()-1).getNext();
+            Session s2 = list2.getChild(list2.getNumChild()-1).getNext();
+            return Program.checkSendLists(list1, list2) && ((s1==null && s2==null) || s1.equals(s2));
         }
         return false;
     }
@@ -179,6 +162,18 @@ aspect SessionComparison{
 
      public boolean LiteralType.equals(Object other){
         return Program.sameClass(this,other);
+    }
+
+    public String IntType.toString(){
+        return "Int";
+    }
+
+    public String StringType.toString(){
+        return "String";
+    }
+
+    public String LiteralType.toString(){
+        return "Literal";
     }
 
      public boolean End.equals(Object other){
