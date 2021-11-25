@@ -9,3 +9,4 @@ jar/
 /erl_crash.dump
 /TwoBuyerProtocol.iml
 **/*.class
+/src/miniErlang/*.java
