@@ -43,8 +43,8 @@ public class GlobalTypeChecker {
 
         System.out.println("copy lib file");
         InputStream filetemp = this.getClass().getClassLoader().getResourceAsStream("forms.beam");
+        assert filetemp != null;
         copyInputStreamToFile(filetemp, new File(args[0] + "forms.erl"));
-
 
         try {
 
