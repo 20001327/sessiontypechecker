@@ -16,3 +16,5 @@ jar/
 /examples/seller-bank-no-global/ast/*
 /examples/seller-bank-no-global/*.beam
 **/*.dump
+/examples/three-buyer/ast/*
+/examples/three-buyer/*.beam
