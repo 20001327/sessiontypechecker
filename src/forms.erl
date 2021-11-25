@@ -539,10 +539,3 @@ read_to_binary(Module,Filename) ->
   io:format(S, "~p~n", [NewTree]),
   file:close(S).
 
-get_ast()->
-  read_to_binary(seller,"ast/seller.ast"),
-  read_to_binary(carol,"ast/carol.ast"),
-  read_to_binary(bob,"ast/bob.ast"),
-  read_to_binary(alice,"ast/alice.ast").
-
-

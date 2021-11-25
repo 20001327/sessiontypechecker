@@ -5,7 +5,7 @@
 
 start() ->
   register(bank, spawn(bank, init, [])).
-                'seller?price<Int>.seller<<.client!pay<Int>.client?card<String>.>>seller.@(seller!ok.End,seller!ko.End)'
+
 -type init() :: 'seller?price<Int>.seller<<.client!pay<Int>.client?card<String>.>>seller.@(seller!ok.End,seller!ko.End)'.
 init() ->
   receive
