@@ -10,3 +10,5 @@ jar/
 /TwoBuyerProtocol.iml
 **/*.class
 /src/miniErlang/*.java
+/examples/seller-bank/*.beam
+/out/**
