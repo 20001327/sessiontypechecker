@@ -8,3 +8,4 @@ jar/
 /buildold.xml
 /erl_crash.dump
 /TwoBuyerProtocol.iml
+**/*.class
