@@ -52,6 +52,8 @@
             <fileset dir="./tools/beaver">
             </fileset>
         </copy>
+        <copy todir="./build" file="resources/forms.beam">
+        </copy>
 
         <javac srcdir="." destdir="build" debug="true"
                classpath=".:tools/beaver-rt.jar:tools/beaver-ant.jar" includeantruntime="true" />

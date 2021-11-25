@@ -5,14 +5,14 @@ import miniErlang.*;
 
 import java.io.*;
 import java.lang.Process;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.net.URL;
+import java.nio.file.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 public class GlobalTypeChecker {
+
+    private static final int DEFAULT_BUFFER_SIZE = 1024;
 
     public static void main(String[] args) throws IOException {
         new GlobalTypeChecker().run(args[0]);
@@ -42,9 +42,9 @@ public class GlobalTypeChecker {
         }
 
         System.out.println("copy lib file");
-        Path fileLib = Paths.get("forms.beam");
-        Path fileLibNew = Paths.get(args[0] + "forms.beam");
-        Files.copy(fileLib, fileLibNew, StandardCopyOption.REPLACE_EXISTING);
+        InputStream filetemp = this.getClass().getClassLoader().getResourceAsStream("forms.beam");
+        copyInputStreamToFile(filetemp, new File(args[0] + "forms.erl"));
+
 
         try {
 
@@ -105,6 +105,20 @@ public class GlobalTypeChecker {
         } catch (Exception e) {
             System.err.println("error (PrettyPrint) : " + e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+
+    private static void copyInputStreamToFile(InputStream inputStream, File file)
+            throws IOException {
+
+        // append = false
+        try (FileOutputStream outputStream = new FileOutputStream(file, false)) {
+            int read;
+            byte[] bytes = new byte[DEFAULT_BUFFER_SIZE];
+            while ((read = inputStream.read(bytes)) != -1) {
+                outputStream.write(bytes, 0, read);
+            }
         }
 
     }
