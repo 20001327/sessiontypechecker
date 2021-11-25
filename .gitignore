@@ -11,4 +11,5 @@ jar/
 **/*.class
 /src/miniErlang/*.java
 /examples/seller-bank/*.beam
-/out/**
+/out/*
+/examples/seller-bank/ast/*
