@@ -54,9 +54,7 @@
     %% Debug functions
     eval/1,
     from_abstract/1,
-    to_abstract/1,
-     get_ast/0
-   ]).
+    to_abstract/1   ]).
 
 %% ========================================================================
 %%  Type definitions

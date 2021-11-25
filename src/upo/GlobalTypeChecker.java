@@ -8,6 +8,7 @@ import java.lang.Process;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -24,7 +25,7 @@ public class GlobalTypeChecker {
             System.exit(1);
         }
         // check that the file exists and is a directory
-        File fileGlobal = new File(args[0]+"/global");
+        File fileGlobal = new File(args[0] + "/global");
         File file = new File(args[0]);
         if (!file.isDirectory()) {
             Path path = Paths.get(args[0]);
@@ -36,9 +37,14 @@ public class GlobalTypeChecker {
         Path pathast = Paths.get(args[0] + "ast/");
         File astDir = new File(args[0] + "ast");
 
-        if (!astDir.exists()){
+        if (!astDir.exists()) {
             Files.createDirectories(pathast);
         }
+
+        System.out.println("copy lib file");
+        Path fileLib = Paths.get("forms.beam");
+        Path fileLibNew = Paths.get(args[0] + "forms.beam");
+        Files.copy(fileLib, fileLibNew, StandardCopyOption.REPLACE_EXISTING);
 
         try {
 
@@ -57,6 +63,7 @@ public class GlobalTypeChecker {
                     "-eval \"make:all().\" " +
                     "-eval 'init:stop().'", null, file);
             process.waitFor(5, TimeUnit.SECONDS);
+            process.destroy();
 
             for (String s : g.getActors()) {
                 System.out.println("getting " + s + " ast file");
@@ -92,11 +99,9 @@ public class GlobalTypeChecker {
                     printer.reset();
                     FunctionType type = new FunctionType("init", new List<>(), session);
                     System.out.println(type.stampa().getString());
-                    p.checkType(s,type);
+                    p.checkType(s, type);
                 }
             }
-
-
         } catch (Exception e) {
             System.err.println("error (PrettyPrint) : " + e.getMessage());
             e.printStackTrace();
