@@ -44,19 +44,21 @@ public class GlobalTypeChecker {
         System.out.println("copy lib file");
         InputStream filetemp = this.getClass().getClassLoader().getResourceAsStream("forms.beam");
         assert filetemp != null;
-        copyInputStreamToFile(filetemp, new File(args[0] + "forms.erl"));
+        copyInputStreamToFile(filetemp, new File(args[0] + "forms.beam"));
 
         try {
 
             ErlangParser parser = new ErlangParser();
-            Reader reader = new FileReader(fileGlobal);
-            ErlangScanner scanner = new ErlangScanner(new BufferedReader(reader));
-            GProg g = (GProg) parser.parse(scanner);
-            reader.close();
-
-            PrettyPrinter printer = g.getGlobal().stampante();
-            g.getGlobal().stampa();
-            System.out.println(printer.getString());
+            GProg g = null;
+            if (fileGlobal.exists()) {
+                Reader reader = new FileReader(fileGlobal);
+                ErlangScanner scanner = new ErlangScanner(new BufferedReader(reader));
+                g = (GProg) parser.parse(scanner);
+                reader.close();
+                PrettyPrinter printer = g.getGlobal().stampante();
+                g.getGlobal().stampa();
+                System.out.println(printer.getString());
+            }
 
             System.out.println("compiling erlang files ");
             Process process = Runtime.getRuntime().exec("erl -noshell " +
@@ -65,13 +67,15 @@ public class GlobalTypeChecker {
             process.waitFor(5, TimeUnit.SECONDS);
             process.destroy();
 
-            for (String s : g.getActors()) {
-                System.out.println("getting " + s + " ast file");
-                Process p = Runtime.getRuntime().exec("erl -noshell " +
-                        "-eval \"forms:read_to_binary(" + s + ",'ast/" + s + ".ast').\" " +
-                        "-eval 'init:stop().'", null, file);
-                p.waitFor(3, TimeUnit.SECONDS);
-                p.destroy();
+            if(g!=null) {
+                for (String s : g.getActors()) {
+                    System.out.println("getting " + s + " ast file");
+                    Process p = Runtime.getRuntime().exec("erl -noshell " +
+                            "-eval \"forms:read_to_binary(" + s + ",'ast/" + s + ".ast').\" " +
+                            "-eval 'init:stop().'", null, file);
+                    p.waitFor(3, TimeUnit.SECONDS);
+                    p.destroy();
+                }
             }
 
             Program p = new Program();
@@ -93,14 +97,17 @@ public class GlobalTypeChecker {
                         });
             }
 
-            for (String s : g.getActors()) {
-                if (g.project(s) != null) {
-                    Session session = g.project(s);
-                    printer.reset();
-                    FunctionType type = new FunctionType("init", new List<>(), session);
-                    System.out.println(type.stampa().getString());
-                    p.checkType(s, type);
+            if(g!=null) {
+                for (String s : g.getActors()) {
+                    if (g.project(s) != null) {
+                        Session session = g.project(s);
+                        FunctionType type = new FunctionType("init", new List<>(), session);
+                        System.out.println(type.stampa().getString());
+                        p.checkType(s, type);
+                    }
                 }
+            }else{
+                p.checkType();
             }
         } catch (Exception e) {
             System.err.println("error (PrettyPrint) : " + e.getMessage());

@@ -23,20 +23,6 @@ packages we use; for example it demonstrates how to use JastAddParser
 (Beaver preprocessor) and JastAdd (which have currently no built-in Ant
 support).
 
-## Before running
-
-Before running we have to generate the ast from erland. to do this open terminal in src folder
-and then open erl with
-    
-    $ erl
-
-then compile all with
-
-    $ make:all().
-
-and extract ast with
-
-    $ forms:get_ast().
 
 ## Building
 
@@ -46,9 +32,11 @@ Just run
 
 to build a working jar file in the `jar` directory. then execute by simple java command
 
-    $ java -jar threeBuyer.jar <AST-DIR>
+    $ java -jar threeBuyer.jar <source-directory>
 
-where <AST-DIR> have to be replaced with the directory cointaing erlang extracted ast
+where <source-directory> have to be replaced with the directory cointaing erlang code. If the directory contains a global file 
+annoted session types will be ignored and type checking is done using projected session types.
+
 ## Cleaning
 
 Run
@@ -57,14 +45,3 @@ Run
 
 to clean up the project tree.
 If you encounter some problems on Cygwin environment, try to add the `-v` flag.
-
-## using forms for generate ast files
-
-In the previous example we use make:all() and form:get_ast() to get the ast. If you want to test 
-the typechecker with other protocol, you have to compile your actors source file with debug option, 
-for example typing in cmd:
-    
-    $ erlc +debug_info file.erl
-and then with forms module extract the ast. in erlang terminal:
-
-    $ read_to_binary(file,"ast/file.ast"),
