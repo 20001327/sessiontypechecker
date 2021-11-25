@@ -76,6 +76,26 @@ public class GlobalTypeChecker {
                     p.waitFor(3, TimeUnit.SECONDS);
                     p.destroy();
                 }
+            }else{
+                try (Stream<Path> paths = Files.walk(Paths.get(args[0]))) {
+                    paths.filter(Files::isRegularFile)
+                            .forEach(f -> {
+                                try {
+                                    String[] fname = f.getFileName().toString().split("\\.");
+                                    if (fname.length==2 && !fname[0].startsWith("main") && fname[1].equals("erl")) {
+                                        String s = fname[0];
+                                        System.out.println("getting " + s + " ast file");
+                                        Process p = Runtime.getRuntime().exec("erl -noshell " +
+                                                "-eval \"forms:read_to_binary(" + s + ",'ast/" + s + ".ast').\" " +
+                                                "-eval 'init:stop().'", null, file);
+                                        p.waitFor(3, TimeUnit.SECONDS);
+                                        p.destroy();
+                                    }
+                                }catch (Exception e){
+                                    e.printStackTrace();
+                                }
+                            });
+                }
             }
 
             Program p = new Program();
