@@ -1,14 +1,20 @@
 aspect Merge{
 
-    public static List<SessionReceive> Session.merge(List<Session> sessions){
-        List<SessionReceive> ret = new List();
-        List<SessionReceive> recs = new List();
+    public static List<Session> Session.merge(List<Session> sessions){
+        List<Session> ret = new List();
+        List<Session> recs = new List();
+
+        for(int i = 0; i<sessions.getNumChild();i++){
+            // TODO: devono essere tutte scelte esterne oppure End
+            // TODO: se è presente un non connecting allora sono tutti ne connecting ne End
+            // TODO: se è presente un connecting sono tutti o connecting oppure end
+        }
 
         for(int i = 0; i<sessions.getNumChild();i++){
             if(sessions.getChild(i).isSubtypeOf(new ExternalChoice())){
                 ExternalChoice ext = (ExternalChoice)sessions.getChild(i);
                 ext.getReceivess().forEach(r->recs.add(r));
-            }else{
+            }else if(sessions.getChild(i).isSubtypeOf(new SessionReceive())){
                 recs.add((SessionReceive)sessions.getChild(i));
             }
         }

@@ -86,7 +86,10 @@
             if(types.getNumChild()==1) {
                 return types.getChild(0);
             }
-            return new ExternalChoice(types);
+            ExternalChoice ext = new ExternalChoice(types);
+            if(ext.isWellFormed()){
+                return ext;
+            }
         }
         return null;
     }
@@ -193,7 +196,8 @@
             return found;
         }
 
-        return new InternalChoice(types);
+        InternalChoice ic = new InternalChoice(types);
+        return ic.isWellFormed() ? ic : null;
     }
 
     eq CaseClause.type(){

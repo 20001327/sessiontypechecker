@@ -18,19 +18,20 @@ aspect Projection{
             List<Session> receives = new List();
             for(Communication c : getCommunicationss()){
                 Session projected = c.project(actor);
-                if(projected.isSubtypeOf(new ExternalChoice())
-                    || projected.isSubtypeOf(new SessionReceive())){
+                if(projected.isSubtypeOf(new ExternalChoice()) || projected.isSubtypeOf(new SessionReceive())){
                     receives.add(projected);
                 }else if(projected.isSubtypeOf(new SessionSend())){
                     sends.add((SessionSend) projected);
+                }else{
+                    return null;
                 }
             }
 
-            if(sends.getNumChild()>0){
+            if(sends.getNumChild()>0 && ){
                 return new InternalChoice(sends);
             }
 
-            if(receives.getNumChild()>0){
+          if(receives.getNumChild()>0){
                 List<SessionReceive> lis = Session.merge(receives);
                 if(lis.getNumChild()==1) return lis.getChild(0);
                 else{

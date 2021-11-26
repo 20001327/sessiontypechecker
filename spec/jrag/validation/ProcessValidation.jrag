@@ -1,6 +1,17 @@
 aspect ProcessValidation{
 
     syn boolean ExternalChoice.isWellFormed(){
+        /* TODO: controlli sui rami
+           tutti i rami devono avere lo stesso "tipo"
+           o tutti i rami sono connecting o tutti sono semplici
+        */
+        return true;
+    }
+
+
+    syn boolean InternalChoice.isWellFormed(){
+        /* TODO: controlli sui rami devono essere digiunti
+        */
         return true;
     }
 

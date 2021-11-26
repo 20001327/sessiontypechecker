@@ -19,6 +19,8 @@ aspect ProjectDelegate{
                     receives.add(projected);
                 }else if(projected.isSubtypeOf(new SessionSend())){
                     sends.add((SessionSend) projected);
+                }else{
+                    return null;
                 }
             }
 
@@ -27,7 +29,14 @@ aspect ProjectDelegate{
             }
 
             if(receives.getNumChild()>0){
-                return new ExternalChoice(Session.merge(receives));
+                List<SessionReceive> lis = Session.merge(receives);
+                if(lis.getNumChild()==1) return lis.getChild(0);
+                else{
+                    ExternalChoice ext = new ExternalChoice(lis);
+                    if(ext.isWellFormed()){
+                        return ext;
+                    }
+                }
             }
         }
 
@@ -53,14 +62,17 @@ aspect ProjectDelegate{
     }
 
     syn Session Terminal.projectDelegate(String p, String q){
-        return new End();
+        return null; // devo tornare errore se sono in delegazione
     }
 
     syn Session StartDelegation.projectDelegate(String p, String q){
+        // TODO: delegazione che non coinvolge ne p ne q, getNext().project(p,q);
         return null;
     }
 
     syn Session EndDelegation.projectDelegate(String p, String q){
+        // TODO: delegazione che non coinvolge ne p ne q, getNext().project(p,q); altrimenti controlla
+        // che siano proprio p e q nell'ordine corretto
         return new AcceptBackwardDelegation(new Atom(q),getNext().project(p));
     }
 

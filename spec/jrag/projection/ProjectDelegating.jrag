@@ -14,6 +14,8 @@ aspect ProjectDelegating{
             for(Communication c : getCommunicationss()){
                Session s1 = c.projectDelegating(p,q);
                if(s == null || s1.isSameType(s)){
+                   // TODO: controllo non solo sul successivo immediato
+                   // ma sull'insieme
                    s = c.projectDelegating(p,q);
                }else{
                    return null;
@@ -33,14 +35,18 @@ aspect ProjectDelegating{
     }
 
     syn Session Terminal.projectDelegating(String p, String q){
-        return new End();
+        return null; // devo tornare errore se sono in delegazione
     }
 
     syn Session StartDelegation.projectDelegating(String p, String q){
+        // TODO: delegazione che non coinvolge ne p ne q, getNext().project(p,q);
         return null;
     }
 
+
     syn Session EndDelegation.projectDelegating(String p, String q){
+        // TODO: delegazione che non coinvolge ne p ne q, getNext().project(p,q); altrimenti controlla
+        // che siano proprio p e q nell'ordine corretto
         return new RequestBackwardDelegation(new Atom(q),getNext().project(p));
     }
 
