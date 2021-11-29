@@ -27,7 +27,7 @@ aspect SessionTypes{
     }
 
     public Session ExternalChoice.getInfo(String label,int index){
-        if(!isWellFormed(this)){
+        if(!this.isWellFormed()){
             return null;
         }
 
@@ -47,7 +47,7 @@ aspect SessionTypes{
     }
 
     public Session InternalChoice.getInfo(String label,int index){
-        if(!isWellFormed(this)){
+        if(!this.isWellFormed()){
             return null;
         }
 

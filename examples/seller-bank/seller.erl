@@ -5,7 +5,7 @@
 start() ->
   register(seller, spawn(seller, init, [])).
 
--type init() :: 'client?title<String>.client!price<Int>.&(client?ok.bank!price<Int>.<<bank.bank>>.&(bank?ok.client!date<String>.End,bank?ko.client!ko.End),client?ko.End)'.
+-type init() :: 'client?title<String>.client!price<Int>.&(client?ok.bank!+price<Int>.<<bank.bank>>.&(bank?ok.client!date<String>.End,bank?ko.client!ko.End),client?ko.End)'.
 init() ->
   Price = 50,
   receive

@@ -27,7 +27,7 @@ aspect Projection{
                 }
             }
 
-            if(sends.getNumChild()>0 && ){
+            if(sends.getNumChild()>0){
                 return new InternalChoice(sends);
             }
 
