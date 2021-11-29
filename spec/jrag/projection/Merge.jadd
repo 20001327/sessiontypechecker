@@ -5,7 +5,6 @@ aspect Merge{
         List<Session> recs = new List();
 
         for(int i = 0; i<sessions.getNumChild();i++){
-            // TODO: devono essere tutte scelte esterne oppure End
             // TODO: se è presente un non connecting allora sono tutti ne connecting ne End
             // TODO: se è presente un connecting sono tutti o connecting oppure end
         }

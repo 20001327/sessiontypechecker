@@ -305,6 +305,10 @@ SessionSend sessionsend =
     {: return new SessionSend(new Atom(sender), new Atom(label), new List(), next); :}
 |   IDENTIFIER.sender SESSIONSEND IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR DOT session.next
     {: return new SessionSend(new Atom(sender), new Atom(label), l, next); :}
+|    IDENTIFIER.sender SESSIONSEND PLUS IDENTIFIER.label DOT session.next
+    {: return new ConnectingSend(new Atom(sender), new Atom(label), new List(), next); :}
+|   IDENTIFIER.sender SESSIONSEND PLUS IDENTIFIER.label OPENANGULAR literal_type_list.l CLOSEANGULAR DOT session.next
+    {: return new ConnectingSend(new Atom(sender), new Atom(label), l, next); :}
 ;
 
 List session_send_list =
