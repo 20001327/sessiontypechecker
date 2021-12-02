@@ -51,8 +51,12 @@ aspect SessionComparison{
         return s;
     }
 
+    public boolean ConnectingSend.equals(Object other){
+        return super.equals(other);
+    }
+
     public boolean SessionSend.equals(Object other){
-        if(Program.sameClass(this, other)){
+        if(((Session)other).isSubtypeOf(new SessionSend())){
             SessionSend send = (SessionSend) other;
             if(getSender().equals(send.getSender()) && getLabel().equals(send.getLabel())){
                 boolean list = Program.checkListsByClassName(getTypes(), send.getTypes());
@@ -71,7 +75,7 @@ aspect SessionComparison{
     }
 
     public boolean SessionReceive.equals(Object other){
-        if(Program.sameClass(this, other)){
+        if(((Session)other).isSubtypeOf(new SessionReceive())){
             SessionReceive obj = (SessionReceive) other;
 
             if(getRecipient().equals(obj.getRecipient()) && getLabel().equals(obj.getLabel())){

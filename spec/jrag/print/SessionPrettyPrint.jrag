@@ -48,6 +48,23 @@ aspect SessionPrettyPrint{
         stampante().append(".");
         if(getNext()!=null)getNext().stampa();
     }
+    public void ConnectingSend.stampa(){
+        getSender().stampa();
+        stampante().append("!+");
+        getLabel().stampa();
+        if(getNumType()>0){
+            stampante().append("<");
+            for (int i=0; i<getNumType(); i++) {
+                Program.printLiteral(stampante(),getType(i));
+                if(i<getNumType()-1){
+                    stampante().append(",");
+                }
+            }
+            stampante().append(">");
+        }
+        stampante().append(".");
+        if(getNext()!=null)getNext().stampa();
+    }
 
     public void SessionReceive.stampa(){
         getRecipient().stampa();

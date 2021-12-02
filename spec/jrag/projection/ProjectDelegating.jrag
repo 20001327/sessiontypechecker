@@ -35,19 +35,28 @@ aspect ProjectDelegating{
     }
 
     syn Session Terminal.projectDelegating(String p, String q){
-        return null; // devo tornare errore se sono in delegazione
+        return null;
     }
 
     syn Session StartDelegation.projectDelegating(String p, String q){
-        // TODO: delegazione che non coinvolge ne p ne q, getNext().project(p,q);
+        if(!p.equals(getDelegate()) && !p.equals(getDelegating()) &&
+                !q.equals(getDelegate()) && !q.equals(getDelegating())){
+            return getNext().projectDelegating(p,q);
+        }
         return null;
     }
 
 
     syn Session EndDelegation.projectDelegating(String p, String q){
-        // TODO: delegazione che non coinvolge ne p ne q, getNext().project(p,q); altrimenti controlla
-        // che siano proprio p e q nell'ordine corretto
-        return new RequestBackwardDelegation(new Atom(q),getNext().project(p));
+        if(!p.equals(getDelegate()) && !p.equals(getDelegating()) &&
+                !q.equals(getDelegate()) && !q.equals(getDelegating())){
+            return getNext().projectDelegating(p,q);
+        }else{
+            if(p.equals(getDelegating()) && q.equals(getDelegate())){
+                return new RequestBackwardDelegation(new Atom(q),getNext().project(p));
+            }
+        }
+        return null;
     }
 
 

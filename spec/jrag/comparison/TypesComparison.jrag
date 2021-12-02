@@ -37,11 +37,15 @@ aspect TypesComparison{
     }
 
     public boolean SessionSend.isSubtypeOf(Session t) {
+           return t instanceof SessionSend || t instanceof ConnectingSend;
+    }
+
+    public boolean ConnectingSend.isSubtypeOf(Session t) {
            return t instanceof SessionSend;
     }
 
     public boolean SessionReceive.isSubtypeOf(Session t) {
-              return t instanceof SessionReceive;
+              return t instanceof SessionReceive || t instanceof ConnectingReceive;
    }
 
     public boolean InternalChoice.isSubtypeOf(Session t) {

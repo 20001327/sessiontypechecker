@@ -55,6 +55,7 @@ AcceptBackwardDelegation:Session ::= Delegate:Atom Next:Session;
 End:Session;
 
 ConnectingSend:SessionSend;
+ConnectingReceive:SessionReceive;
 
 abstract LiteralType:Session;
 AtomType:LiteralType;

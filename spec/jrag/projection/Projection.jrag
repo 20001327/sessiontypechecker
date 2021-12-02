@@ -61,9 +61,15 @@ aspect Projection{
                                     getMessage().getTypess(), getNext().project(actor));
             }
         }else if(actor.equals(getMessage().getRecipient())){
-              return new SessionReceive(new Atom(getMessage().getSender()),
-                                new Atom(getMessage().getLabel()),
-                                getMessage().getTypess(),getNext().project(actor));
+            if(getMessage().getClass().getName().equals(Connecting.class.getName())){
+                return new ConnectingReceive(new Atom(getMessage().getSender()),
+                                          new Atom(getMessage().getLabel()),
+                                          getMessage().getTypess(),getNext().project(actor));
+            } else{
+                return new SessionReceive(new Atom(getMessage().getSender()),
+                                            new Atom(getMessage().getLabel()),
+                                            getMessage().getTypess(),getNext().project(actor));
+            }
         }
 
        return getNext().project(actor);
@@ -78,7 +84,7 @@ aspect Projection{
         if(getDelegating().equals(actor)){
             return new RequestForwardDelegation(new Atom(getDelegate()), getNext().projectDelegating(getDelegating(),getDelegate()));
         }else if(getDelegate().equals(actor)){
-            return new AcceptForwardDelegation(new Atom(getDelegating()), getNext().projectDelegate(actor, getDelegating()));
+            return new AcceptForwardDelegation(new Atom(getDelegating()), getNext().projectDelegate(getDelegating(), getDelegate()));
         }
 
         return getNext().project(actor);

@@ -3,35 +3,42 @@ aspect Merge{
     public static List<SessionReceive> Session.merge(List<Session> sessions){
         List<SessionReceive> ret = new List();
         List<Session> recs = new List();
+        boolean allSimple = true;
+        boolean allConnecting = true;
 
         for(int i = 0; i<sessions.getNumChild();i++){
-            // TODO: se è presente un non connecting allora sono tutti ne connecting ne End
-            // TODO: se è presente un connecting sono tutti o connecting oppure end
+            allSimple = allSimple && Program.sameClass(sessions.getChild(i),SessionReceive.class);
+            allConnecting = allConnecting && (Program.sameClass(sessions.getChild(i),ConnectingReceive.class)
+                                        || sessions.getChild(i).isSubtypeOf(new End()));
         }
 
-        for(int i = 0; i<sessions.getNumChild();i++){
-            if(sessions.getChild(i).isSubtypeOf(new ExternalChoice())){
-                ExternalChoice ext = (ExternalChoice)sessions.getChild(i);
-                ext.getReceivess().forEach(r->recs.add(r));
-            }else if(sessions.getChild(i).isSubtypeOf(new SessionReceive())){
-                recs.add((SessionReceive)sessions.getChild(i));
+        if(allConnecting || allSimple){
+            for(int i = 0; i<sessions.getNumChild();i++){
+                if(sessions.getChild(i).isSubtypeOf(new ExternalChoice())){
+                    ExternalChoice ext = (ExternalChoice)sessions.getChild(i);
+                    ext.getReceivess().forEach(r->recs.add(r));
+                }else if(sessions.getChild(i).isSubtypeOf(new SessionReceive())){
+                    recs.add((SessionReceive)sessions.getChild(i));
+                }
             }
+
+            for(int i = 0; i<recs.getNumChild();i++){
+                boolean add = true;
+                SessionReceive toBeAdded = (SessionReceive)recs.getChild(i);
+                for(int j=0; j<ret.getNumChild();j++){
+                    SessionReceive present = (SessionReceive)ret.getChild(j);
+                    add = add && !present.equals(toBeAdded);
+                }
+
+                if(add){
+                    ret.add(toBeAdded);
+                }
+            }
+
+            return ret;
         }
 
-        for(int i = 0; i<recs.getNumChild();i++){
-            boolean add = true;
-            SessionReceive toBeAdded = (SessionReceive)recs.getChild(i);
-            for(int j=0; j<ret.getNumChild();j++){
-                SessionReceive present = (SessionReceive)ret.getChild(j);
-                add = add && !present.equals(toBeAdded);
-            }
-
-            if(add){
-                ret.add(toBeAdded);
-            }
-        }
-
-        return ret;
+        return null;
     }
 
 }

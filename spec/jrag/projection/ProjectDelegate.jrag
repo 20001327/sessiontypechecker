@@ -45,15 +45,28 @@ aspect ProjectDelegate{
     }
 
     syn Session Communication.projectDelegate(String p, String q){
-        if(q.equals(getMessage().getSender()) && !p.equals(getMessage().getRecipient())){
-              return new SessionSend(new Atom(getMessage().getRecipient()), new Atom(getMessage().getLabel()),
+        if(p.equals(getMessage().getSender()) && !q.equals(getMessage().getRecipient())){
+            if(getMessage().getClass().getName().equals(Connecting.class.getName())){
+              return new ConnectingSend(new Atom(getMessage().getRecipient()),
+                                           new Atom(getMessage().getLabel()),
+                                           getMessage().getTypess(), getNext().projectDelegate(p,q));
+            }else{
+              return new SessionSend(new Atom(getMessage().getRecipient()),
+                                    new Atom(getMessage().getLabel()),
                                     getMessage().getTypess(), getNext().projectDelegate(p, q));
-        }else if(q.equals(getMessage().getRecipient()) && !p.equals(getMessage().getSender())){
-              return new SessionReceive(new Atom(getMessage().getSender()),
+            }
+        }else if(p.equals(getMessage().getRecipient()) && !q.equals(getMessage().getSender())){
+             if(getMessage().getClass().getName().equals(Connecting.class.getName())){
+                return new ConnectingReceive(new Atom(getMessage().getSender()),
+                                  new Atom(getMessage().getLabel()),
+                                  getMessage().getTypess(),getNext().projectDelegate(p,q));
+             } else{
+                return new SessionReceive(new Atom(getMessage().getSender()),
                                 new Atom(getMessage().getLabel()),
                                 getMessage().getTypess(),getNext().projectDelegate(p,q));
-        }else if(!p.equals(getMessage().getSender()) && !p.equals(getMessage().getSender()) &&
-            !q.equals(getMessage().getRecipient()) && !q.equals(getMessage().getSender())){
+            }
+        }else if(!q.equals(getMessage().getSender()) && !q.equals(getMessage().getSender()) &&
+            !p.equals(getMessage().getRecipient()) && !p.equals(getMessage().getSender())){
             return getNext().projectDelegate(p,q);
         }
 
@@ -62,18 +75,27 @@ aspect ProjectDelegate{
     }
 
     syn Session Terminal.projectDelegate(String p, String q){
-        return null; // devo tornare errore se sono in delegazione
+        return null;
     }
 
     syn Session StartDelegation.projectDelegate(String p, String q){
-        // TODO: delegazione che non coinvolge ne p ne q, getNext().project(p,q);
+        if(!p.equals(getDelegate()) && !p.equals(getDelegating()) &&
+                !q.equals(getDelegate()) && !q.equals(getDelegating())){
+            return getNext().projectDelegate(p,q);
+        }
         return null;
     }
 
     syn Session EndDelegation.projectDelegate(String p, String q){
-        // TODO: delegazione che non coinvolge ne p ne q, getNext().project(p,q); altrimenti controlla
-        // che siano proprio p e q nell'ordine corretto
-        return new AcceptBackwardDelegation(new Atom(q),getNext().project(p));
+        if(!p.equals(getDelegate()) && !p.equals(getDelegating()) &&
+                !q.equals(getDelegate()) && !q.equals(getDelegating())){
+            return getNext().projectDelegate(p,q);
+        }else{
+            if(p.equals(getDelegating()) && q.equals(getDelegate())){
+                return new AcceptBackwardDelegation(new Atom(p),getNext().project(q));
+            }
+        }
+        return null;
     }
 
 
