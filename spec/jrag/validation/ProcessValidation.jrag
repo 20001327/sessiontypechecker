@@ -1,18 +1,92 @@
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 aspect ProcessValidation{
 
     syn boolean ExternalChoice.isWellFormed(){
-        /* TODO: controlli sui rami
-           tutti i rami devono avere lo stesso "tipo"
-           o tutti i rami sono connecting o tutti sono semplici
-        */
-        return true;
+        boolean allSimple = true;
+        boolean allConnecting = true;
+
+        for(int i = 0; i<getNumReceives();i++){
+            allSimple = allSimple && Program.sameClass(getReceives(i),SessionReceive.class);
+            allConnecting = allConnecting && (Program.sameClass(getReceives(i),ConnectingReceive.class)
+                                     || getReceives(i).isSubtypeOf(new End()));
+        }
+
+        return allConnecting || allSimple;
     }
 
 
     syn boolean InternalChoice.isWellFormed(){
-        /* TODO: controlli sui rami devono essere digiunti
-        */
+        Map<String, String> map = new HashMap();
+
+        for(SessionSend send: getSendss()){
+            if(send.isPresentInThisMap(map)){
+                return false;
+            }
+        }
+
         return true;
+    }
+
+    public boolean SessionSend.isPresentInThisMap(Map<String,String> map){
+        String types = StreamSupport.stream(getTypes().spliterator(),false).map(t->t.toString()).collect(Collectors.joining());
+        String sender = getSender().getIdent() + getLabel().getIdent();
+        if(!map.containsKey(sender) || !map.get(sender).equals(types)){
+            map.put(sender,types);
+            return getNext().isPresentInThisMap(map);
+        }else{
+            return true;
+        }
+    }
+
+    public boolean ConnectingSend.isPresentInThisMap(Map<String,String> map){
+        return super.isPresentInThisMap(map);
+    }
+
+    public boolean Session.isPresentInThisMap(Map<String,String> map){
+        System.out.println("session: " + getClass().toString());
+        return true;
+    }
+
+    public boolean SessionReceive.isPresentInThisMap(Map<String,String> map){
+        return getNext().isPresentInThisMap(map);
+    }
+
+    public boolean ExternalChoice.isPresentInThisMap(Map<String,String> map){
+        return false;
+    }
+
+    public boolean LiteralType.isPresentInThisMap(Map<String,String> map){
+        return false;
+    }
+
+    public boolean InternalChoice.isPresentInThisMap(Map<String,String> map){
+        return false;
+    }
+
+    public boolean ConnectingReceive.isPresentInThisMap(Map<String,String> map){
+        return getNext().isPresentInThisMap(map);
+    }
+
+    public boolean RequestForwardDelegation.isPresentInThisMap(Map<String,String> map){
+        return getNext().isPresentInThisMap(map);
+    }
+
+    public boolean RequestBackwardDelegation.isPresentInThisMap(Map<String,String> map){
+        return getNext().isPresentInThisMap(map);
+    }
+
+    public boolean AcceptForwardDelegation.isPresentInThisMap(Map<String,String> map){
+        return getNext().isPresentInThisMap(map);
+    }
+
+    public boolean AcceptBackwardDelegation.isPresentInThisMap(Map<String,String> map){
+        return getNext().isPresentInThisMap(map);
+    }
+
+    public boolean End.isPresentInThisMap(Map<String,String> map){
+        return false;
     }
 
 }
