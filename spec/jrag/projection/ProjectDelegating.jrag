@@ -10,10 +10,11 @@ aspect ProjectDelegating{
         if(getNumCommunications()==1){
             return getCommunications(0).projectDelegating(p, q);
         }else{
-            Session s = null;
-            for(Communication c : getCommunicationss()){
+            Session s = getCommunications(0).projectDelegating(p,q);
+            for(int i = 1; i<getNumCommunications(); i++){
+               Communication c = getCommunications(i);
                Session s1 = c.projectDelegating(p,q);
-               if(s == null || s1.isSameType(s)){
+               if(s1.isSameType(s)){
                    // TODO: controllo non solo sul successivo immediato
                    // ma sull'insieme
                    s = c.projectDelegating(p,q);
