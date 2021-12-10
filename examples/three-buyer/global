@@ -8,10 +8,10 @@ alice->bob:myquote<Int>.
   bob->alice:ok.
   bob->seller:address<String>.
   seller->bob:date<String>.
-  carol>>bob.End,
+  bob>>carol.End,
   bob->alice:quit.
   bob->seller:quit.
-  carol>>bob.End),
+  bob>>carol.End),
  bob->seller:ok.
  bob->alice:ok.
  bob->seller:address<String>.

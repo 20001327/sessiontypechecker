@@ -6,21 +6,22 @@ aspect Merge{
         boolean allSimple = true;
         boolean allConnecting = true;
 
-        for(int i = 0; i<sessions.getNumChild();i++){
-            allSimple = allSimple && Program.sameClass(sessions.getChild(i),SessionReceive.class);
-            allConnecting = allConnecting && (Program.sameClass(sessions.getChild(i),ConnectingReceive.class)
-                                        || sessions.getChild(i).isSubtypeOf(new End()));
+      for(int i = 0; i<sessions.getNumChild();i++){
+          if(sessions.getChild(i).isSubtypeOf(new ExternalChoice())){
+              ExternalChoice ext = (ExternalChoice)sessions.getChild(i);
+              ext.getReceivess().forEach(r->recs.add(r));
+          }else if(sessions.getChild(i).isSubtypeOf(new SessionReceive())){
+              recs.add(sessions.getChild(i));
+          }
+      }
+
+        for(int i = 0; i<recs.getNumChild();i++){
+            allSimple = allSimple && Program.sameClass(recs.getChild(i),SessionReceive.class);
+            allConnecting = allConnecting && (Program.sameClass(recs.getChild(i),ConnectingReceive.class)
+                                        || recs.getChild(i).isSubtypeOf(new End()));
         }
 
         if(allConnecting || allSimple){
-            for(int i = 0; i<sessions.getNumChild();i++){
-                if(sessions.getChild(i).isSubtypeOf(new ExternalChoice())){
-                    ExternalChoice ext = (ExternalChoice)sessions.getChild(i);
-                    ext.getReceivess().forEach(r->recs.add(r));
-                }else if(sessions.getChild(i).isSubtypeOf(new SessionReceive())){
-                    recs.add((SessionReceive)sessions.getChild(i));
-                }
-            }
 
             for(int i = 0; i<recs.getNumChild();i++){
                 boolean add = true;
