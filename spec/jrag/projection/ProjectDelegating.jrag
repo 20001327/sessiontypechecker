@@ -15,8 +15,6 @@ aspect ProjectDelegating{
                Communication c = getCommunications(i);
                Session s1 = c.projectDelegating(p,q);
                if(s1.isSameType(s)){
-                   // TODO: controllo non solo sul successivo immediato
-                   // ma sull'insieme
                    s = c.projectDelegating(p,q);
                }else{
                    return null;
