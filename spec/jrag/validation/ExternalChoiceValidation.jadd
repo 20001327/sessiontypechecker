@@ -1,0 +1,16 @@
+aspect ExternalChoiceValidation{
+
+    syn boolean ExternalChoice.isWellFormed(){
+        boolean allSimple = true;
+        boolean allConnecting = true;
+
+        for(int i = 0; i<getNumReceives();i++){
+            allSimple = allSimple && Program.sameClass(getReceives(i),SessionReceive.class);
+            allConnecting = allConnecting && (Program.sameClass(getReceives(i),ConnectingReceive.class)
+                                     || getReceives(i).isSubtypeOf(new End()));
+        }
+
+        return allConnecting || allSimple;
+    }
+
+}

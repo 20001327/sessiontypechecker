@@ -1,0 +1,73 @@
+aspect SendTyping{
+  eq Send.type(){
+        if((getMessage().getSender().getIdent().equals(getModuleName()))
+        || (getMessage().getSender().getClass().getName().equals(VarSender.class.getName()) && delegating().getName() != null)){
+              if(getMessage().getLabel().getIdent().equals("start_delegation")){
+               if(((Atom)getMessage().getPayload(0)).getIdent().equals(getModuleName()) &&
+                        getMessage().getPayload(1).type().isSameType(new PidType())){
+                            delegating().setDelegateName(getRecipient());
+                            return new RequestForwardDelegation(getRecipient(), getNext().type());
+               }
+           }
+           else{
+               if(getMessage().getNumPayload() == 0 || !(new Atom("end_delegation")).equals(getMessage().getPayload(0))){
+                   List<LiteralType> types = new List();
+                   for(int i=0;i<getMessage().getNumPayload();i++){
+                       types.add((LiteralType)getMessage().getPayload(i).type());
+                   }
+                   return new SessionSend(getRecipient(),getMessage().getLabel(), types, getNext().type());
+               }
+           }
+
+        }
+       return null;
+    }
+
+
+    syn Send ReceiveClause.searchSendInMod(String moduleName,String dest, String label){
+        for (Module module: getModulesList()){
+            if(module.getPartecipant().equals(moduleName)){
+                for(Function f: module.getFunctionss()){
+                    return searchSend(f.getBody(), dest, label);
+                }
+            }
+        }
+        return null;
+    }
+
+
+    syn Send ReceiveClause.searchSend(Process process, String dest, String label){
+        String className = process.getClass().getName();
+        if(className.equals(Send.class.getName())){
+            Send s = (Send) process;
+            if(s.getRecipient().getIdent().equals(dest)
+                && s.getMessage().getLabel().getIdent().equals(label)){
+                return s;
+            }else {
+                return searchSend(s.getNext(),dest,label);
+            }
+        }else if(className.equals(Receive.class.getName())){
+            Receive s = (Receive) process;
+            Send send = null;
+            for (ReceiveClause rc : s.getClausess()){
+                send = searchSend(rc.getActions(),dest,label);
+                if (send!=null) return send;
+            }
+            if(s.hasNext()) return searchSend(s.getNext(),dest,label);
+        }else if(className.equals(Case.class.getName())){
+            Case s = (Case) process;
+            Send send = null;
+            for (CaseClause rc : s.getClausess()){
+                send = searchSend(rc.getActions(),dest,label);
+                if (send!=null) return send;
+            }
+            if(s.hasNext()) return searchSend(s.getNext(),dest,label);
+        }else if(className.equals(Let.class.getName())){
+            Let s = (Let) process;
+            return searchSend(s.getNext(),dest,label);
+        }
+
+        return null;
+    }
+
+}

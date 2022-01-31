@@ -1,0 +1,9 @@
+
+aspect PrimitiveTypes {
+
+    eq CharList.type() = new StringType();
+    eq Number.type() = new IntType();
+    eq Boolean.type() = new BoolType();
+    eq AtomSender.type() = new AtomType();
+
+}

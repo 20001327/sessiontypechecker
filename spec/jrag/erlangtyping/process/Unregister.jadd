@@ -1,0 +1,30 @@
+aspect UnregisterTyping{
+
+    eq Unregister.type(){
+    // anche qui le info non le riesco a desumere dal tipo annotato, devo fare un check con le info
+    // che mi sono tirato giù prima
+        if(delegating().getName()!=null){
+            Process p = getNextProcess(this);
+            Process p1 = getNextProcess(p);
+            Process p2 = getNextProcess(p1);
+            Session next = getNextProcess(p2)!=null?getNextProcess(p2).type():null;
+
+            Register reg1 = new Register(new List(new Atom(getModuleName()),new Call(new Atom("self"), new List())), null);
+            Register reg2 = new Register(new List(delegating().getName(),new Call(new Atom("self"), new List())), null);
+
+            boolean differ = !p.equals(p1);
+            boolean b1 = this.equals(new Unregister(new List(delegating().getName()), null));
+            boolean b2 = (p.equals(reg1) || p.equals(reg2));
+            boolean b3 = (p1.equals(reg1) || p1.equals(reg2));
+            boolean b4 = p2.equals(new Send(delegating().getName(),
+                    new Message(new AtomSender(getModuleName()), new Atom("end_delegation"),new List()), null));
+
+            if(b1 && b2 && b3 && b4 && differ){
+                return new AcceptBackwardDelegation(delegating().getName(),next);
+            }
+        }
+
+        return null;
+    }
+
+}

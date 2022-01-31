@@ -1,21 +1,7 @@
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-aspect ProcessValidation{
-
-    syn boolean ExternalChoice.isWellFormed(){
-        boolean allSimple = true;
-        boolean allConnecting = true;
-
-        for(int i = 0; i<getNumReceives();i++){
-            allSimple = allSimple && Program.sameClass(getReceives(i),SessionReceive.class);
-            allConnecting = allConnecting && (Program.sameClass(getReceives(i),ConnectingReceive.class)
-                                     || getReceives(i).isSubtypeOf(new End()));
-        }
-
-        return allConnecting || allSimple;
-    }
-
+aspect InternalChoiceValidation{
 
     syn boolean InternalChoice.isWellFormed(){
         Map<String, String> map = new HashMap();
@@ -29,6 +15,11 @@ aspect ProcessValidation{
         return true;
     }
 
+
+    /*
+       utility function to get if a send is already present in the map,
+       check if a pair sender, label is present twice
+    */
     public boolean SessionSend.isPresentInThisMap(Map<String,String> map){
         String types = StreamSupport.stream(getTypes().spliterator(),false).map(t->t.toString()).collect(Collectors.joining());
         String sender = getSender().getIdent() + getLabel().getIdent();
@@ -40,6 +31,14 @@ aspect ProcessValidation{
         }
     }
 
+   public boolean SessionReceive.isPresentInThisMap(Map<String,String> map){
+        return getNext().isPresentInThisMap(map);
+    }
+
+    public boolean ExternalChoice.isPresentInThisMap(Map<String,String> map){
+        return false;
+    }
+
     public boolean ConnectingSend.isPresentInThisMap(Map<String,String> map){
         return super.isPresentInThisMap(map);
     }
@@ -47,14 +46,6 @@ aspect ProcessValidation{
     public boolean Session.isPresentInThisMap(Map<String,String> map){
         System.out.println("session: " + getClass().toString());
         return true;
-    }
-
-    public boolean SessionReceive.isPresentInThisMap(Map<String,String> map){
-        return getNext().isPresentInThisMap(map);
-    }
-
-    public boolean ExternalChoice.isPresentInThisMap(Map<String,String> map){
-        return false;
     }
 
     public boolean LiteralType.isPresentInThisMap(Map<String,String> map){

@@ -1,11 +1,4 @@
-aspect ExpressionTypes {
-
-    syn lazy Session Expression.type();
-
-
-    inh lazy FunType Expression.getFunType();
-    inh lazy String Expression.getModuleName();
-
+aspect CallTyping{
     inh lazy Delegating Call.delegating();
 
     eq Call.type(){
@@ -25,23 +18,5 @@ aspect ExpressionTypes {
 
              return type;
          }
-    }
-
-    eq Self.type() {
-        return new PidType();
-    }
-
-    eq Operator.type() {
-        if(getLeftOp().type().isSameType(new BoolType())
-            && getRightOp().type().isSameType(new BoolType())) {
-            return new BoolType();
-        }
-
-        if(getLeftOp().type().isSameType(new IntType())
-            && getRightOp().type().isSameType(new IntType())) {
-            return new IntType();
-        }
-
-        return null;
     }
 }

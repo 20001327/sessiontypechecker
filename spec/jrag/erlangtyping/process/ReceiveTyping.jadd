@@ -1,0 +1,116 @@
+aspect ReceiveTyping{
+
+    eq Receive.getClauses().getNextProcess(Process p) = this.getNextProcess(p);
+    inh lazy Process ReceiveClause.getNextProcess(Process p);
+    syn lazy Session ReceiveClause.type();
+    inh lazy String ReceiveClause.getModuleName();
+
+    inh lazy Delegating ReceiveClause.delegating();
+    eq ReceiveClause.getActions().delegating() = this.delegating();
+    eq Receive.getClauses().delegating() = this.delegating();
+
+    inh lazy List<Module> ReceiveClause.getModulesList();
+
+    syn Delegating Receive.delegating(){
+        ASTNode node = getParent();
+
+        while(node!=null && !Program.sameClass(node,ReceiveClause.class)){
+            node = node.getParent();
+        }
+
+        if(node==null){
+            return new Delegating();
+        }
+
+
+        if(Program.sameClass(node,ReceiveClause.class)){
+            ReceiveClause receive = (ReceiveClause)node;
+            return receive.delegating();
+        }
+
+        return new Delegating();
+    }
+
+    eq Receive.type(){
+        List<SessionReceive> types = new List();
+
+        Map<ReceiveClause, Integer> freq1 = new HashMap<>();
+        getClausess().forEach(it -> freq1.merge(it, 1, (a, b) -> a + b));
+        if(!freq1.entrySet().stream().filter(entry->entry.getValue()>1).findAny().isPresent()){
+            for(int i=0; i<getNumClauses();i++){
+                Session t = getClauses(i).type();
+                if(t.isSameType(new SessionReceive())){
+                    types.add((SessionReceive)t);
+                }else{
+                    return t;
+                }
+            }
+            if(types.getNumChild()==1) {
+                return types.getChild(0);
+            }
+            ExternalChoice ext = new ExternalChoice(types);
+            if(ext.isWellFormed()){
+                return ext;
+            }
+        }
+        return null;
+    }
+
+    eq ReceiveClause.type(){
+        List<LiteralType> sessions = new List();
+
+       if(getLabel().getIdent().equals("end_delegation")){
+           return new RequestBackwardDelegation(getSender(),getActions().type());
+       }
+
+       if(getNumVariables()>0){
+           if(getNumVariables()==2){
+               if(getLabel().getIdent().equals("start_delegation")){
+                   // questo mi serve perchè non posso conoscere il tipo delle variabili
+                   // nell'annotazione di tipo non ho il tipo del messaggio
+                   // devo in qualche modo sapere il nome di chi sto delegando per sapere il tipo corretto
+                   Send s = searchSendInMod(getSender().getIdent(), getModuleName(),getLabel().getIdent());
+                   if(s.getMessage().getPayload(0).type().isSameType(new AtomType()) &&
+                       s.getMessage().getPayload(1).type().isSameType(new PidType())){
+                           Process p = getActions();
+                           Process p1 = getNextProcess(p);
+                           Process p2 = getNextProcess(p1);
+                           for(int i=0; i<s.getMessage().getNumPayload();i++){
+                               addDeclaration(((Variable)getVariables(i)).getIdent(),
+                               s.getMessage().getPayload(i).type(), s.getMessage().getPayload(i));
+                           }
+
+                           Atom d = (Atom)s.getMessage().getPayload(0);
+
+                           Unregister unreg1 = new Unregister(new List(new Atom(getModuleName())),null);
+                           Unregister unreg2 = new Unregister( new List(d), null);
+                           Register reg1 = new Register(new List(d,new Call(new Atom("self"), new List())), null);
+
+                           boolean differ = !p.equals(p1);
+                           boolean b1 = (p.equals(unreg1) || p.equals(unreg2));
+                           boolean b2 = (p1.equals(unreg1) || p1.equals(unreg2));
+                           boolean b3 = p2.equals(reg1);
+
+                           if(b1 && b2 && b3 && differ){
+                                delegating().setName(d);
+                                return new AcceptForwardDelegation(d, getNextProcess(p2).type());
+                           }
+                       }
+               }
+          }
+
+           for(int i=0; i<getNumVariables();i++){
+               if(getVariables(i).getClass().getName().equals(Variable.class.getName())){
+                   addDeclaration(((Variable)getVariables(i)).getIdent(),getInfo(getLabel().getIdent(), i), null);
+               }
+
+               sessions.add((LiteralType)getVariables(i).type());
+           }
+       }
+
+       return new SessionReceive(getSender(),getLabel(),sessions, getActions().type());
+    }
+
+
+
+}

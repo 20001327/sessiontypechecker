@@ -1,0 +1,10 @@
+aspect VarSender{
+    eq VarSender.type() {
+        for (VarDeclaration d : getDeclarations()) {
+          if(d.getName().equals(getIdent())){
+            return d.getType();
+          }
+        }
+        return null;
+    }
+}

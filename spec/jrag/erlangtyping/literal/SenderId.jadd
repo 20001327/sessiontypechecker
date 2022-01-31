@@ -1,0 +1,12 @@
+aspect SenderId{
+
+    syn lazy Session SenderId.type();
+    eq SenderId.type(){
+        return null;
+    }
+
+    public String SenderId.getIdent(){
+        return null;
+    }
+
+}

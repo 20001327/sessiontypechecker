@@ -1,0 +1,12 @@
+aspect VariableTyping{
+
+    eq Variable.type() {
+        for (VarDeclaration d : getDeclarations()) {
+          if(d.getName().equals(getIdent())){
+            return d.getType();
+          }
+        }
+        return null;
+    }
+
+}

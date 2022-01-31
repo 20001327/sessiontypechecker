@@ -1,0 +1,12 @@
+aspect ExpressionTypes {
+
+    inh lazy List<Function> Expression.getFunctionss();
+    syn lazy Session Expression.type();
+    inh lazy FunType Expression.getFunType();
+    inh lazy String Expression.getModuleName();
+
+    eq Self.type() {
+        return new PidType();
+    }
+
+}
