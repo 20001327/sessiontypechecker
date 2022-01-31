@@ -9,3 +9,4 @@ aspect AtomTyping{
         }
         return new AtomType();
     }
+}
