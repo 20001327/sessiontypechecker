@@ -1,0 +1,29 @@
+aspect CommunicationProjection{
+ syn Session Communication.project(String actor){
+        if(actor.equals(getMessage().getSender())){
+            if(getMessage().getClass().getName().equals(Connecting.class.getName())){
+              return new ConnectingSend(new Atom(getMessage().getRecipient()),
+                                   new Atom(getMessage().getLabel()),
+                                   getMessage().getTypess(), getNext().project(actor));
+            }else{
+              return new SessionSend(new Atom(getMessage().getRecipient()),
+                                    new Atom(getMessage().getLabel()),
+                                    getMessage().getTypess(), getNext().project(actor));
+            }
+        }else if(actor.equals(getMessage().getRecipient())){
+            if(getMessage().getClass().getName().equals(Connecting.class.getName())){
+                return new ConnectingReceive(new Atom(getMessage().getSender()),
+                                          new Atom(getMessage().getLabel()),
+                                          getMessage().getTypess(),getNext().project(actor));
+            } else{
+                return new SessionReceive(new Atom(getMessage().getSender()),
+                                            new Atom(getMessage().getLabel()),
+                                            getMessage().getTypess(),getNext().project(actor));
+            }
+        }
+
+       return getNext().project(actor);
+
+    }
+
+}

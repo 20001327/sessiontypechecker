@@ -1,4 +1,4 @@
-aspect Actors{
+aspect ActorDiscover{
 
     syn lazy ArrayList<String> GProg.getActors() {
         return getGlobal().actors();

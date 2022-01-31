@@ -1,0 +1,10 @@
+aspect ProjectDelegate{
+
+    syn lazy Session Global.projectDelegate(String p, String q){
+        return null;
+    }
+    syn Session Terminal.projectDelegate(String p, String q){
+        return null;
+    }
+
+}

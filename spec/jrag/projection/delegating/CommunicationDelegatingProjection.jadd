@@ -1,0 +1,11 @@
+aspect CommunicationDelegatingProjection{
+
+    syn Session Communication.projectDelegating(String p, String q){
+        if(!q.equals(getMessage().getRecipient()) && !q.equals(getMessage().getSender())){
+            return getNext().projectDelegating(p,q);
+        }
+
+        return null;
+
+    }
+}

@@ -1,0 +1,21 @@
+aspect CommunicationChoiceDelegatingProjection{
+
+    syn Session CommunicationChoices.projectDelegating(String p, String q){
+
+        if(getNumCommunications()==1){
+            return getCommunications(0).projectDelegating(p, q);
+        }else{
+            Session s = getCommunications(0).projectDelegating(p,q);
+            for(int i = 1; i<getNumCommunications(); i++){
+               Communication c = getCommunications(i);
+               Session s1 = c.projectDelegating(p,q);
+               if(s1.isSameType(s)){
+                   s = c.projectDelegating(p,q);
+               }else{
+                   return null;
+               }
+            }
+            return s;
+        }
+    }
+}

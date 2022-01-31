@@ -1,0 +1,42 @@
+aspect CommunicationChoiceProjection{
+
+    syn Session CommunicationChoices.project(String actor){
+
+        if(getNumCommunications()==1){
+            return getCommunications(0).project(actor);
+        }else{
+            List<SessionSend> sends = new List();
+            List<Session> receives = new List();
+            for(Communication c : getCommunicationss()){
+                Session projected = c.project(actor);
+                if(projected.isSubtypeOf(new ExternalChoice())
+                    || projected.isSubtypeOf(new SessionReceive())
+                    || projected.isSubtypeOf(new End())){
+                    receives.add(projected);
+                }else if(projected.isSubtypeOf(new SessionSend())){
+                    sends.add((SessionSend) projected);
+                }else{
+                    return null;
+                }
+            }
+
+            if(sends.getNumChild()>0 && receives.getNumChild() == 0){
+                return new InternalChoice(sends);
+            }
+
+          if(receives.getNumChild()>0 && sends.getNumChild() == 0){
+                List<SessionReceive> lis = Session.merge(receives);
+                if(lis.getNumChild()==1) return lis.getChild(0);
+                else{
+                    ExternalChoice ext = new ExternalChoice(lis);
+                    if(ext.isWellFormed()){
+                        return ext;
+                    }
+                }
+            }
+        }
+
+        return null;
+
+    }
+}

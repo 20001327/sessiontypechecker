@@ -1,0 +1,33 @@
+aspect CommunicationDelegateProjection{
+
+    syn Session Communication.projectDelegate(String p, String q){
+        if(p.equals(getMessage().getSender()) && !q.equals(getMessage().getRecipient())){
+            if(getMessage().getClass().getName().equals(Connecting.class.getName())){
+              return new ConnectingSend(new Atom(getMessage().getRecipient()),
+                                           new Atom(getMessage().getLabel()),
+                                           getMessage().getTypess(), getNext().projectDelegate(p,q));
+            }else{
+              return new SessionSend(new Atom(getMessage().getRecipient()),
+                                    new Atom(getMessage().getLabel()),
+                                    getMessage().getTypess(), getNext().projectDelegate(p, q));
+            }
+        }else if(p.equals(getMessage().getRecipient()) && !q.equals(getMessage().getSender())){
+             if(getMessage().getClass().getName().equals(Connecting.class.getName())){
+                return new ConnectingReceive(new Atom(getMessage().getSender()),
+                                  new Atom(getMessage().getLabel()),
+                                  getMessage().getTypess(),getNext().projectDelegate(p,q));
+             } else{
+                return new SessionReceive(new Atom(getMessage().getSender()),
+                                new Atom(getMessage().getLabel()),
+                                getMessage().getTypess(),getNext().projectDelegate(p,q));
+            }
+        }else if(!q.equals(getMessage().getSender()) && !q.equals(getMessage().getSender()) &&
+            !p.equals(getMessage().getRecipient()) && !p.equals(getMessage().getSender())){
+            return getNext().projectDelegate(p,q);
+        }
+
+        return null;
+
+    }
+
+}

@@ -1,0 +1,11 @@
+aspect ProjectDelegating{
+
+    syn lazy Session Global.projectDelegating(String p, String q){
+        return null;
+    }
+
+    syn Session Terminal.projectDelegating(String p, String q){
+        return null;
+    }
+
+}

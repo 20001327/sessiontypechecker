@@ -1,0 +1,23 @@
+aspect DelegationDelegatingProjection{
+
+  syn Session StartDelegation.projectDelegating(String p, String q){
+        if(!p.equals(getDelegate()) && !p.equals(getDelegating()) &&
+                !q.equals(getDelegate()) && !q.equals(getDelegating())){
+            return getNext().projectDelegating(p,q);
+        }
+        return null;
+    }
+
+
+    syn Session EndDelegation.projectDelegating(String p, String q){
+        if(!p.equals(getDelegate()) && !p.equals(getDelegating()) &&
+                !q.equals(getDelegate()) && !q.equals(getDelegating())){
+            return getNext().projectDelegating(p,q);
+        }else{
+            if(p.equals(getDelegating()) && q.equals(getDelegate())){
+                return new RequestBackwardDelegation(new Atom(q),getNext().project(p));
+            }
+        }
+        return null;
+    }
+}
