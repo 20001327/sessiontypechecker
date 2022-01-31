@@ -1,0 +1,41 @@
+aspect DelegationSubtyping{
+    public boolean RequestForwardDelegation.subtypeOf(Object other){
+        if(Program.sameClass(this, other)){
+            RequestForwardDelegation obj = (RequestForwardDelegation) other;
+            return getDelegating().equals(obj.getDelegating()) &&
+                               getNext().subtypeOf(obj.getNext());
+
+        }
+        return false;
+    }
+
+    public boolean RequestBackwardDelegation.subtypeOf(Object other){
+        if(Program.sameClass(this, other)){
+            RequestBackwardDelegation obj = (RequestBackwardDelegation) other;
+            return getDelegating().equals(obj.getDelegating()) &&
+                               getNext().subtypeOf(obj.getNext());
+
+        }
+        return false;
+    }
+
+    public boolean AcceptForwardDelegation.subtypeOf(Object other){
+        if(Program.sameClass(this, other)){
+            AcceptForwardDelegation obj = (AcceptForwardDelegation) other;
+            return getDelegate().equals(obj.getDelegate()) &&
+                               getNext().subtypeOf(obj.getNext());
+
+        }
+        return false;
+    }
+
+    public boolean AcceptBackwardDelegation.subtypeOf(Object other){
+        if(Program.sameClass(this, other)){
+            AcceptBackwardDelegation obj = (AcceptBackwardDelegation) other;
+            return getDelegate().equals(obj.getDelegate()) &&
+                               getNext().subtypeOf(obj.getNext());
+
+        }
+        return false;
+    }
+}

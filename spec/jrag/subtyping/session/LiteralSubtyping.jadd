@@ -1,0 +1,22 @@
+aspect LiteralSubtyping{
+     public boolean LiteralType.subtypeOf(Object other){
+        return Program.sameClass(this,other);
+    }
+
+    public boolean End.subtypeOf(Object other){
+        return other instanceof LiteralType || other.getClass().getName().equals(End.class.getName());
+    }
+
+    public String IntType.toString(){
+        return "Int";
+    }
+
+    public String StringType.toString(){
+        return "String";
+    }
+
+    public String LiteralType.toString(){
+        return "Literal";
+    }
+
+}

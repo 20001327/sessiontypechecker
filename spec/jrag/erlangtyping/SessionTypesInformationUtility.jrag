@@ -1,4 +1,4 @@
-aspect SessionTypes{
+aspect SessionTypesInformationUtility{
 
     eq Function.getBody().getInfo(String label, int index) = this.getInfo(label,index);
     inh lazy Session Process.getInfo(String label,int index);

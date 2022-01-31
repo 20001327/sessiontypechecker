@@ -1,0 +1,29 @@
+aspect SessionComparison{
+
+    public boolean FunType.compareWith(FunctionType type) {
+        boolean name = this.getFunName().equals(type.getFunName());
+        boolean arguments = Program.checkLists(getArgumentss(),type.getArgumentss());
+        boolean sessions = getSessionType().subtypeOf(type.getSessionType());
+        return name && arguments && sessions;
+    }
+
+    public boolean FunctionType.compareWith(FunctionType type) {
+        boolean name = this.getFunName().equals(type.getFunName());
+        boolean arguments = Program.checkLists(getArgumentss(),type.getArgumentss());
+        boolean sessions = getSessionType().subtypeOf(type.getSessionType());
+        return name && arguments && sessions;
+    }
+
+    public static boolean Program.checkListsByClassName(List<? extends ASTNode> l1, List<? extends ASTNode> l2){
+         Map<String, Integer> freq1 = new HashMap<>();
+         l1.forEach(it -> freq1.merge(it.getClass().getName(), 1, (a, b) -> a + b));
+         Map<String, Integer> freq2 = new HashMap<>();
+         l2.forEach(it -> freq2.merge(it.getClass().getName(), 1, (a, b) -> a + b));
+         return freq1.equals(freq2);
+    }
+
+    public boolean Session.subtypeOf(Object other){
+        return Program.sameClass(this,other);
+    }
+
+}
