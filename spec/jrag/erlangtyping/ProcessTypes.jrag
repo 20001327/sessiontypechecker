@@ -2,14 +2,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 aspect ProcessTypes{
+    eq Program.getModules().getModulesList() = this.getModulesList();
     eq Module.getFunctions().getModuleName() = this.getPartecipant();
+    eq Module.getFunctions().getFunctionss() = this.getFunctionss();
+    eq Function.getBody().getFunType() = this.getType();
 
     syn lazy Session Process.type();
-    eq Program.getModules().getModulesList() = this.getModulesList();
+
     inh lazy String Process.getModuleName();
-    eq Module.getFunctions().getFunctionss() = this.getFunctionss();
     inh lazy List<Function> Process.getFunctionss();
-    eq Function.getBody().getFunType() = this.getType();
     inh lazy FunType Process.getFunType();
     inh lazy Delegating Process.delegating();
 
