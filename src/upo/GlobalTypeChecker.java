@@ -124,8 +124,10 @@ public class GlobalTypeChecker {
                 for (String s : g.getActors()) {
                     if (g.project(s) != null) {
                         Session session = g.project(s);
-                        FunctionType type = new FunctionType("init", new List<>(), session);
-                        System.out.println(type.stampa().getString());
+                        FunType type = new FunType("init", new List<>(), session);
+                        PrettyPrinter printer = type.stampante();
+                        type.stampa();
+                        System.out.println(printer.getString());
                         p.checkType(s, type);
                     }
                 }

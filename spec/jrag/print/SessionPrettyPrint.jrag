@@ -1,21 +1,19 @@
 aspect SessionPrettyPrint{
 
 
-    syn lazy PrettyPrinter FunctionType.stampante() {
+    syn lazy PrettyPrinter FunType.stampante() {
         return new PrettyPrinter();
     }
-    eq FunctionType.getArguments().stampante() = this.stampante();
-    eq FunctionType.getSessionType().stampante() = this.stampante();
+    eq FunType.getArguments().stampante() = this.stampante();
+    eq FunType.getSessionType().stampante() = this.stampante();
     inh lazy PrettyPrinter Session.stampante();
     inh lazy PrettyPrinter Atom.stampante();
-
-
 
     public void Session.stampa(){
        stampante().append("session");
     }
 
-    syn PrettyPrinter FunctionType.stampa(){
+    public void FunType.stampa(){
        stampante().append("\n");
        stampante().append("-type " + getFunName() + "(");
        for (int i=0; i<getNumArguments(); i++) {
@@ -28,7 +26,6 @@ aspect SessionPrettyPrint{
        stampante().append(") :: '");
        getSessionType().stampa();
        stampante().append("'");
-       return stampante();
     }
 
     public void SessionSend.stampa(){

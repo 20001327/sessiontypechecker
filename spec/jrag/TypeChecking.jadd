@@ -10,9 +10,11 @@ aspect TypeChecking{
                     type1.print();
                     System.out.println("tipo atteso: " + printer().getString());
                     Session t = function.getBody().type();
-                    FunctionType type2 = new FunctionType(function.getFunctionName(),
+                    printer().reset();
+                    FunType type2 = new FunType(function.getFunctionName(),
                                                 function.getType().getArgumentss(),t);
-                    System.out.println("tipo calcolato: " + type2.stampa().getString());
+                    type2.stampa();
+                    System.out.println("tipo calcolato: " + printer().getString());
                     System.out.println("Risultato Compare: " + type1.compareWith(type2));
                 }
             }
@@ -20,7 +22,7 @@ aspect TypeChecking{
         }
     }
 
-    public void Program.checkType(String actor, FunctionType type1){
+    public void Program.checkType(String actor, FunType type1){
         for (Module module: getModuless()){
             if(actor.equals(module.getPartecipant())){
                 System.out.println("_______________________" + module.getPartecipant() + "________________________");
@@ -30,9 +32,11 @@ aspect TypeChecking{
                         type1.stampa();
                         System.out.println("tipo atteso: " + printer().getString());
                         Session t = function.getBody().type();
-                        FunctionType type2 = new FunctionType(function.getFunctionName(),
+                        FunType type2 = new FunType(function.getFunctionName(),
                                                     function.getType().getArgumentss(),t);
-                        System.out.println("tipo calcolato: " + type2.stampa().getString());
+                        printer().reset();
+                        type2.stampa();
+                        System.out.println("tipo calcolato: " + printer().getString());
                         System.out.println("Risultato Compare: " + type1.compareWith(type2));
                     }
                 }
