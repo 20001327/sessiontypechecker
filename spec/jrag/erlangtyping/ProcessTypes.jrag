@@ -12,6 +12,7 @@ aspect ProcessTypes{
     inh lazy String Process.getModuleName();
     inh lazy List<Function> Process.getFunctionss();
     inh lazy FunType Process.getFunType();
+
     inh lazy Delegating Process.delegating();
 
     eq Register.type(){
