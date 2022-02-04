@@ -2,16 +2,6 @@ aspect CaseTyping{
     syn lazy Session CaseClause.type();
 
     eq Case.type(){
-/*      manca check su tipi di del matching form e dei valori associati
-        il codice sarebbe più o meno questo, ma ci vorrebbe la valutazione delle espressioni
-        for(int i=0; i<getNumMatching();i++){
-            for(int j=0; j<getNumClauses();j++){
-                if(!getMatching(i).type().isSameType(getClauses(j).getPatterns(i).type())){
-                    return null;
-                }
-            }
-        }
-*/
 
         List<SessionSend> types = new List();
         Session found = null;
