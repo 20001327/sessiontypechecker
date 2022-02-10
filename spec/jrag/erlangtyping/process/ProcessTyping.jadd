@@ -1,0 +1,15 @@
+aspect ProcessTyping{
+    eq Register.type(){
+        return null;
+    }
+
+    eq Let.type(){
+        addDeclaration(getLeft().getIdent(),getRight().type(), getRight());
+        return getNext().type();
+    }
+
+    eq ExpressionProcess.type(){
+        Session s = getExpression().type();
+        return s;
+    }
+}
