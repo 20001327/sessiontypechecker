@@ -1,3 +1,5 @@
+
+
 aspect Merge{
 
     public static List<SessionReceive> Session.merge(List<Session> sessions){
@@ -6,14 +8,19 @@ aspect Merge{
         boolean allSimple = true;
         boolean allConnecting = true;
 
-      for(int i = 0; i<sessions.getNumChild();i++){
-          if(sessions.getChild(i).isSubtypeOf(new ExternalChoice())){
-              ExternalChoice ext = (ExternalChoice)sessions.getChild(i);
-              ext.getReceivess().forEach(r->recs.add(r));
-          }else if(sessions.getChild(i).isSubtypeOf(new SessionReceive())){
-              recs.add(sessions.getChild(i));
-          }
-      }
+        Map<String, String> map = new HashMap();
+
+        for(int i = 0; i<sessions.getNumChild();i++){
+              if(sessions.getChild(i).isSubtypeOf(new ExternalChoice())){
+                  ExternalChoice ext = (ExternalChoice)sessions.getChild(i);
+                  for(SessionReceive r: ext.getReceivess()){
+                    if(!r.isReceivePresentInThisMap(map)) recs.add(r);
+                  }
+              }else if(sessions.getChild(i).isSubtypeOf(new SessionReceive())){
+                  SessionReceive r = (SessionReceive)sessions.getChild(i);
+                  if(!r.isReceivePresentInThisMap(map)) recs.add(r);
+              }
+        }
 
         for(int i = 0; i<recs.getNumChild();i++){
             allSimple = allSimple && Program.sameClass(recs.getChild(i),SessionReceive.class);

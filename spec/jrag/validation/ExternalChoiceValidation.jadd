@@ -3,14 +3,30 @@ aspect ExternalChoiceValidation{
     syn boolean ExternalChoice.isWellFormed(){
         boolean allSimple = true;
         boolean allConnecting = true;
+        Map<String, String> map = new HashMap();
 
         for(int i = 0; i<getNumReceives();i++){
             allSimple = allSimple && Program.sameClass(getReceives(i),SessionReceive.class);
             allConnecting = allConnecting && (Program.sameClass(getReceives(i),ConnectingReceive.class)
                                      || getReceives(i).isSubtypeOf(new End()));
+            if(getReceives(i).isReceivePresentInThisMap(map)){
+                return false;
+            }
         }
 
         return allConnecting || allSimple;
     }
+
+   public boolean SessionReceive.isReceivePresentInThisMap(Map<String,String> map){
+        String types = StreamSupport.stream(getTypes().spliterator(),false).map(t->t.toString()).collect(Collectors.joining());
+        String label = getLabel().getIdent();
+        if(!map.containsKey(label) || !map.get(label).equals(types)){
+            map.put(label,types);
+        }else{
+           return true;
+        }
+
+        return false;
+   }
 
 }
