@@ -27,24 +27,18 @@ aspect ReceiveTyping{
 
     eq Receive.type(){
         List<SessionReceive> types = new List();
-        Map<ReceiveClause, Integer> freq1 = new HashMap<>();
-        getClausess().forEach(it ->
-            freq1.merge(it, 1, (a, b) -> a + b));
-        if(!freq1.entrySet().stream().
-            filter(entry->entry.getValue()>1).
-                findAny().isPresent()){
-            for(int i=0; i<getNumClauses();i++){
-                Session t = getClauses(i).type();
-                if(t.isSameType(new SessionReceive()))
-                    types.add((SessionReceive)t);
-                else return t;
-            }
-            if(types.getNumChild()==1)
-                return types.getChild(0);
-            ExternalChoice ext = new ExternalChoice(types);
-            if(ext.isWellFormed())
-                return ext;
+        for(int i=0; i<getNumClauses();i++){
+            Session t = getClauses(i).type();
+            if(t.isSameType(new SessionReceive()))
+                types.add((SessionReceive)t);
+            else return t;
         }
+        if(types.getNumChild()==1)
+            return types.getChild(0);
+        ExternalChoice ext = new ExternalChoice(types);
+        if(ext.isWellFormed())
+            return ext;
+
         return null;
     }
 

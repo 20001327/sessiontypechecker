@@ -19,7 +19,7 @@ aspect ExternalChoiceValidation{
         String types = StreamSupport.stream(getTypes().spliterator(),false).
                         map(t->t.toString()).collect(Collectors.joining());
         String label = getLabel().getIdent();
-        if(!map.containsKey(label) || !map.get(label).equals(types)){
+        if(!map.containsKey(label) || !map.get(label).equals(types))
             map.put(label,types);
         else return true;
 
