@@ -6,11 +6,15 @@ aspect CallTyping{
             return new PidType();
         }else{
              Session type = null;
+             List typeList = new List();
+             for(Expression s : getArgumentss()){
+                typeList.add(s.type());
+             }
              for(Function f : getFunctionss()){
                 if(f.getFunctionName().equals(getFunctionName().getIdent())) {
-                    if(f.getNumParameters() == getNumArguments()){
-                        // ci sarebbe da verificare il tipo degli argomenti,
-                        // o scriviamo il tipo oppure non posso derivare il tipo
+                    List ts = f.getType().getArgumentss();
+                    if(f.getNumParameters() == getNumArguments()
+                      && Program.checkListsByClassName(ts,typeList)){
                         type = f.getBody().type();
                     }
                 }

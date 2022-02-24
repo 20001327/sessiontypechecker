@@ -82,13 +82,26 @@ RCURLYBRACE
 ;
 
 FunType funtype =
-LCURLYBRACE ATTRIBUTE COMMA anno COMMA TYPE COMMA
+ LCURLYBRACE ATTRIBUTE COMMA anno COMMA TYPE COMMA
     LCURLYBRACE IDENTIFIER.fun
     COMMA
-    LCURLYBRACE ATOM COMMA anno COMMA SINGLEMARKS session SINGLEMARKS RCURLYBRACE
+    LCURLYBRACE ATOM COMMA anno COMMA SINGLEMARKS
+        session SINGLEMARKS RCURLYBRACE
     COMMA
     LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
-{: return new FunType(fun, new List(), session ); :}
+    {: return new FunType(fun, new List(), session ); :}
+| LCURLYBRACE ATTRIBUTE COMMA anno COMMA TYPE COMMA
+     LCURLYBRACE IDENTIFIER.fun
+     COMMA
+     LCURLYBRACE ATOM COMMA anno COMMA
+         SINGLEMARKS
+          session_list.l MINUS CLOSEANGULAR
+          session
+         SINGLEMARKS
+     RCURLYBRACE
+     COMMA
+     LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
+     {: return new FunType(fun, l, session ); :}
 ;
 
 ReceiveClause receive_clause =
@@ -300,6 +313,13 @@ Session session =
      {: return new End(); :}
 ;
 
+
+List session_list =
+	session   		                {: return new List().add(session);	:}
+|	session_list COMMA session    	{: return session_list.add(session); :}
+ ;
+
+
 SessionSend sessionsend =
     IDENTIFIER.sender SESSIONSEND IDENTIFIER.label DOT session.next
     {: return new SessionSend(new Atom(sender), new Atom(label), new List(), next); :}
@@ -332,6 +352,7 @@ LiteralType literaltype =
     STRINGTYPE  {: return new StringType(); :}
 |    INTTYPE     {: return new IntType(); :}
 |    ATOMTYPE    {: return new AtomType(); :}
+|    BOOLEANTYPE    {: return new BoolType(); :}
 ;
 
 List literal_type_list =

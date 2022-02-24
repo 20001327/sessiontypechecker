@@ -99,6 +99,7 @@ IdInSingle     = '{Identifier}'
 "String"            { return sym(Terminals.STRINGTYPE); }
 "Int"               { return sym(Terminals.INTTYPE); }
 "Atom"              { return sym(Terminals.ATOMTYPE); }
+"Boolean"           { return sym(Terminals.BOOLEANTYPE); }
 
 
 {Symbol}              { return sym(Terminals.SYMBOL); }

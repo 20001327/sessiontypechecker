@@ -69,13 +69,13 @@ public class GlobalTypeChecker {
 
             if(g!=null) {
                 for (String s : g.getActors()) {
-                    File temp = new File(args[0] + s);
+                    File temp = new File(args[0] + s + ".erl");
                     if (temp.exists()) {
                         System.out.println("getting " + s + " ast file");
                         Process p = Runtime.getRuntime().exec("erl -noshell " +
                                 "-eval \"forms:read_to_binary(" + s + ",'ast/" + s + ".ast').\" " +
                                 "-eval 'init:stop().'", null, file);
-                        p.waitFor(1, TimeUnit.SECONDS);
+                        p.waitFor(3, TimeUnit.SECONDS);
                         p.destroy();
                     }
                 }

@@ -1,8 +1,6 @@
 aspect UnregisterTyping{
 
     eq Unregister.type(){
-    // anche qui le info non le riesco a desumere dal tipo annotato, devo fare un check con le info
-    // che mi sono tirato giù prima
         if(delegating().getName()!=null){
             Process p = getNextProcess(this);
             Process p1 = getNextProcess(p);
@@ -23,7 +21,6 @@ aspect UnregisterTyping{
                 return new AcceptBackwardDelegation(delegating().getName(),next);
             }
         }
-
         return null;
     }
 

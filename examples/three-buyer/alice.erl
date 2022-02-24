@@ -20,6 +20,7 @@ init() ->
       end
   end.
 
+-type funny() :: 'Int->Boolean'.
 funny(Exp) ->
   case Exp < 10 of
     true ->

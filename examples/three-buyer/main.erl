@@ -1,4 +1,4 @@
--module(three_buyer).
+-module(main).
 
 -export([start_protocol/0]).
 
