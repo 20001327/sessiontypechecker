@@ -1,4 +1,4 @@
-aspect CaseTyping{
+    aspect CaseTyping{
     syn lazy Session CaseClause.type();
 
     eq Case.type(){

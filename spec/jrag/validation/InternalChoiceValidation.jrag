@@ -15,13 +15,9 @@ aspect InternalChoiceValidation{
         return true;
     }
 
-
-    /*
-       utility function to get if a send is already present in the map,
-       check if a pair sender, label is present twice
-    */
     public boolean SessionSend.isPresentInThisMap(Map<String,String> map){
-        String types = StreamSupport.stream(getTypes().spliterator(),false).map(t->t.toString()).collect(Collectors.joining());
+        String types = StreamSupport.stream(getTypes().spliterator(),false).
+                        map(t->t.toString()).collect(Collectors.joining());
         String sender = getSender().getIdent() + getLabel().getIdent();
         if(!map.containsKey(sender) || !map.get(sender).equals(types)){
             map.put(sender,types);
