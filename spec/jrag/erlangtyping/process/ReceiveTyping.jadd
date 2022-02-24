@@ -33,12 +33,10 @@ aspect ReceiveTyping{
                 types.add((SessionReceive)t);
             else return t;
         }
-        if(types.getNumChild()==1)
-            return types.getChild(0);
+        if(types.getNumChild()==1) return types.getChild(0);
         ExternalChoice ext = new ExternalChoice(types);
         if(ext.isWellFormed())
             return ext;
-
         return null;
     }
 
@@ -53,9 +51,6 @@ aspect ReceiveTyping{
            if(getNumVariables()==2){
                if(getLabel().getIdent().
                     equals("start_delegation")){
-                   // questo mi serve perchè non posso conoscere il tipo delle variabili
-                   // nell'annotazione di tipo non ho il tipo del messaggio
-                   // devo in qualche modo sapere il nome di chi sto delegando per sapere il tipo corretto
                    Send s = searchSendInMod(getSender().getIdent(),
                         getModuleName(),getLabel().getIdent());
                    if(s.getMessage().getPayload(0).type().
@@ -106,8 +101,6 @@ aspect ReceiveTyping{
        }
        return new SessionReceive(getSender(),getLabel(),sessions, getActions().type());
     }
-
-
 
     syn Send ReceiveClause.searchSendInMod(String moduleName,String dest, String label){
         for (Module module: getModulesList()){
