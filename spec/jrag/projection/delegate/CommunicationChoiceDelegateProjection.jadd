@@ -1,7 +1,6 @@
 aspect CommunicationChoiceDelegateProjection{
 
     syn Session CommunicationChoices.projectDelegate(String p, String q){
-
         if(getNumCommunications()==1){
             return getCommunications(0).projectDelegate(p, q);
         }else{
@@ -14,28 +13,22 @@ aspect CommunicationChoiceDelegateProjection{
                     receives.add(projected);
                 }else if(projected.isSubtypeOf(new SessionSend())){
                     sends.add((SessionSend) projected);
-                }else{
-                    return null;
-                }
+                else return null;
             }
-
             if(sends.getNumChild()>0){
-                return new InternalChoice(sends);
+                Internal choice ic = new InternalChoice(sends);
+                if(ic.isWellFormed())
+                    return ic;
             }
-
             if(receives.getNumChild()>0){
                 List<SessionReceive> lis = Session.merge(receives);
                 if(lis.getNumChild()==1) return lis.getChild(0);
                 else{
                     ExternalChoice ext = new ExternalChoice(lis);
-                    if(ext.isWellFormed()){
-                        return ext;
-                    }
+                    if(ext.isWellFormed()) return ext;
                 }
             }
         }
-
         return null;
-
     }
 }
