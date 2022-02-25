@@ -21,17 +21,7 @@ aspect Merge{
               }
         }
 
-        for(int i = 0; i<recs.getNumChild();i++){
-            allSimple = allSimple && Program.sameClass(recs.getChild(i),SessionReceive.class);
-            allConnecting = allConnecting && (Program.sameClass(recs.getChild(i),ConnectingReceive.class)
-                                        || recs.getChild(i).isSubtypeOf(new End()));
-        }
-
-        if(allConnecting || allSimple){
-            return recs;
-        }
-
-        return null;
+        return recs;
     }
 
 }
