@@ -9,11 +9,7 @@ aspect CommunicationChoiceDelegatingProjection{
             for(int i = 1; i<getNumCommunications(); i++){
                Communication c = getCommunications(i);
                Session s1 = c.projectDelegating(p,q);
-               if(s1.isSameType(s)){
-                   s = c.projectDelegating(p,q);
-               }else{
-                   return null;
-               }
+               if(!s1.isSameType(s)) return null;
             }
             return s;
         }
