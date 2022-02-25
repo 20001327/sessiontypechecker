@@ -4,7 +4,8 @@ jar/
 
 /.idea/
 /calc/
-/src/*.beam
+*.beam
+
 /buildold.xml
 /erl_crash.dump
 /TwoBuyerProtocol.iml

@@ -3,8 +3,7 @@
 aspect Merge{
 
     public static List<SessionReceive> Session.merge(List<Session> sessions){
-        List<SessionReceive> ret = new List();
-        List<Session> recs = new List();
+        List<SessionReceive> recs = new List();
         boolean allSimple = true;
         boolean allConnecting = true;
 
@@ -29,21 +28,7 @@ aspect Merge{
         }
 
         if(allConnecting || allSimple){
-
-            for(int i = 0; i<recs.getNumChild();i++){
-                boolean add = true;
-                SessionReceive toBeAdded = (SessionReceive)recs.getChild(i);
-                for(int j=0; j<ret.getNumChild();j++){
-                    SessionReceive present = (SessionReceive)ret.getChild(j);
-                    add = add && !present.equals(toBeAdded);
-                }
-
-                if(add){
-                    ret.add(toBeAdded);
-                }
-            }
-
-            return ret;
+            return recs;
         }
 
         return null;

@@ -1,16 +1,13 @@
 aspect ReceiveSubtyping{
+        public boolean SessionReceive.subtypeOf(Object other){
+            if(((Session)other).isSubtypeOf(new SessionReceive())){
+                SessionReceive obj = (SessionReceive) other;
 
-    public boolean SessionReceive.subtypeOf(Object other){
-        if(((Session)other).isSubtypeOf(new SessionReceive())){
-            SessionReceive obj = (SessionReceive) other;
-
-            if(getRecipient().equals(obj.getRecipient()) && getLabel().equals(obj.getLabel())){
-                boolean list = Program.checkListsByClassName(getTypes(), obj.getTypes());
-                return list && getNext().subtypeOf(obj.getNext());
+                if(getRecipient().equals(obj.getRecipient()) && getLabel().equals(obj.getLabel())){
+                    boolean list = Program.checkListsByClassName(getTypes(), obj.getTypes());
+                    return list && getNext().subtypeOf(obj.getNext());
+                }
             }
-
+            return false;
         }
-
-        return false;
-    }
 }
