@@ -309,6 +309,8 @@ Session session =
      {: return  new AcceptForwardDelegation(new Atom(i), next); :}
 |   IDENTIFIER.i CLOSEANGULAR CLOSEANGULAR DOT session.next
      {: return  new RequestBackwardDelegation(new Atom(i), next); :}
+|   REC RECSYM IDENTIFIER.t DOT session DOT RECSYM IDENTIFIER.t2
+     {: return new RecType(new RecVar(t), session, new RecVar(t2)); :}
 |   END
      {: return new End(); :}
 ;

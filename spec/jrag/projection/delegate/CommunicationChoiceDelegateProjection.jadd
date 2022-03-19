@@ -11,12 +11,12 @@ aspect CommunicationChoiceDelegateProjection{
                 if(projected.isSubtypeOf(new ExternalChoice())
                     || projected.isSubtypeOf(new SessionReceive())){
                     receives.add(projected);
-                }else if(projected.isSubtypeOf(new SessionSend())){
+                }else if(projected.isSubtypeOf(new SessionSend()))
                     sends.add((SessionSend) projected);
                 else return null;
             }
             if(sends.getNumChild()>0){
-                Internal choice ic = new InternalChoice(sends);
+                InternalChoice ic = new InternalChoice(sends);
                 if(ic.isWellFormed())
                     return ic;
             }
