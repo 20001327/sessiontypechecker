@@ -93,13 +93,15 @@ IdInSingle     = '{Identifier}'
 "'/'"                 { return sym(Terminals.DIVISION); }
 "'<'"                 { return sym(Terminals.LESS); }
 
+"$"                   { return sym(Terminals.RECSYM); }
+"rec"                 { return sym(Terminals.REC); }
 "'"                   { return sym(Terminals.SINGLEMARKS); }
 "<"                   { return sym(Terminals.OPENANGULAR); }
 ">"                   { return sym(Terminals.CLOSEANGULAR); }
-"String"            { return sym(Terminals.STRINGTYPE); }
-"Int"               { return sym(Terminals.INTTYPE); }
-"Atom"              { return sym(Terminals.ATOMTYPE); }
-"Boolean"           { return sym(Terminals.BOOLEANTYPE); }
+"String"              { return sym(Terminals.STRINGTYPE); }
+"Int"                 { return sym(Terminals.INTTYPE); }
+"Atom"                { return sym(Terminals.ATOMTYPE); }
+"Boolean"             { return sym(Terminals.BOOLEANTYPE); }
 
 
 {Symbol}              { return sym(Terminals.SYMBOL); }

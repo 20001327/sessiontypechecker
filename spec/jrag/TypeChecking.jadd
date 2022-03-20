@@ -6,15 +6,15 @@ aspect TypeChecking{
             for (Function function : module.getFunctionss()){
                 if(function.getFunctionName().equals("init")){
                     FunType type1 = function.getType();
-                    printer().reset();
-                    type1.print();
-                    System.out.println("tipo atteso: " + printer().getString());
-                    Session t = function.getBody().type();
-                    printer().reset();
+                    type1.stampante().reset();
+                    type1.stampa();
+                    System.out.println("tipo atteso: " + type1.stampante().getString());
+                    Session t = function.getInferredType();
                     FunType type2 = new FunType(function.getFunctionName(),
                                                 function.getType().getArgumentss(),t);
+                    type2.stampante().reset();
                     type2.stampa();
-                    System.out.println("tipo calcolato: " + printer().getString());
+                    System.out.println("tipo calcolato: " + type2.stampante().getString());
                     System.out.println("Risultato Compare: " + type1.compareWith(type2));
                 }
             }
@@ -28,15 +28,15 @@ aspect TypeChecking{
                 System.out.println("_______________________" + module.getPartecipant() + "________________________");
                 for (Function function : module.getFunctionss()){
                     if(function.getFunctionName().equals("init")){
-                        printer().reset();
+                        type1.stampante().reset();
                         type1.stampa();
-                        System.out.println("tipo atteso: " + printer().getString());
-                        Session t = function.getBody().type();
+                        System.out.println("tipo atteso: " + type1.stampante().getString());
+                        Session t = function.getInferredType();;
                         FunType type2 = new FunType(function.getFunctionName(),
                                                     function.getType().getArgumentss(),t);
-                        printer().reset();
+                        type2.stampante().reset();
                         type2.stampa();
-                        System.out.println("tipo calcolato: " + printer().getString());
+                        System.out.println("tipo calcolato: " + type2.stampante().getString());
                         System.out.println("Risultato Compare: " + type1.compareWith(type2));
                     }
                 }

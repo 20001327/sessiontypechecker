@@ -9,8 +9,18 @@ aspect SessionPrettyPrint{
     inh lazy PrettyPrinter Session.stampante();
     inh lazy PrettyPrinter Atom.stampante();
 
-    public void Session.stampa(){
-       stampante().append("session");
+    public abstract void Session.stampa();
+
+    public void RecType.stampa(){
+       stampante().append("rec");
+       getRecVariable().stampa();
+       stampante().append(".");
+       getType().stampa();
+    }
+
+    public void RecVar.stampa(){
+        stampante().append("$");
+        stampante().append(getName());
     }
 
     public void FunType.stampa(){
@@ -143,8 +153,34 @@ aspect SessionPrettyPrint{
         stampante().append(getIdent());
     }
 
+    public void ActorPid.stampa() {
+        stampante().append("End");
+    }
+
+    public void AtS.stampa() {
+        stampante().append("End");
+    }
+
     public void AtomType.stampa() {
         stampante().append("End");
     }
+
+    public void BoolType.stampa() {
+        stampante().append("End");
+    }
+
+    public void IntType.stampa() {
+        stampante().append("End");
+    }
+
+    public void PidType.stampa() {
+        stampante().append("End");
+    }
+
+    public void StringType.stampa() {
+        stampante().append("End");
+    }
+
+
 
 }

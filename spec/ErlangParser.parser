@@ -291,12 +291,15 @@ Variable variable =
     {: return new Variable(ATOMID.replace("'","")); :}
 ;
 
-
+RecVar recvar =
+    RECSYM IDENTIFIER.t
+    {: return new RecVar(t); :};
 
 Session session =
     literaltype
 |   sessionsend
 |   sessionreceive
+|   recvar
 |   INTERNALCHOICE LQUAD session_send_list.list RQUAD
     {: return new InternalChoice(list); :}
 |   EXTERNALCHOICE LQUAD session_receive_list.list RQUAD
@@ -309,6 +312,8 @@ Session session =
      {: return  new AcceptForwardDelegation(new Atom(i), next); :}
 |   IDENTIFIER.i CLOSEANGULAR CLOSEANGULAR DOT session.next
      {: return  new RequestBackwardDelegation(new Atom(i), next); :}
+|   REC recvar.t DOT session
+     {: return new RecType(t, session); :}
 |   END
      {: return new End(); :}
 ;

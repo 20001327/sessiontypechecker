@@ -2,9 +2,11 @@ aspect CallTyping{
     inh lazy Delegating Call.delegating();
 
     eq Call.type(){
-        if(getFunctionName().getIdent().equals("self")){
+        if(getFunctionName().getIdent().equals(getCalledFunName())){
+            return new RecVar(getCalledFunName());
+        } else if(getFunctionName().getIdent().equals("self")){
             return new PidType();
-        }else{
+        } else {
              Session type = null;
              List typeList = new List();
              for(Expression s : getArgumentss()){

@@ -1,0 +1,20 @@
+aspect RecSubtyping{
+
+    public boolean RecType.isSubtypeOf(Session other){
+        if(getType().endsWith(getRecVariable())){
+            if(((Session)other).isSubtypeOf(new RecType())){
+                RecType oth = (RecType) other;
+                return this.getType().equals(oth.getType());
+            }
+        }
+        return false;
+    }
+
+    public boolean RecVar.isSubtypeOf(Session other){
+        if(((Session)other).isSubtypeOf(new RecVar())){
+            RecVar endVar = (RecVar) other;
+            return this.getName().equals(endVar.getName());
+        }
+        return false;
+    }
+}

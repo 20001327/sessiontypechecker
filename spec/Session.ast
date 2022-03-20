@@ -1,0 +1,27 @@
+
+abstract Session;
+SessionSend:Session ::= Sender:Atom Label:Atom Type:LiteralType* Next:Session;
+SessionReceive:Session ::= Recipient:Atom Label:Atom Type:LiteralType* Next:Session;
+InternalChoice:Session ::= Sends:SessionSend*;
+ExternalChoice:Session ::= Receives:SessionReceive*;
+RequestForwardDelegation:Session ::= Delegating:Atom Next:Session;
+RequestBackwardDelegation:Session ::= Delegating:Atom Next:Session;
+AcceptForwardDelegation:Session ::= Delegate:Atom Next:Session;
+AcceptBackwardDelegation:Session ::= Delegate:Atom Next:Session;
+RecType:Session ::= RecVariable:RecVar Type:Session;
+RecVar:Session ::= <Name:String>;
+End:Session;
+
+ConnectingSend:SessionSend;
+ConnectingReceive:SessionReceive;
+
+abstract LiteralType:Session;
+AtomType:LiteralType;
+IntType:LiteralType;
+StringType:LiteralType;
+PidType:LiteralType;
+BoolType:LiteralType;
+ActorPid:LiteralType::=<Actor:String>;
+AtS:LiteralType::=<Partecipant:String>;
+
+FunType:Session ::= <FunName:String> Arguments:LiteralType* SessionType:Session;
