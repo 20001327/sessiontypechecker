@@ -6,14 +6,30 @@ aspect ProcessTypes{
     eq Module.getFunctions().getModuleName() = this.getPartecipant();
     eq Module.getFunctions().getFunctionss() = this.getFunctionss();
     eq Function.getBody().getFunType() = this.getType();
+    eq Function.getBody().getCalledFunName() = this.getFunctionName();
+    eq Function.getBody().getCalledBody() = this.getBody();
 
     syn lazy Session Process.type();
 
     inh lazy String Process.getModuleName();
+    inh lazy String Process.getCalledFunName();
+    inh lazy String Expression.getCalledFunName();
+    inh lazy Process Process.getCalledBody();
     inh lazy List<Function> Process.getFunctionss();
     inh lazy FunType Process.getFunType();
 
     inh lazy Delegating Process.delegating();
+
+    Session Function.getInferredType(){
+        if(this.isRecursive()){
+            if(getBody().type().endsWith(new RecVar(getFunctionName()))){
+                return new RecType(new RecVar(getFunctionName()), getBody().type());
+            }
+        }else{
+            return getBody().type();
+        }
+        return null;
+    }
 
     Process Process.getNextProcess(Process p){
         String className = p.getClass().getName();

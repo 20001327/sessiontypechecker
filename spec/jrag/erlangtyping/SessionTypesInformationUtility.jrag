@@ -8,6 +8,10 @@ aspect SessionTypesInformationUtility{
         return getType().getSessionType().getInfo(label, index);
     }
 
+    public boolean Function.isRecursive(){
+        return getType().getSessionType() instanceof RecType;
+    }
+
     public Session Session.getInfo(String label,int index){
         return null;
     }

@@ -93,8 +93,8 @@ IdInSingle     = '{Identifier}'
 "'/'"                 { return sym(Terminals.DIVISION); }
 "'<'"                 { return sym(Terminals.LESS); }
 
-"rec"                 { return sym(Terminals.REC); }
 "$"                   { return sym(Terminals.RECSYM); }
+"rec"                 { return sym(Terminals.REC); }
 "'"                   { return sym(Terminals.SINGLEMARKS); }
 "<"                   { return sym(Terminals.OPENANGULAR); }
 ">"                   { return sym(Terminals.CLOSEANGULAR); }

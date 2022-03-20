@@ -1,0 +1,93 @@
+aspect EndsWithUtility{
+
+    public abstract boolean Session.endsWith(RecVar var);
+
+    public boolean RecVar.endsWith(RecVar var){
+        return this.getName().equals(var.getName());
+    }
+
+    public boolean RecType.endsWith(RecVar var){
+        return this.getType().endsWith(var);
+    }
+
+    public boolean InternalChoice.endsWith(RecVar var){
+      boolean found = true;
+      for (SessionSend send: getSendss()){
+        found = found && send.endsWith(var);
+      }
+      return found;
+    }
+
+    public boolean ExternalChoice.endsWith(RecVar var){
+        boolean found = true;
+        for (SessionReceive s1: getReceivess()){
+            found = found && s1.endsWith(var);
+        }
+
+        return found;
+    }
+
+    public boolean LiteralType.endsWith(RecVar var) {
+            return false;
+    }
+
+    public boolean IntType.endsWith(RecVar var) {
+            return false;
+    }
+
+    public boolean AtomType.endsWith(RecVar var) {
+            return false;
+    }
+
+    public boolean BoolType.endsWith(RecVar var) {
+            return false;
+    }
+
+    public boolean PidType.endsWith(RecVar var) {
+            return false;
+    }
+
+    public boolean ActorPid.endsWith(RecVar var) {
+            return false;
+    }
+
+    public boolean End.endsWith(RecVar var) {
+            return false;
+    }
+
+    public boolean AtS.endsWith(RecVar var) {
+            return false;
+    }
+
+    public boolean SessionSend.endsWith(RecVar var) {
+           return getNext().endsWith(var);
+    }
+
+    public boolean SessionReceive.endsWith(RecVar var) {
+           return getNext().endsWith(var);
+   }
+
+    public boolean RequestForwardDelegation.endsWith(RecVar var) {
+           return getNext().endsWith(var);
+    }
+
+    public boolean RequestBackwardDelegation.endsWith(RecVar var) {
+           return getNext().endsWith(var);
+    }
+
+    public boolean AcceptForwardDelegation.endsWith(RecVar var) {
+           return getNext().endsWith(var);
+    }
+
+    public boolean AcceptBackwardDelegation.endsWith(RecVar var) {
+           return getNext().endsWith(var);
+    }
+
+    public boolean FunType.endsWith(RecVar var) {
+           return getSessionType().endsWith(var);
+    }
+
+    public boolean StringType.endsWith(RecVar var) {
+            return false;
+    }
+}
