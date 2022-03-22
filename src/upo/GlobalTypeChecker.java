@@ -21,11 +21,11 @@ public class GlobalTypeChecker {
     public void run(String... args) throws IOException {
         // Make sure there are arguments
         if (args.length != 1) {
-            System.err.println("1 arguments required: path of the folder with sources and global types");
+            System.err.println("1 arguments required: path of the folder with sources and _global types");
             System.exit(1);
         }
         // check that the file exists and is a directory
-        File fileGlobal = new File(args[0] + "/global");
+        File fileGlobal = new File(args[0] + "/_global");
         File file = new File(args[0]);
         if (!file.isDirectory()) {
             Path path = Paths.get(args[0]);
