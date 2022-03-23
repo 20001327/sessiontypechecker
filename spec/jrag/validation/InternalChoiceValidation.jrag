@@ -44,6 +44,10 @@ aspect InternalChoiceValidation{
         return true;
     }
 
+    public boolean RecVar.isPresentInThisMap(Map<String,String> map){
+        return false;
+    }
+
     public boolean LiteralType.isPresentInThisMap(Map<String,String> map){
         return false;
     }

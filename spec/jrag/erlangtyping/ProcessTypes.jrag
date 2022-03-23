@@ -12,23 +12,34 @@ aspect ProcessTypes{
     syn lazy Session Process.type();
 
     inh lazy String Process.getModuleName();
-    inh lazy String Process.getCalledFunName();
-    inh lazy String Expression.getCalledFunName();
-    inh lazy Process Process.getCalledBody();
+    inh String Process.getCalledFunName();
+    inh String Expression.getCalledFunName();
+    inh Process Process.getCalledBody();
     inh lazy List<Function> Process.getFunctionss();
     inh lazy FunType Process.getFunType();
 
     inh lazy Delegating Process.delegating();
 
-    Session Function.getInferredType(){
-        if(this.isRecursive()){
-            if(getBody().type().endsWith(new RecVar(getFunctionName()))){
-                return new RecType(new RecVar(getFunctionName()), getBody().type());
+    syn Session Function.getInferredType() circular [null];
+
+    eq Function.getInferredType(){
+        Session s = null;
+        for(TypeDeclaration decl: getTypeDeclarations()){
+            if(decl.getName().equals("fun-"+getFunctionName())){
+                s = decl.getType();
             }
-        }else{
-            return getBody().type();
         }
-        return null;
+
+        if(s==null){
+            s = getBody().type();
+            RecVar var = new RecVar(getFunctionName());
+            if(isRecursive() && s.endsWith(var)){
+               s = new RecType(var, s);
+            }
+            addTypeDeclaration("fun-"+getFunctionName(),s);
+        }
+
+        return s;
     }
 
     Process Process.getNextProcess(Process p){

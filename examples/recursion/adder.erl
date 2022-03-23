@@ -11,5 +11,7 @@ init()->
         %io:format("ADDER: ~p + ~p~n", [Qta1,Qta2]),
         Tot = 1 + 1,
         client!{adder, 'tot', Tot},
-        init()
+        init();
+    {client, 'stop'} ->
+        'End'
   end.

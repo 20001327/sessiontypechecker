@@ -1,0 +1,39 @@
+import java.util.ArrayList;
+
+aspect TypeTable{
+    class TypeDeclaration{
+        String name;
+        Session type;
+
+        public String getName(){
+            return name;
+        }
+
+        public Session getType(){
+            return type;
+        }
+
+        public void setName(String name){
+            this.name = name;
+        }
+
+        public void setType(Session type){
+            this.type = type;
+        }
+
+    }
+
+    syn lazy ArrayList<TypeDeclaration> Module.getTypeDeclarations() {
+        return new ArrayList<>();
+    }
+
+    inh lazy ArrayList<TypeDeclaration>  Function.getTypeDeclarations();
+    eq Module.getFunctions().getTypeDeclarations() = this.getTypeDeclarations();
+
+    public void Function.addTypeDeclaration(String name, Session type) {
+        TypeDeclaration var = new TypeDeclaration();
+        var.setName(name);
+        var.setType(type);
+        getTypeDeclarations().add(var);
+    }
+}

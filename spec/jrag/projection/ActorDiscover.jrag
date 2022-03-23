@@ -35,6 +35,15 @@ aspect ActorDiscover{
         return actors;
     }
 
+
+    public ArrayList<String> RecGlobal.actors(){
+        ArrayList<String> actors = new ArrayList();
+        for(String actor: getType().actors()){
+            GProg.addAbsent(actor, actors);
+        }
+        return actors;
+    }
+
     public ArrayList<String> Connecting.actors(){
         ArrayList<String> actors = new ArrayList();
         GProg.addAbsent(getSender(), actors);

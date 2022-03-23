@@ -70,6 +70,10 @@ aspect SessionTypesInformationUtility{
         return getNext().getInfo(label, index);
     }
 
+    public Session RecType.getInfo(String label,int index){
+        return getType().getInfo(label, index);
+    }
+
     public Session RequestBackwardDelegation.getInfo(String label,int index){
         return getNext().getInfo(label, index);
     }

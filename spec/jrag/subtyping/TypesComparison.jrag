@@ -12,6 +12,14 @@ aspect TypesComparison{
             return t instanceof IntType;
     }
 
+    public boolean RecVar.isSubtypeOf(Session t) {
+            return t instanceof RecVar;
+    }
+
+    public boolean RecType.isSubtypeOf(Session t) {
+            return t instanceof RecType;
+    }
+
     public boolean AtomType.isSubtypeOf(Session t) {
             return t instanceof AtomType;
     }

@@ -222,6 +222,9 @@ Operator operator =
 |    LCURLYBRACE OPERATOR COMMA anno COMMA LESS.sym COMMA
      expression.op1 COMMA expression.op2 RCURLYBRACE
      {: return new Operator(sym,op1, op2); :}
+|    LCURLYBRACE OPERATOR COMMA anno COMMA MORE.sym COMMA
+     expression.op1 COMMA expression.op2 RCURLYBRACE
+     {: return new Operator(sym,op1, op2); :}
 ;
 
 List expression_list =
@@ -365,6 +368,11 @@ List literal_type_list =
 |   literal_type_list COMMA literaltype     {: return literal_type_list.add(literaltype); :}
 ;
 
+
+RecGlobalVar recglobalvar =
+    RECSYM IDENTIFIER.t
+    {: return new RecGlobalVar(t); :};
+
 Global global =
     LQUAD communication_list.clist RQUAD
     {: return new CommunicationChoices(clist); :}
@@ -374,6 +382,9 @@ Global global =
     {: return new StartDelegation(delegate, delegating, next); :}
 |   IDENTIFIER.delegating CLOSEANGULAR CLOSEANGULAR IDENTIFIER.delegate DOT global.next
     {: return new EndDelegation(delegate, delegating, next); :}
+|   REC recglobalvar.t DOT global
+    {: return new RecGlobal(t, global); :}
+|   recglobalvar
 |   terminal
 ;
 

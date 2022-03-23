@@ -11,17 +11,17 @@ aspect EndsWithUtility{
     }
 
     public boolean InternalChoice.endsWith(RecVar var){
-      boolean found = true;
+      boolean found = false;
       for (SessionSend send: getSendss()){
-        found = found && send.endsWith(var);
+        found = found || send.endsWith(var);
       }
       return found;
     }
 
     public boolean ExternalChoice.endsWith(RecVar var){
-        boolean found = true;
+        boolean found = false;
         for (SessionReceive s1: getReceivess()){
-            found = found && s1.endsWith(var);
+            found = found || s1.endsWith(var);
         }
 
         return found;

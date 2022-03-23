@@ -1,0 +1,26 @@
+aspect RecursionProjection{
+
+    syn Session RecGlobal.project(String actor){
+        boolean found = false;
+        for(String a: actors()){
+            found = found || a.equals(actor);
+        }
+
+        Session s = getType().project(actor);
+        if(found){
+            RecVar recvar = new RecVar(getRecVariable().getName());
+            if(s.endsWith(recvar)){
+                return new RecType(recvar, s);
+            }
+        }else{
+            return s;
+        }
+
+        return new End();
+    }
+
+    syn Session RecGlobalVar.project(String actor){
+        return new RecVar(getName());
+    }
+
+}

@@ -5,8 +5,8 @@ abstract Global;
 CommunicationChoices:Global ::= Communications:Communication*;
 StartDelegation:Global ::= <Delegate:String> <Delegating:String> Next:Global;
 EndDelegation:Global ::= <Delegate:String> <Delegating:String> Next:Global;
-Rec:Global ::= RecVariable:RecVariable FunType:FunctionGlobal Next:Global;
-RecVariable:Global;
+RecGlobal:Global ::= RecVariable:RecGlobalVar Type:Global;
+RecGlobalVar:Global ::= <Name:String>;
 Terminal:Global;
 
 EndGlobal:Terminal;

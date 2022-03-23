@@ -36,6 +36,18 @@ aspect SessionPrettyPrint{
 
     }
 
+    public void RecGlobal.stampa(){
+       stampante().append("rec");
+       getRecVariable().stampa();
+       stampante().append(".");
+       getType().stampa();
+    }
+
+    public void RecGlobalVar.stampa(){
+        stampante().append("$");
+        stampante().append(getName());
+    }
+
     public void CommunicationChoice.stampa(){
         stampante().append("\n");
         stampante().append(getSender());

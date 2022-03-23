@@ -15,13 +15,11 @@ aspect CallTyping{
              for(Function f : getFunctionss()){
                 if(f.getFunctionName().equals(getFunctionName().getIdent())) {
                     List ts = f.getType().getArgumentss();
-                    if(f.getNumParameters() == getNumArguments()
-                      && Program.checkListsByClassName(ts,typeList)){
-                        type = f.getBody().type();
+                    if(f.getNumParameters() == getNumArguments() && Program.checkListsByClassName(ts,typeList)){
+                          type = f.getInferredType();
                     }
                 }
              }
-
              return type;
          }
     }

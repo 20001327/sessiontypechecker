@@ -5,7 +5,6 @@ import miniErlang.*;
 
 import java.io.*;
 import java.lang.Process;
-import java.net.URL;
 import java.nio.file.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -21,11 +20,11 @@ public class GlobalTypeChecker {
     public void run(String... args) throws IOException {
         // Make sure there are arguments
         if (args.length != 1) {
-            System.err.println("1 arguments required: path of the folder with sources and _global types");
+            System.err.println("1 arguments required: path of the folder with sources and global types");
             System.exit(1);
         }
         // check that the file exists and is a directory
-        File fileGlobal = new File(args[0] + "/_global");
+        File fileGlobal = new File(args[0] + "/global");
         File file = new File(args[0]);
         if (!file.isDirectory()) {
             Path path = Paths.get(args[0]);

@@ -92,6 +92,7 @@ IdInSingle     = '{Identifier}'
 "'!'"                 { return sym(Terminals.SEND); }
 "'/'"                 { return sym(Terminals.DIVISION); }
 "'<'"                 { return sym(Terminals.LESS); }
+"'>'"                 { return sym(Terminals.MORE); }
 
 "$"                   { return sym(Terminals.RECSYM); }
 "rec"                 { return sym(Terminals.REC); }

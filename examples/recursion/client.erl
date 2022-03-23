@@ -5,27 +5,22 @@
 start()->
   register(client,spawn(client, init, [])).
 
--type init() :: '@(rec$internal.adder!add.adder?tot<Int>.$internal,adder!stop.End)'.
+-type init() :: 'rec$loop.@(adder!add.adder?tot<Int>.$loop,adder!stop.End)'.
 init()->
   loop(10).
 
--type loop() :: 'Int->@(rec$internal.adder!add.adder?tot<Int>.$internal,adder!stop.End)'.
+-type loop() :: 'Int->rec$loop.@(adder!add.adder?tot<Int>.$loop,adder!stop.End)'.
 loop(Ending)->
     NewEnding = Ending - 1,
     case Ending>0 of
-    true->
-        internal();
-    false->
-        adder!{client,'stop'},
-        'End'
+        true->
+            adder!{client,'add'},
+            receive
+                {adder, 'tot', Tot} -> loop(NewEnding)
+            end;
+        false->
+            adder!{client,'stop'},
+            'End'
     end.
 
--type internal() :: 'rec$internal.adder!add.adder?tot<Int>.$internal'.
-internal()->
-    adder!{client,'add'},
-    receive
-        {adder, 'tot', Tot} ->
-        %io:format("tot ~p~n", [Tot]),
-        adder!{client,'add'}
-    end,
-    loop(NewEnding);
+

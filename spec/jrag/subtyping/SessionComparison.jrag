@@ -6,9 +6,13 @@ aspect SessionComparison{
         boolean sessions = getSessionType().subtypeOf(type.getSessionType());
         return name && arguments && sessions;
     }
-    public boolean Session.subtypeOf(Object other){
-        return Program.sameClass(this,other);
+
+    public abstract boolean Session.subtypeOf(Object other);
+
+    public boolean FunType.subtypeOf(Object other){
+        return false;
     }
+
     public static boolean Program.checkListsByClassName(List<? extends ASTNode> l1, List<? extends ASTNode> l2){
          Map<String, Integer> freq1 = new HashMap<>();
          l1.forEach(it -> freq1.merge(it.getClass().getName(), 1, (a, b) -> a + b));
