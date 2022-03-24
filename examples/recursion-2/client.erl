@@ -5,16 +5,16 @@
 start()->
   register(client,spawn(client, init, [])).
 
--type init() :: 'rec$loop.@(adder!add.adder?tot<Int>.$loop,adder!stop.End)'.
+-type init() :: 'rec$loop.@(adder!add<Int,Int>.adder?tot<Int>.$loop,adder!stop.End)'.
 init()->
   loop(10).
 
--type loop() :: 'Int->rec$loop.@(adder!add.adder?tot<Int>.$loop,adder!stop.End)'.
+-type loop() :: 'Int->rec$loop.@(adder!add<Int,Int>.adder?tot<Int>.$loop,adder!stop.End)'.
 loop(Ending)->
     NewEnding = Ending - 1,
     case Ending>0 of
         true->
-            adder!{client,'add'},
+            adder!{client,'add', 3, 4},
             receive
                 {adder, 'tot', Tot} -> loop(NewEnding)
             end;

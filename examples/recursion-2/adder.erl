@@ -4,12 +4,12 @@
 
 start()->register(adder,spawn(adder, init, [])).
 
--type init() :: 'rec$init.client?add.client!tot<Int>.$init'.
+-type init() :: 'rec$init.client?add<Int,Int>.client!tot<Int>.$init'.
 init()->
   receive
-    {client, 'add'} ->
+    {client, 'add', A1, A2} ->
         %io:format("ADDER: ~p + ~p~n", [Qta1,Qta2]),
-        Tot = 1 + 1,
+        Tot = A1 + A2,
         client!{adder, 'tot', Tot},
         init();
     {client, 'stop'} ->
