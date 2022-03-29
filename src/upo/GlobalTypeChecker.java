@@ -33,8 +33,8 @@ public class GlobalTypeChecker {
             System.exit(2);
         }
         System.out.println("file : " + args[0]);
-        Path pathast = Paths.get(args[0] + "ast/");
-        File astDir = new File(args[0] + "ast");
+        Path pathast = Paths.get(args[0] + "form/");
+        File astDir = new File(args[0] + "form");
 
         if (!astDir.exists()) {
             Files.createDirectories(pathast);
@@ -70,9 +70,9 @@ public class GlobalTypeChecker {
                 for (String s : g.getActors()) {
                     File temp = new File(args[0] + s + ".erl");
                     if (temp.exists()) {
-                        System.out.println("getting " + s + " ast file");
+                        System.out.println("getting " + s + " form file");
                         Process p = Runtime.getRuntime().exec("erl -noshell " +
-                                "-eval \"forms:read_to_binary(" + s + ",'ast/" + s + ".ast').\" " +
+                                "-eval \"forms:read_to_binary(" + s + ",'form/" + s + ".form').\" " +
                                 "-eval 'init:stop().'", null, file);
                         p.waitFor(3, TimeUnit.SECONDS);
                         p.destroy();
@@ -88,7 +88,7 @@ public class GlobalTypeChecker {
                                         String s = fname[0];
                                         System.out.println("getting " + s + " ast file");
                                         Process p = Runtime.getRuntime().exec("erl -noshell " +
-                                                "-eval \"forms:read_to_binary(" + s + ",'ast/" + s + ".ast').\" " +
+                                                "-eval \"forms:read_to_binary(" + s + ",'form/" + s + ".form').\" " +
                                                 "-eval 'init:stop().'", null, file);
                                         p.waitFor(3, TimeUnit.SECONDS);
                                         p.destroy();
