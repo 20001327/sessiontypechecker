@@ -10,9 +10,6 @@ RecGlobalVar:Global ::= <Name:String>;
 Terminal:Global;
 
 EndGlobal:Terminal;
-
-FunctionGlobal::= Arguments:LiteralType* SessionType:Session;
-
 Communication ::= Message:CommunicationChoice Next:Global;
 
 CommunicationChoice ::= <Sender:String> <Recipient:String> <Label:String> Types:LiteralType*;
