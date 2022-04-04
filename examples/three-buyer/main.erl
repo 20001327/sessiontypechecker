@@ -3,6 +3,7 @@
 -export([start_protocol/0]).
 
 start_protocol()->
+    tracer:start(),
     start_actor(seller),
     start_actor(carol),
     start_actor(bob),

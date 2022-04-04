@@ -31,7 +31,7 @@ aspect TypeChecking{
                         type1.stampante().reset();
                         type1.stampa();
                         System.out.println("tipo atteso: " + type1.stampante().getString());
-                        Session t = function.getInferredType();;
+                        Session t = function.getInferredType();
                         FunType type2 = new FunType(function.getFunctionName(),
                                                     function.getType().getArgumentss(),t);
                         type2.stampante().reset();

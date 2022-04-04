@@ -45,6 +45,10 @@ public class GlobalTypeChecker {
         assert filetemp != null;
         copyInputStreamToFile(filetemp, new File(args[0] + "forms.beam"));
 
+        InputStream tracer = this.getClass().getClassLoader().getResourceAsStream("tracer.beam");
+        assert tracer != null;
+        copyInputStreamToFile(filetemp, new File(args[0] + "tracer.beam"));
+
         try {
 
             ErlangParser parser = new ErlangParser();

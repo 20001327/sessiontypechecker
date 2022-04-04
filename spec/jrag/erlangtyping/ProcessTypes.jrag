@@ -21,7 +21,6 @@ aspect ProcessTypes{
     inh lazy Delegating Process.delegating();
 
     syn Session Function.getInferredType() circular [null];
-
     eq Function.getInferredType(){
         Session s = null;
         for(TypeDeclaration decl: getTypeDeclarations()){
@@ -29,7 +28,6 @@ aspect ProcessTypes{
                 s = decl.getType();
             }
         }
-
         if(s==null){
             s = getBody().type();
             RecVar var = new RecVar(getFunctionName());
@@ -38,7 +36,6 @@ aspect ProcessTypes{
             }
             addTypeDeclaration("fun-"+getFunctionName(),s);
         }
-
         return s;
     }
 
