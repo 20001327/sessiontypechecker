@@ -65,7 +65,8 @@ getPrint(Message, UserList, Pid) ->
   io:format("call: ~p ~n", [Call]),
   Ret = if
     is_atom(Call) ->  lists:member({Call,Pid}, UserList);
-    true -> false
+    (Call) ->  lists:member({Call,Pid}, UserList);
+    true -> true
   end,
   Ret.
 

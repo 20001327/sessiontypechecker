@@ -9,7 +9,7 @@ start() ->
 init() ->
   receive
     {alice, title, Title} ->
-      Quote=20,
+      Quote=500,
       bob ! {seller, quote, Quote},
       alice ! {seller, quote, Quote},
       receive

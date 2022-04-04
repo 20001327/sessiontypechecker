@@ -56,18 +56,12 @@ start() ->
   seq_trace:set_token('receive',true).
 
 
-getPrint(Message, UserList, Pid) ->
+getPrint(Message,UserList, Pid) ->
   Call = if
     is_tuple(Message) ->  element(1, Message);
     true -> 'stop'
   end,
-  io:format("call: ~p   --    ", [UserList]),
-  io:format("call: ~p ~n", [Call]),
-  Ret = if
-    is_atom(Call) ->  lists:member({Call,Pid}, UserList);
-    true -> false
-  end,
-  Ret.
+  lists:keymember(Pid,2,UserList) and lists:keymember(Call,1,UserList).
 
 checkList(Message, UserList, Pid) ->
     NewList = if
