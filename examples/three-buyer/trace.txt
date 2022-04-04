@@ -1,0 +1,16 @@
+{alice,<0.436.0>}: Sent {alice,title,"Toy Story"} to {seller,<0.434.0>} 
+{seller,<0.434.0>}: Received {alice,title,"Toy Story"} from {alice,<0.436.0>} 
+{seller,<0.434.0>}: Sent {seller,quote,20} to {bob,<0.435.0>} 
+{seller,<0.434.0>}: Sent {seller,quote,20} to {alice,<0.436.0>} 
+{bob,<0.435.0>}: Received {seller,quote,20} from {seller,<0.434.0>} 
+{alice,<0.436.0>}: Received {seller,quote,20} from {seller,<0.434.0>} 
+{alice,<0.436.0>}: Sent {alice,myquote,10.0} to {bob,<0.435.0>} 
+{bob,<0.435.0>}: Received {alice,myquote,10.0} from {alice,<0.436.0>} 
+{bob,<0.435.0>}: Sent {bob,ok} to {seller,<0.434.0>} 
+{bob,<0.435.0>}: Sent {bob,ok} to {alice,<0.436.0>} 
+{bob,<0.435.0>}: Sent {bob,address,"Address"} to {seller,<0.434.0>} 
+{seller,<0.434.0>}: Received {bob,ok} from {bob,<0.435.0>} 
+{seller,<0.434.0>}: Received {bob,address,"Address"} from {bob,<0.435.0>} 
+{seller,<0.434.0>}: Sent {seller,date,"09-09-2021"} to {bob,<0.435.0>} 
+{alice,<0.436.0>}: Received {bob,ok} from {bob,<0.435.0>} 
+{bob,<0.435.0>}: Received {seller,date,"09-09-2021"} from {seller,<0.434.0>} 
