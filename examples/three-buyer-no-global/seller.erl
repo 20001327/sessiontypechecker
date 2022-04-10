@@ -5,7 +5,7 @@
 start() ->
   register(seller, spawn(seller, init, [])).
 
--type init() :: 'alice?title<String>.bob!quote<Int>.alice!quote<Int>.&(bob?ok.bob?address<String>.bob!date<String>.End,bob?quit.End)'.
+-spec init()->'#alice?title<String>.bob!quote<Int>.alice!quote<Int>.&(bob?ok.bob?address<String>.bob!date<String>.End,bob?quit.End)'.
 init() ->
   receive
     {alice, title, Title} ->

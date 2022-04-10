@@ -47,6 +47,7 @@ IdInSingle     = '{Identifier}'
 // discard whitespace information and comments
 {WhiteSpace}          { }
 
+"'fun'"              { return sym(Terminals.FUN); }
 "function"           { return sym(Terminals.FUNCTION); }
 "'receive'"          { return sym(Terminals.RECEIVE); }
 "'case'"             { return sym(Terminals.CASE); }
@@ -58,7 +59,9 @@ IdInSingle     = '{Identifier}'
 "string"             { return sym(Terminals.STRING); }
 "attribute"          { return sym(Terminals.ATTRIBUTE); }
 "module"             { return sym(Terminals.MODULE); }
+"product"            { return sym(Terminals.PRODUCT); }
 "type"               { return sym(Terminals.TYPE); }
+"spec"               { return sym(Terminals.SPEC); }
 "start"              { return sym(Terminals.START); }
 "true"               { return sym(Terminals.TRUE); }
 "false"              { return sym(Terminals.FALSE); }
@@ -80,6 +83,7 @@ IdInSingle     = '{Identifier}'
 "]"                   { return sym(Terminals.RBRACKET); }
 ")"                   { return sym(Terminals.RQUAD); }
 
+"#"                   { return sym(Terminals.CANC); }
 "."                   { return sym(Terminals.DOT); }
 "-"                   { return sym(Terminals.MINUS); }
 "+"                   { return sym(Terminals.PLUS); }

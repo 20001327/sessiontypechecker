@@ -4,7 +4,7 @@
 
 start()->register(adder,spawn(adder, init, [])).
 
--type init() :: 'rec$loop.&(client?add<Int,Int>.client!t<Int>.$loop,client?stop.End)'.
+-spec init()->'#rec$loop.&(client?add<Int,Int>.client!t<Int>.$loop,client?stop.End)'.
 init()->
   receive
     {client, 'add', A1, A2} ->

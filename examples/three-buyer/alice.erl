@@ -5,7 +5,7 @@
 start() ->
   register(alice, spawn(alice, init, [])).
 
--type init() :: 'seller!title<String>.seller?quote<Int>.bob!myquote<Int>.&(bob?ok.End,bob?quit.End)'.
+-spec init()->'#seller!title<String>.seller?quote<Int>.bob!myquote<Int>.&(bob?ok.End,bob?quit.End)'.
 init() ->
   seller!{alice,title,"Toy Story"},
   receive
@@ -20,7 +20,7 @@ init() ->
       end
   end.
 
--type funny() :: 'Int->Boolean'.
+-spec funny('#Int')->'#Boolean'.
 funny(Exp) ->
   case Exp < 10 of
     true ->

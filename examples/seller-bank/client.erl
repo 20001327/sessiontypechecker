@@ -1,7 +1,7 @@
 -module(client).
 -export([start/0, init/0]).
 start() -> register(client,spawn(client, init,[])).
--type init() :: 'seller!title<String>.seller?price<Int>.@(seller!ok.seller?pay<Int>.seller!card<String>.&(seller?date<String>.End,seller?ko.End),seller!ko.End)'.
+-spec init()->'#seller!title<String>.seller?price<Int>.@(seller!ok.seller?pay<Int>.seller!card<String>.&(seller?date<String>.End,seller?ko.End),seller!ko.End)'.
 init() ->
   MyLimit = 50,
   seller!{client,title,"Novecento"},

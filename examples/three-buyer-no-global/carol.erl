@@ -3,8 +3,7 @@
 start() ->
   register(carol, spawn(carol, init, [])).
 
--type init() :: 'bob?quote<Int>.bob<<.@(seller!ok.alice!ok.seller!address<String>.seller?date<String>.>>bob.End,alice!quit.seller!quit.>>bob.End)'.
-
+-spec init()->'#bob?quote<Int>.bob<<.@(seller!ok.alice!ok.seller!address<String>.seller?date<String>.>>bob.End,alice!quit.seller!quit.>>bob.End)'.
 init() ->
   receive
     {bob, quote, MyQuote} ->

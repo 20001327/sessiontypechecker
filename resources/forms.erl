@@ -528,6 +528,7 @@ read_to_binary(Module,Filename) ->
         case Form of
           {function,_,_,_,_} ->true;
           {attribute,_,type,_} ->true;
+          {attribute,_,spec,_} ->true;
           {attribute,_,module,_} ->true;
           _ ->false
         end ;

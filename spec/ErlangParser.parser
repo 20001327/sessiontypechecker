@@ -82,26 +82,27 @@ RCURLYBRACE
 ;
 
 FunType funtype =
- LCURLYBRACE ATTRIBUTE COMMA anno COMMA TYPE COMMA
-    LCURLYBRACE IDENTIFIER.fun
-    COMMA
-    LCURLYBRACE ATOM COMMA anno COMMA SINGLEMARKS
-        session SINGLEMARKS RCURLYBRACE
-    COMMA
-    LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
-    {: return new FunType(fun, new List(), session ); :}
-| LCURLYBRACE ATTRIBUTE COMMA anno COMMA TYPE COMMA
-     LCURLYBRACE IDENTIFIER.fun
-     COMMA
-     LCURLYBRACE ATOM COMMA anno COMMA
-         SINGLEMARKS
-          session_list.l MINUS CLOSEANGULAR
-          session
-         SINGLEMARKS
-     RCURLYBRACE
-     COMMA
-     LBRACKET RBRACKET RCURLYBRACE RCURLYBRACE COMMA
-     {: return new FunType(fun, l, session ); :}
+     LCURLYBRACE ATTRIBUTE COMMA anno COMMA SPEC COMMA
+        LCURLYBRACE LCURLYBRACE IDENTIFIER.fun COMMA INTEGER.i RCURLYBRACE COMMA
+            LBRACKET LCURLYBRACE TYPE COMMA anno COMMA FUN COMMA
+            LBRACKET LCURLYBRACE TYPE COMMA anno COMMA PRODUCT COMMA
+                LBRACKET
+                LCURLYBRACE ATOM COMMA anno COMMA SINGLEMARKS CANC session_list.l SINGLEMARKS
+                RCURLYBRACE
+                RBRACKET RCURLYBRACE COMMA
+                    LCURLYBRACE ATOM COMMA anno COMMA SINGLEMARKS CANC session SINGLEMARKS RCURLYBRACE
+            RBRACKET RCURLYBRACE RBRACKET
+        RCURLYBRACE RCURLYBRACE COMMA
+            {: return new FunType(fun, l, session ); :}
+|       LCURLYBRACE ATTRIBUTE COMMA anno COMMA SPEC COMMA
+        LCURLYBRACE LCURLYBRACE IDENTIFIER.fun COMMA INTEGER.i RCURLYBRACE COMMA
+            LBRACKET LCURLYBRACE TYPE COMMA anno COMMA FUN COMMA
+            LBRACKET LCURLYBRACE TYPE COMMA anno COMMA PRODUCT COMMA
+                LBRACKET RBRACKET RCURLYBRACE COMMA
+                    LCURLYBRACE ATOM COMMA anno COMMA SINGLEMARKS CANC session SINGLEMARKS RCURLYBRACE
+            RBRACKET RCURLYBRACE RBRACKET
+        RCURLYBRACE RCURLYBRACE COMMA
+            {: return new FunType(fun, new List(), session ); :}
 ;
 
 ReceiveClause receive_clause =
@@ -299,8 +300,7 @@ RecVar recvar =
     {: return new RecVar(t); :};
 
 Session session =
-    literaltype
-|   sessionsend
+    sessionsend
 |   sessionreceive
 |   recvar
 |   INTERNALCHOICE LQUAD session_send_list.list RQUAD
@@ -319,12 +319,13 @@ Session session =
      {: return new RecType(t, session); :}
 |   END
      {: return new End(); :}
+|   literaltype
 ;
 
 
 List session_list =
-	session   		                {: return new List().add(session);	:}
-|	session_list COMMA session    	{: return session_list.add(session); :}
+	session.s		                {: return new List().add(s);	:}
+|	session_list.l COMMA session    	{: return l.add(session); :}
  ;
 
 
