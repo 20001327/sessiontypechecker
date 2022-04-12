@@ -1,27 +1,13 @@
 @startuml
 'https://plantuml.com/component-diagram
-skinparam classFontName Courier
 skinparam componentStyle rectangle
-skinparam componentFontName Courier
-skinparam rectangleFontName Courier
-skinparam circledCharacterFontName Courier
-skinparam arrowFontName Courier
-skinparam component {
-  FontSize 20
-  FontName Courier
-}
+skinparam rectangleFontSize 30
+skinparam noteFontSize 30
+skinparam arrowFontSize 25
+skinparam arrowFontSize 25
+skinparam interfaceFontSize 25
 
-skinparam cloud{
-  FontSize 20
-  FontName Courier
-}
-
-skinparam node{
-  FontSize 20
-  FontName Courier
-}
-
-node "Erlang code"{
+rectangle "Erlang code"{
     [Client.erl]
     [Seller.erl]
     [Main.erl]
@@ -29,7 +15,7 @@ node "Erlang code"{
     [.global]
 }
 
-node "Erlang Abstract Format"{
+rectangle "Erlang Abstract Format"{
     [Client.form]
     [Seller.form]
     [Bank.form]
@@ -39,32 +25,34 @@ node "Erlang Abstract Format"{
 [Seller.erl] -> [Seller.form]
 [Client.erl] -> [Client.form]
 
-cloud "Program"
-cloud "Global"{
+rectangle "Program"
+rectangle "Global"{
+    note as G
     client->seller:title<String>...
+    end note
 }
 
 [Client.form] --> Program
-[Seller.form] --> Program:parse
-[Bank.form] --> Program
-[.global] --> Global:parse
+[Seller.form] -> Program:parse
+[Bank.form] -> Program
+[.global] -> Global:parse
 
-cloud "Session"{
-    [Client]
-    [Seller]
-    [Bank]
+rectangle "Session"{
+[Client]
+[Seller]
+[Bank]
 }
 
-cloud "SessionDerived"{
-    [ClientDerived]
-    [SellerDerived]
-    [BankDerived]
+rectangle "Session'" as SessionDerived{
+[Client']
+[Seller']
+[Bank']
 }
 
 Global --> Session:projection
 Program --> SessionDerived:type inference
 
-Session --> isSubtype:projection type
-SessionDerived --> isSubtype:code type
+Session --> isSubtype
+SessionDerived --> isSubtype
 
 @enduml
