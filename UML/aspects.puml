@@ -43,7 +43,7 @@ rectangle "Session"{
 [Bank]
 }
 
-rectangle "Session'" as SessionDerived{
+rectangle "Session Inferred" as SessionDerived{
 [Client']
 [Seller']
 [Bank']
