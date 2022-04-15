@@ -33,8 +33,8 @@ public class GlobalTypeChecker {
             System.exit(2);
         }
         System.out.println("file : " + args[0]);
-        Path pathast = Paths.get(args[0] + "form/");
-        File astDir = new File(args[0] + "form");
+        Path pathast = Paths.get(args[0] + File.separator + "form/");
+        File astDir = new File(args[0]  + File.separator + "form");
 
         if (!astDir.exists()) {
             Files.createDirectories(pathast);
@@ -44,13 +44,8 @@ public class GlobalTypeChecker {
         InputStream filetemp = this.getClass().getClassLoader().getResourceAsStream("forms.beam");
         assert filetemp != null;
         copyInputStreamToFile(filetemp, new File(args[0] + "forms.beam"));
-
-        InputStream tracer = this.getClass().getClassLoader().getResourceAsStream("tracer.beam");
-        assert tracer != null;
-        copyInputStreamToFile(filetemp, new File(args[0] + "tracer.beam"));
-
+        System.out.println("copied lib file");
         try {
-
             ErlangParser parser = new ErlangParser();
             GProg g = null;
             if (fileGlobal.exists()) {
@@ -69,10 +64,12 @@ public class GlobalTypeChecker {
                     "-eval 'init:stop().'", null, file);
             process.waitFor(3, TimeUnit.SECONDS);
             process.destroy();
+            System.out.println("compiled erlang files files");
 
             if(g!=null) {
                 for (String s : g.getActors()) {
-                    File temp = new File(args[0] + s + ".erl");
+                    File temp = new File(args[0] + File.separator + s + ".erl");
+                    System.out.println("ACTOR " + s + " file: " + temp.getPath());
                     if (temp.exists()) {
                         System.out.println("getting " + s + " form file");
                         Process p = Runtime.getRuntime().exec("erl -noshell " +
@@ -113,7 +110,7 @@ public class GlobalTypeChecker {
                                 Reader readerloc = new FileReader(f.toFile());
                                 ErlangScanner scannerloc = new ErlangScanner(new BufferedReader(readerloc));
                                 Program pr_part = (Program) parser.parse(scannerloc);
-                                for (Module m : pr_part.getModuless()) {
+                                for (miniErlang.Module m : pr_part.getModuless()) {
                                     p.addModules(m);
                                 }
                                 readerloc.close();
