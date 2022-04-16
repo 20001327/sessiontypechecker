@@ -14,30 +14,39 @@ public class GlobalTypeChecker {
     private static final int DEFAULT_BUFFER_SIZE = 1024;
 
     public static void main(String[] args) throws IOException {
-        new GlobalTypeChecker().run(args[0]);
+        new GlobalTypeChecker().run(args);
     }
 
     public void run(String... args) throws IOException {
-        // Make sure there are arguments
-        if (args.length != 1) {
-            System.err.println("1 arguments required: path of the folder with sources and global types");
-            System.exit(1);
-        }
         // check that the file exists and is a directory
-        doTypeChecking(args[0]);
+        doTypeChecking(args.length == 0? null: args[0]);
 
     }
 
-    protected static void doTypeChecking(String basepath) throws IOException {
-        File fileGlobal = new File(basepath + "/global");
+    protected static void doTypeChecking(String pathTotype) throws IOException {
+        String basepath = pathTotype;
+        if (basepath == null){
+            System.out.println("It seems you have not specified a valid path, available examples are :");
+            System.out.println("  - recursion");
+            System.out.println("  - seller-bank");
+            System.out.println("  - three-buyer");
+            BufferedReader c = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Insert the example to typecheck: ");
+            String fi = c.readLine();
+            basepath = "examples" + File.separator + fi;
+        }
+
         File file = new File(basepath);
+        File fileGlobal = new File(basepath + File.separator + "global");
+
         if (!file.isDirectory()) {
+            file = new File(basepath);
             Path path = Paths.get(basepath);
             System.out.println("directory : " + path.toAbsolutePath());
             System.err.println("error (PrettyPrint) : not a directory");
             System.exit(2);
         }
-        Path pathast = Paths.get(basepath + File.separator + "form/");
+        Path pathast = Paths.get(basepath + File.separator + "form" + File.separator);
         File astDir = new File(basepath + File.separator + "form");
 
         if (!astDir.exists()) {
@@ -46,11 +55,12 @@ public class GlobalTypeChecker {
 
         InputStream filetemp = GlobalTypeChecker.class.getClassLoader().getResourceAsStream("forms.beam");
         assert filetemp != null;
-        copyInputStreamToFile(filetemp, new File(basepath + "forms.beam"));
+        copyInputStreamToFile(filetemp, new File(basepath + File.separator + "forms.beam"));
         try {
             ErlangParser parser = new ErlangParser();
             GProg g = null;
             if (fileGlobal.exists()) {
+                System.out.println("Global type: ");
                 Reader reader = new FileReader(fileGlobal);
                 ErlangScanner scanner = new ErlangScanner(new BufferedReader(reader));
                 g = (GProg) parser.parse(scanner);
@@ -78,6 +88,7 @@ public class GlobalTypeChecker {
                 }
             }else{
                 try (Stream<Path> paths = Files.walk(Paths.get(basepath))) {
+                    File finalFile = file;
                     paths.filter(Files::isRegularFile)
                             .forEach(f -> {
                                 try {
@@ -86,7 +97,7 @@ public class GlobalTypeChecker {
                                         String s = fname[0];
                                         Process p = Runtime.getRuntime().exec("erl -noshell " +
                                                 "-eval \"forms:read_to_binary(" + s + ",'form/" + s + ".form').\" " +
-                                                "-eval 'init:stop().'", null, file);
+                                                "-eval 'init:stop().'", null, finalFile);
                                         p.waitFor(3, TimeUnit.SECONDS);
                                         p.destroy();
                                     }
