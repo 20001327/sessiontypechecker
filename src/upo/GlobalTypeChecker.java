@@ -24,27 +24,29 @@ public class GlobalTypeChecker {
             System.exit(1);
         }
         // check that the file exists and is a directory
-        File fileGlobal = new File(args[0] + "/global");
-        File file = new File(args[0]);
+        doTypeChecking(args[0]);
+
+    }
+
+    protected static void doTypeChecking(String basepath) throws IOException {
+        File fileGlobal = new File(basepath + "/global");
+        File file = new File(basepath);
         if (!file.isDirectory()) {
-            Path path = Paths.get(args[0]);
+            Path path = Paths.get(basepath);
             System.out.println("directory : " + path.toAbsolutePath());
             System.err.println("error (PrettyPrint) : not a directory");
             System.exit(2);
         }
-        System.out.println("file : " + args[0]);
-        Path pathast = Paths.get(args[0] + File.separator + "form/");
-        File astDir = new File(args[0]  + File.separator + "form");
+        Path pathast = Paths.get(basepath + File.separator + "form/");
+        File astDir = new File(basepath + File.separator + "form");
 
         if (!astDir.exists()) {
             Files.createDirectories(pathast);
         }
 
-        System.out.println("copy lib file");
-        InputStream filetemp = this.getClass().getClassLoader().getResourceAsStream("forms.beam");
+        InputStream filetemp = GlobalTypeChecker.class.getClassLoader().getResourceAsStream("forms.beam");
         assert filetemp != null;
-        copyInputStreamToFile(filetemp, new File(args[0] + "forms.beam"));
-        System.out.println("copied lib file");
+        copyInputStreamToFile(filetemp, new File(basepath + "forms.beam"));
         try {
             ErlangParser parser = new ErlangParser();
             GProg g = null;
@@ -58,20 +60,15 @@ public class GlobalTypeChecker {
                 System.out.println(printer.getString());
             }
 
-            System.out.println("compiling erlang files ");
             Process process = Runtime.getRuntime().exec("erl -noshell " +
                     "-eval \"make:all().\" " +
                     "-eval 'init:stop().'", null, file);
             process.waitFor(3, TimeUnit.SECONDS);
             process.destroy();
-            System.out.println("compiled erlang files files");
-
             if(g!=null) {
                 for (String s : g.getActors()) {
-                    File temp = new File(args[0] + File.separator + s + ".erl");
-                    System.out.println("ACTOR " + s + " file: " + temp.getPath());
+                    File temp = new File(basepath + File.separator + s + ".erl");
                     if (temp.exists()) {
-                        System.out.println("getting " + s + " form file");
                         Process p = Runtime.getRuntime().exec("erl -noshell " +
                                 "-eval \"forms:read_to_binary(" + s + ",'form/" + s + ".form').\" " +
                                 "-eval 'init:stop().'", null, file);
@@ -80,14 +77,13 @@ public class GlobalTypeChecker {
                     }
                 }
             }else{
-                try (Stream<Path> paths = Files.walk(Paths.get(args[0]))) {
+                try (Stream<Path> paths = Files.walk(Paths.get(basepath))) {
                     paths.filter(Files::isRegularFile)
                             .forEach(f -> {
                                 try {
                                     String[] fname = f.getFileName().toString().split("\\.");
                                     if (fname.length==2 && !fname[0].startsWith("main") && fname[1].equals("erl")) {
                                         String s = fname[0];
-                                        System.out.println("getting " + s + " ast file");
                                         Process p = Runtime.getRuntime().exec("erl -noshell " +
                                                 "-eval \"forms:read_to_binary(" + s + ",'form/" + s + ".form').\" " +
                                                 "-eval 'init:stop().'", null, file);
@@ -106,7 +102,6 @@ public class GlobalTypeChecker {
                 paths.filter(Files::isRegularFile)
                         .forEach(f -> {
                             try {
-                                System.out.println("scan : " + f.getFileName());
                                 Reader readerloc = new FileReader(f.toFile());
                                 ErlangScanner scannerloc = new ErlangScanner(new BufferedReader(readerloc));
                                 Program pr_part = (Program) parser.parse(scannerloc);
@@ -120,19 +115,24 @@ public class GlobalTypeChecker {
                         });
             }
 
+            boolean verified = true;
             if(g!=null) {
                 for (String s : g.getActors()) {
                     if (g.project(s) != null) {
                         Session session = g.project(s);
                         FunType type = new FunType("init", new List<>(), session);
-                        PrettyPrinter printer = type.stampante();
-                        type.stampa();
-                        System.out.println(printer.getString());
-                        p.checkType(s, type);
+                        verified = verified && p.checkType(s, type);
                     }
                 }
             }else{
-                p.checkType();
+                verified = p.checkType();
+            }
+
+
+            if(verified){
+                System.out.println("the protocol follows the global type " );
+            }else{
+                System.out.println("some error has occoured, it seems the protocol doesn't follow the global type" );
             }
         } catch (Exception e) {
             System.err.println("error (PrettyPrint) : " + e.getMessage());
