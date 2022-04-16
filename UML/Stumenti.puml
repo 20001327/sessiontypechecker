@@ -1,0 +1,52 @@
+@startuml
+node docker{
+    note as n
+        implementazione dei protocolli
+    end note
+    n-.Erlang
+    node Erlang{
+
+    }
+
+    note as nk
+        parsing e implementazione
+        degli algoritmi di proiezione
+        e type-checkin
+    end note
+    nk-.JASTADD
+    node JASTADD{
+
+    }
+
+    JASTADD --> antr
+    note as c
+        gestore della build:
+        generazione del parser
+        generazione delle classi
+        compilazione sorgenti
+    end note
+    antr.c
+    node antr{
+
+    }
+
+    Erlang <- Java
+    Java --> antr
+
+    note as j
+        compilazione erlang tramite
+        chiamate di sistema e
+    end note
+    Java.j
+    node Java{
+    }
+
+    rectangle jar
+    antr --> jar
+
+
+
+
+}
+
+@enduml
