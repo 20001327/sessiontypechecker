@@ -1,0 +1,20 @@
+{alice,<0.186.0>}: Sent {alice,title,"Toy Story"} to {seller,<0.183.0>} 
+{seller,<0.183.0>}: Received {alice,title,"Toy Story"} from {alice,<0.186.0>} 
+{seller,<0.183.0>}: Sent {seller,quote,500} to {bob,<0.185.0>} 
+{seller,<0.183.0>}: Sent {seller,quote,500} to {alice,<0.186.0>} 
+{bob,<0.185.0>}: Received {seller,quote,500} from {seller,<0.183.0>} 
+{alice,<0.186.0>}: Received {seller,quote,500} from {seller,<0.183.0>} 
+{alice,<0.186.0>}: Sent {alice,myquote,250.0} to {bob,<0.185.0>} 
+{bob,<0.185.0>}: Received {alice,myquote,250.0} from {alice,<0.186.0>} 
+{bob,<0.185.0>}: Sent {bob,quote,151.0} to {carol,<0.184.0>} 
+{bob,<0.185.0>}: Sent {bob,start_delegation,bob,<0.185.0>} to {carol,
+                                                               <0.184.0>} 
+{carol,<0.184.0>}: Received {bob,quote,151.0} from {bob,<0.185.0>} 
+{carol,<0.184.0>}: Received {bob,start_delegation,bob,<0.185.0>} from {bob,
+                                                                       <0.185.0>} 
+{carol,<0.184.0>}: Sent {bob,quit} to {alice,<0.186.0>} 
+{carol,<0.184.0>}: Sent {bob,quit} to {seller,<0.183.0>} 
+{carol,<0.184.0>}: Sent {carol,end_delegation} to {bob,<0.185.0>} 
+{alice,<0.186.0>}: Received {bob,quit} from {carol,<0.184.0>} 
+{seller,<0.183.0>}: Received {bob,quit} from {carol,<0.184.0>} 
+{bob,<0.185.0>}: Received {carol,end_delegation} from {carol,<0.184.0>} 

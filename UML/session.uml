@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>miniErlang</OriginalElement>
+  <nodes>
+    <node x="301.0" y="81.0">miniErlang.ExternalChoice</node>
+    <node x="1828.0" y="81.0">miniErlang.RecType</node>
+    <node x="1572.0" y="81.0">miniErlang.RequestBackwardDelegation</node>
+    <node x="0.0" y="162.0">miniErlang.ConnectingReceive</node>
+    <node x="2108.5" y="162.0">miniErlang.ConnectingSend</node>
+    <node x="468.0" y="81.0">miniErlang.AcceptForwardDelegation</node>
+    <node x="1444.0" y="81.0">miniErlang.FunType</node>
+    <node x="1099.0" y="81.0">miniErlang.AcceptBackwardDelegation</node>
+    <node x="708.0" y="81.0">miniErlang.RequestForwardDelegation</node>
+    <node x="1956.0" y="81.0">miniErlang.InternalChoice</node>
+    <node x="1348.0" y="81.0">miniErlang.End</node>
+    <node x="2121.0" y="81.0">miniErlang.SessionSend</node>
+    <node x="956.0" y="81.0">miniErlang.LiteralType</node>
+    <node x="13.0" y="81.0">miniErlang.SessionReceive</node>
+    <node x="1163.5" y="0.0">miniErlang.Session</node>
+    <node x="183.0" y="81.0">miniErlang.RecVar</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="miniErlang.ExternalChoice" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="374.5" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.ConnectingSend" target="miniErlang.SessionSend" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.AcceptForwardDelegation" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="578.0" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.InternalChoice" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="2028.5" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.LiteralType" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="1017.5" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.RequestBackwardDelegation" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="1690.0" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.RecType" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="1882.0" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.RecVar" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="232.0" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.SessionSend" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="2187.5" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.RequestForwardDelegation" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="822.0" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.End" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="1386.0" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.FunType" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="1498.0" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.SessionReceive" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="88.0" y="56.0" />
+      <point x="1213.5" y="56.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.AcceptBackwardDelegation" target="miniErlang.Session" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="miniErlang.ConnectingReceive" target="miniErlang.SessionReceive" relationship="GENERALIZATION">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.40752076956711847" showDependencies="false" x="1133.5" y="96.5" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
