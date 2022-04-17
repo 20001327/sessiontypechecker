@@ -2,7 +2,7 @@ aspect SendTyping{
   eq Send.type(){
         if((getMessage().getSender().getIdent().equals(getModuleName()))
         || (getMessage().getSender().getClass().getName().equals(VarSender.class.getName()) &&
-                                                            delegating().getName() != null)){
+                                                             delegating().getName() != null)){
               if(getMessage().getLabel().getIdent().equals("start_delegation")){
                if(((Atom)getMessage().getPayload(0)).getIdent().equals(getModuleName()) &&
                         getMessage().getPayload(1).type().isSameType(new PidType())){
