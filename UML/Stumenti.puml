@@ -17,20 +17,20 @@
 
     }
 
-    JASTADD --> antr
+    JASTADD ---> ant
     note as c
         gestore della build:
         - generazione del parser
-        - generazione delle classi AST
+        - generazione classi java AST
         - compilazione sorgenti java generati
     end note
-    antr.c
-    node antr{
+    ant.c
+    node ant{
 
     }
 
-    Erlang <- Java
-    Java --> antr
+    Erlang --> Java:input
+    Java --> ant
 
     note as j
         - compilazione erlang tramite
@@ -43,8 +43,6 @@
     }
 
     rectangle jar
-    antr --> jar
-
-
+    ant --> jar
 
 @enduml
