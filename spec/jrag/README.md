@@ -1,14 +1,14 @@
 #JRAG
-TODO: interazione tra i componenti magari graficamente
+![img.png](img.png)
 
-#Struttura dei packages
-- print: contiene il codice per la pretty print del codice, dei session types e dei global types
-- erlangtyping: contiene il codice per derivare il tipo dei processi erlang
-- subtyping: contiene il codice per il subtyping del codice derivato. Qui si capisce se il codice derivato contiene tutti i session types nel tipo che stiamo checkando (sia esso proiettato dal tipo globale o annotato nel codice)
-- projection: contiene il codice per la proiezione dal tipo globale ai session types
-- validation: contiene il codice per verificare la buona formatezza di External ed Internal Choice
-- utils/nameAnalisys: codice per creare la symbol table
-- utils/equals.jrag: utility di equals per fare il typechecking
+#Structure of packages
+- print: contains the code for the pretty print of the code, session types and global types
+- erlangtyping: contains code to derive the type of erlang processes
+- subtyping: contains the code for subtyping the derived code. Here we understand if the derived code contains all the session types in the type we are checking (be it projected from the global type or annotated in the code)
+- projection: contains the code for projection from the global type to the session types
+- validation: contains the code to verify the good form of External and Internal Choice
+- utils / nameAnalisys: code to create the symbol table
+- utils / equals.jrag: equals utility for typechecking
 
 ###TypeChecking.jadd
-codice che deriva e fa partire il checking con il tipo annotato/proiettato
+code that derives and starts checking with the annotated/projected type
