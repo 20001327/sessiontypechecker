@@ -43,7 +43,7 @@ aspect ReceiveTyping{
     eq ReceiveClause.type(){
        List<LiteralType> sessions = new List();
        if(getLabel().getIdent().equals("end_delegation")){
-           return new RequestBackwardDelegation(
+           return new AcceptBackwardDelegation(
             getSender(),getActions().type());
        }
 

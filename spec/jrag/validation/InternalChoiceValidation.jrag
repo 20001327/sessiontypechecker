@@ -64,7 +64,7 @@ aspect InternalChoiceValidation{
         return getNext().isPresentInThisMap(map);
     }
 
-    public boolean RequestBackwardDelegation.isPresentInThisMap(Map<String,String> map){
+    public boolean AcceptBackwardDelegation.isPresentInThisMap(Map<String,String> map){
         return getNext().isPresentInThisMap(map);
     }
 
@@ -72,7 +72,7 @@ aspect InternalChoiceValidation{
         return getNext().isPresentInThisMap(map);
     }
 
-    public boolean AcceptBackwardDelegation.isPresentInThisMap(Map<String,String> map){
+    public boolean RequestBackwardDelegation.isPresentInThisMap(Map<String,String> map){
         return getNext().isPresentInThisMap(map);
     }
 

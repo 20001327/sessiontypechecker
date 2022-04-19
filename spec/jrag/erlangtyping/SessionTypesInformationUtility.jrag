@@ -74,7 +74,7 @@ aspect SessionTypesInformationUtility{
         return getType().getInfo(label, index);
     }
 
-    public Session RequestBackwardDelegation.getInfo(String label,int index){
+    public Session AcceptBackwardDelegation.getInfo(String label,int index){
         return getNext().getInfo(label, index);
     }
 
@@ -82,7 +82,7 @@ aspect SessionTypesInformationUtility{
         return getNext().getInfo(label,index);
     }
 
-    public Session AcceptBackwardDelegation.getInfo(String label,int index){
+    public Session RequestBackwardDelegation.getInfo(String label,int index){
         return getNext().getInfo(label, index);
     }
 

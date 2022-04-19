@@ -71,7 +71,7 @@ aspect EndsWithUtility{
            return getNext().endsWith(var);
     }
 
-    public boolean RequestBackwardDelegation.endsWith(RecVar var) {
+    public boolean AcceptBackwardDelegation.endsWith(RecVar var) {
            return getNext().endsWith(var);
     }
 
@@ -79,7 +79,7 @@ aspect EndsWithUtility{
            return getNext().endsWith(var);
     }
 
-    public boolean AcceptBackwardDelegation.endsWith(RecVar var) {
+    public boolean RequestBackwardDelegation.endsWith(RecVar var) {
            return getNext().endsWith(var);
     }
 

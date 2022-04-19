@@ -18,7 +18,7 @@ aspect UnregisterTyping{
                     new Message(new AtomSender(getModuleName()), new Atom("end_delegation"),new List()), null));
 
             if(b1 && b2 && b3 && b4 && differ){
-                return new AcceptBackwardDelegation(delegating().getName(),next);
+                return new RequestBackwardDelegation(delegating().getName(),next);
             }
         }
         return null;

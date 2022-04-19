@@ -5,9 +5,9 @@ SessionReceive:Session ::= Recipient:Atom Label:Atom Type:LiteralType* Next:Sess
 InternalChoice:Session ::= Sends:SessionSend*;
 ExternalChoice:Session ::= Receives:SessionReceive*;
 RequestForwardDelegation:Session ::= Delegating:Atom Next:Session;
-RequestBackwardDelegation:Session ::= Delegating:Atom Next:Session;
+AcceptBackwardDelegation:Session ::= Delegating:Atom Next:Session;
 AcceptForwardDelegation:Session ::= Delegate:Atom Next:Session;
-AcceptBackwardDelegation:Session ::= Delegate:Atom Next:Session;
+RequestBackwardDelegation:Session ::= Delegate:Atom Next:Session;
 RecType:Session ::= RecVariable:RecVar Type:Session;
 RecVar:Session ::= <Name:String>;
 End:Session;

@@ -14,7 +14,7 @@ aspect DelegationDelegateProjection{
             return getNext().projectDelegate(p,q);
         }else{
             if(p.equals(getDelegating()) && q.equals(getDelegate())){
-                return new AcceptBackwardDelegation(new Atom(p),getNext().project(q));
+                return new RequestBackwardDelegation(new Atom(p),getNext().project(q));
             }
         }
         return null;

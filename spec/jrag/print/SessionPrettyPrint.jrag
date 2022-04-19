@@ -124,7 +124,7 @@ aspect SessionPrettyPrint{
         getNext().stampa();
     }
 
-    public void RequestBackwardDelegation.stampa(){
+    public void AcceptBackwardDelegation.stampa(){
         getDelegating().stampa();
         stampante().append(">>");
         stampante().append(".");
@@ -138,7 +138,7 @@ aspect SessionPrettyPrint{
         getNext().stampa();
     }
 
-    public void AcceptBackwardDelegation.stampa(){
+    public void RequestBackwardDelegation.stampa(){
         stampante().append(">>");
         getDelegate().stampa();
         stampante().append(".");

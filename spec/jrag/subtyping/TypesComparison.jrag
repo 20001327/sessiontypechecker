@@ -68,16 +68,16 @@ aspect TypesComparison{
             return t instanceof RequestForwardDelegation;
     }
 
-    public boolean RequestBackwardDelegation.isSubtypeOf(Session t) {
-             return t instanceof RequestBackwardDelegation;
+    public boolean AcceptBackwardDelegation.isSubtypeOf(Session t) {
+             return t instanceof AcceptBackwardDelegation;
     }
 
     public boolean AcceptForwardDelegation.isSubtypeOf(Session t) {
            return t instanceof AcceptForwardDelegation;
     }
 
-    public boolean AcceptBackwardDelegation.isSubtypeOf(Session t) {
-            return t instanceof AcceptBackwardDelegation;
+    public boolean RequestBackwardDelegation.isSubtypeOf(Session t) {
+            return t instanceof RequestBackwardDelegation;
     }
 
     public boolean FunType.isSubtypeOf(Session t) {

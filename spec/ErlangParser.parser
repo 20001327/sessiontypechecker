@@ -310,11 +310,11 @@ Session session =
 |   OPENANGULAR OPENANGULAR IDENTIFIER.i DOT session.next
      {: return  new RequestForwardDelegation(new Atom(i), next); :}
 |   CLOSEANGULAR CLOSEANGULAR IDENTIFIER.i DOT session.next
-     {: return  new AcceptBackwardDelegation(new Atom(i), next); :}
+     {: return  new RequestBackwardDelegation(new Atom(i), next); :}
 |   IDENTIFIER.i OPENANGULAR OPENANGULAR DOT session.next
      {: return  new AcceptForwardDelegation(new Atom(i), next); :}
 |   IDENTIFIER.i CLOSEANGULAR CLOSEANGULAR DOT session.next
-     {: return  new RequestBackwardDelegation(new Atom(i), next); :}
+     {: return  new AcceptBackwardDelegation(new Atom(i), next); :}
 |   REC recvar.t DOT session
      {: return new RecType(t, session); :}
 |   END
