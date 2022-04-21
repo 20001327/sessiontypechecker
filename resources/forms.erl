@@ -520,8 +520,13 @@ is_form(Form) ->
     end.
 
 
-
-
+%%-------------------------------------------------------------------------
+%% @doc
+%% Read a module, get a the erlang abstract format filtered for type-check tool.
+%% the output is redirect to a file
+%% @end
+%%-------------------------------------------------------------------------
+-author("Lorenzo")
 read_to_binary(Module,Filename) ->
   NewTree = filter(
     fun(Form) ->
