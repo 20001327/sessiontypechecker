@@ -526,7 +526,7 @@ is_form(Form) ->
 %% the output is redirect to a file
 %% @end
 %%-------------------------------------------------------------------------
--author("Author, 2022")
+%% added by Lorenzo
 read_to_binary(Module,Filename) ->
   NewTree = filter(
     fun(Form) ->
