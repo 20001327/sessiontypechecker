@@ -1,0 +1,5 @@
+{main,[debug_info]}.
+{alice,[debug_info]}.
+{bob,[debug_info]}.
+{carol,[debug_info]}.
+{seller,[debug_info]}.

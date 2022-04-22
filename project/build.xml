@@ -1,4 +1,4 @@
-<project name="miniErlang"  basedir=".">
+<project name="miniErlang"  basedir="./">
     <taskdef classname="jflex.anttask.JFlexTask" name="jflex"
              classpath="tools/jflex-full-1.8.2.jar" />
     <taskdef classname="beaver.comp.run.AntTask" name="beaver"
@@ -47,9 +47,9 @@
 
     <target name="build" depends="generate">
         <mkdir dir="build" />
-        <unzip src="./tools/beaver-rt.jar" dest="./tools/"/>
+        <unzip src="tools/beaver-rt.jar" dest="tools/"/>
         <copy todir="./build/beaver/">
-            <fileset dir="./tools/beaver">
+            <fileset dir="tools/beaver">
             </fileset>
         </copy>
         <copy todir="./build" file="resources/forms.beam">
@@ -57,7 +57,7 @@
 
         <javac srcdir="." destdir="build" debug="true"
                classpath=".:tools/beaver-rt.jar:tools/beaver-ant.jar" includeantruntime="true" />
-        <jar destfile="./jar/type-checker.jar" basedir="./build">
+        <jar destfile="jar/type-checker.jar" basedir="./build">
             <manifest>
                 <attribute name="Main-Class" value="upo.GlobalTypeChecker"/>
             </manifest>
