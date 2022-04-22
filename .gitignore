@@ -1,6 +1,7 @@
 *.beaver
 build/
 jar/
+*.iml
 
 /.idea/
 /calc/
