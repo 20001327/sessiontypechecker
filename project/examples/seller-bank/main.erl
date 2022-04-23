@@ -1,6 +1,7 @@
 -module(main).
 -export([start_protocol/0]).
 start_protocol()->
+    tracer:start(),
     start_actor(seller),
     start_actor(bank),
     start_actor(client).

@@ -1,3 +1,4 @@
-
 {client,[debug_info]}.
 {adder,[debug_info]}.
+{main,[debug_info]}.
+{tracer,[debug_info]}.
