@@ -20,7 +20,7 @@ init() ->
       end
   end.
 
--spec funny('#Int')->'#Boolean'.
+-spec funny('#Int')->'#End'.
 funny(Exp) ->
   case Exp < 10 of
     true ->

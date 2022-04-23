@@ -4,14 +4,7 @@ aspect TypeChecking{
         boolean verified = true;
         for (Module module: getModuless()){
             System.out.println(module.getPartecipant() + " checking");
-            for (Function function : module.getFunctionss()){
-                if(function.getFunctionName().equals("init")){
-                    FunType type1 = function.getType();
-                    verified = verified && check(type1, function);
-                    System.out.println("inferred type is a subtype of the projected type: " + verified);
-                    System.out.println();
-                }
-            }
+            verified = verified && module.checkActor(null);
         }
         return verified;
     }
@@ -20,28 +13,45 @@ aspect TypeChecking{
         boolean verified = true;
         for (Module module: getModuless()){
             if(actor.equals(module.getPartecipant())){
-                System.out.println(module.getPartecipant() + " subtype check");
-                for (Function function : module.getFunctionss()){
-                    if(function.getFunctionName().equals("init")){
-                        verified = verified && check(type1, function);
-                        System.out.println("inferred type is a subtype of the projected type: " + verified);
-                        System.out.println();
-                    }
-                }
+                System.out.println(module.getPartecipant() + " checking");
+                verified = verified && module.checkActor(type1);
             }
         }
         return verified;
     }
 
+    public boolean Module.checkActor(FunType type1){
+        boolean verified = true;
+        for (Function function : getFunctionss()){
+            if(type1==null)
+                type1 = function.getType();
+            if(function.getFunctionName().equals("init")){
+                verified = verified && Program.check(type1, function, true);
+                System.out.println("inferred type is a subtype of the projected type: " + verified);
+                System.out.println();
+            }else{
+                verified = verified && Program.check(function.getType(), function);
+            }
+        }
+        System.out.println();
+        return verified;
+    }
+
     static boolean Program.check(FunType type1, Function function) {
-        type1.stampante().reset();
-        type1.stampa();
-        System.out.println("Projected session type: " + type1.stampante().getString());
+        return Program.check(type1,function, false);
+    }
+
+    static boolean Program.check(FunType type1, Function function, boolean printLog) {
         Session t = function.getInferredType();
         FunType type2 = new FunType(function.getFunctionName(), function.getType().getArgumentss(),t);
-        type2.stampante().reset();
-        type2.stampa();
-        System.out.println("Inferred session type: " + type2.stampante().getString());
+        if(printLog){
+           type1.stampante().reset();
+           type1.stampa();
+           System.out.println("Projected session type: " + type1.stampante().getString());
+           type2.stampante().reset();
+           type2.stampa();
+           System.out.println("Inferred session type: " + type2.stampante().getString());
+        }
         return type1.compareWith(type2);
     }
 
