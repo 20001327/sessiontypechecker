@@ -119,7 +119,7 @@ aspect PrettyPrint {
 
     public void FunType.print(){
        printer().append("\n");
-       printer().append("-type " + getFunName() + "(");
+       printer().append("-spec " + getFunName() + "(");
        for (int i=0; i<getNumArguments(); i++) {
            LiteralType var = getArguments(i);
            printer().append(var.getClass().getName());
@@ -127,7 +127,7 @@ aspect PrettyPrint {
                printer().append(",");
            }
        }
-       printer().append(") :: '");
+       printer().append(")->'");
        getSessionType().print();
        printer().append("'");
     }

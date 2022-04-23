@@ -58,7 +58,7 @@ public class GlobalTypeChecker {
                 ErlangParser parser = new ErlangParser();
                 GProg g = null;
                 if (fileGlobal.exists()) {
-                    System.out.println("Global type: ");
+                    System.out.print("Global type: ");
                     Reader reader = new FileReader(fileGlobal);
                     ErlangScanner scanner = new ErlangScanner(new BufferedReader(reader));
                     g = (GProg) parser.parse(scanner);
@@ -66,6 +66,7 @@ public class GlobalTypeChecker {
                     PrettyPrinter printer = g.getGlobal().stampante();
                     g.getGlobal().stampa();
                     System.out.println(printer.getString());
+                    System.out.println();
                 }
 
                 Process process = Runtime.getRuntime().exec("erl -noshell " +

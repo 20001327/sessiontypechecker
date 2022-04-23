@@ -25,7 +25,7 @@ aspect SessionPrettyPrint{
 
     public void FunType.stampa(){
        stampante().append("\n");
-       stampante().append("-type " + getFunName() + "(");
+       stampante().append("-spec " + getFunName() + "(");
        for (int i=0; i<getNumArguments(); i++) {
            LiteralType var = getArguments(i);
            stampante().append(var.getClass().getName());
@@ -33,7 +33,7 @@ aspect SessionPrettyPrint{
                stampante().append(",");
            }
        }
-       stampante().append(") :: '");
+       stampante().append(")->'");
        getSessionType().stampa();
        stampante().append("'");
     }

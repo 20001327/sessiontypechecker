@@ -20,7 +20,7 @@ aspect TypeChecking{
         boolean verified = true;
         for (Module module: getModuless()){
             if(actor.equals(module.getPartecipant())){
-                System.out.println(module.getPartecipant() + " checking");
+                System.out.println(module.getPartecipant() + " subtype check");
                 for (Function function : module.getFunctionss()){
                     if(function.getFunctionName().equals("init")){
                         verified = verified && check(type1, function);
@@ -36,12 +36,12 @@ aspect TypeChecking{
     static boolean Program.check(FunType type1, Function function) {
         type1.stampante().reset();
         type1.stampa();
-        System.out.println("projected type: " + type1.stampante().getString());
+        System.out.println("Projected session type: " + type1.stampante().getString());
         Session t = function.getInferredType();
         FunType type2 = new FunType(function.getFunctionName(), function.getType().getArgumentss(),t);
         type2.stampante().reset();
         type2.stampa();
-        System.out.println("inferred type: " + type2.stampante().getString());
+        System.out.println("Inferred session type: " + type2.stampante().getString());
         return type1.compareWith(type2);
     }
 

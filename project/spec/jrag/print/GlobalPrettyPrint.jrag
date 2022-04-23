@@ -16,7 +16,7 @@ aspect SessionPrettyPrint{
     inh lazy PrettyPrinter CommunicationChoice.stampante();
     inh lazy PrettyPrinter Global.stampante();
 
-    eq CommunicationChoices.addsIndentationLevel()=true;
+    eq CommunicationChoices.addsIndentationLevel()=getNumCommunications()>1;
 
     public void Communication.stampa(){
         getMessage().stampa();
@@ -49,7 +49,7 @@ aspect SessionPrettyPrint{
     }
 
     public void CommunicationChoice.stampa(){
-        stampante().append("\n");
+        stampante().append(indent());
         stampante().append(getSender());
         stampante().append("->");
         stampante().append(getRecipient() + ":");
@@ -67,7 +67,6 @@ aspect SessionPrettyPrint{
     }
 
     public void Connecting.stampa(){
-        stampante().append("\n");
         stampante().append(getSender());
         stampante().append("->");
         stampante().append(getRecipient() + ":+");
@@ -86,7 +85,6 @@ aspect SessionPrettyPrint{
 
 
     public void StartDelegation.stampa(){
-        stampante().append("\n");
         stampante().append(getDelegating());
         stampante().append("<<");
         stampante().append(getDelegate());
@@ -95,7 +93,6 @@ aspect SessionPrettyPrint{
     }
 
     public void EndDelegation.stampa(){
-        stampante().append("\n");
         stampante().append(getDelegating());
         stampante().append(">>");
         stampante().append(getDelegate());
