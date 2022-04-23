@@ -1,3 +1,0 @@
-client->seller:title<String>.
-seller->client:price<Int>.
-client->seller:ok.End

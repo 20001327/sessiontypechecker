@@ -13,7 +13,7 @@ to run the seller-bank protocol typechecking.
 
 
 you can also test the available examples with docker running
-    docker run eis513/session-type-checker:v1 <example>
+   $ docker run eis513/session-type-checker:v1 <example>
 replacing <example> with one of the following:
  - seller-bank
  - three-buyer
