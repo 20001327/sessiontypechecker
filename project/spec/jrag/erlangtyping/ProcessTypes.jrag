@@ -58,7 +58,6 @@ aspect ProcessTypes{
     public class Delegating {
 
         Atom name;
-        Atom delegateName;
 
         public void setName(Atom del){
             name = del;
@@ -68,13 +67,6 @@ aspect ProcessTypes{
             return name;
         }
 
-        public void setDelegateName(Atom del){
-            delegateName = del;
-        }
-
-        public Atom getDelegateName(){
-            return delegateName;
-        }
     }
 
 }

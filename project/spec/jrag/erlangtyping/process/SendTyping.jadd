@@ -6,7 +6,6 @@ aspect SendTyping{
               if(getMessage().getLabel().getIdent().equals("start_delegation")){
                if(((Atom)getMessage().getPayload(0)).getIdent().equals(getModuleName()) &&
                         getMessage().getPayload(1).type().isSameType(new PidType())){
-                            delegating().setDelegateName(getRecipient());
                             return new RequestForwardDelegation(getRecipient(), getNext().type());
                }
            }
