@@ -1,6 +1,6 @@
 aspect RecursionProjection{
 
-    syn Session RecGlobal.project(String actor){
+    eq RecGlobal.project(String actor){
         boolean found = false;
         for(String a: actors()){
             found = found || a.equals(actor);
@@ -19,7 +19,7 @@ aspect RecursionProjection{
         return new End();
     }
 
-    syn Session RecGlobalVar.project(String actor){
+    eq RecGlobalVar.project(String actor){
         return new RecVar(getName());
     }
 

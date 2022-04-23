@@ -1,6 +1,6 @@
 aspect DelegationProjection{
 
-    syn Session StartDelegation.project(String actor){
+    eq StartDelegation.project(String actor){
         if(getDelegating().equals(actor)){
             return new RequestForwardDelegation(new Atom(getDelegate()), getNext().projectDelegating(getDelegating(),getDelegate()));
         }else if(getDelegate().equals(actor)){
@@ -10,7 +10,7 @@ aspect DelegationProjection{
         return getNext().project(actor);
     }
 
-    syn Session EndDelegation.project(String actor) {
+    eq EndDelegation.project(String actor) {
         if(!getDelegate().equals(actor) && !getDelegating().equals(actor))
             return getNext().project(actor);
 

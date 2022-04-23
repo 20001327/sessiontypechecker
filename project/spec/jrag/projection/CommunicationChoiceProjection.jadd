@@ -1,6 +1,6 @@
 aspect CommunicationChoiceProjection{
 
-    syn Session CommunicationChoices.project(String actor){
+    eq CommunicationChoices.project(String actor){
 
         if(getNumCommunications()==1){
             return getCommunications(0).project(actor);

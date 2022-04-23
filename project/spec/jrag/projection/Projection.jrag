@@ -4,11 +4,9 @@ aspect Projection{
         return getGlobal().project(actor);
     }
 
-    syn lazy Session Global.project(String actor){
-        return null;
-    }
+    syn lazy Session Global.project(String actor);
 
-    syn Session Terminal.project(String actor){
+    eq Terminal.project(String actor){
         return new End();
     }
 
