@@ -1,23 +1,16 @@
 # Session type checker
 
-the aim of the project is typechecking of erlang processes with their type that are annotated for each
-process.
- 
-### bin
-in bin folder you can find the jar of the typechecker, you can run in the following way:
-    $ java -jar threeBuyer.jar <source-directory>
-where <source-directory> have to be replaced with the directory cointaing erlang code. 
-In the bin folder are available some examples. for example from the bin directory you can run :
-    $ java -jar threeBuyer.jar examples/seller-bank
-to run the seller-bank protocol typechecking.
+The aim of the project is to typecheck a “multyparty session” written in Erlang 
+to ensure that it conforms to the global type that specifies the expected protocol.
+You can find examples of multiparty sessions in project/examples/.
+In addition to the source files of the project we also provide (in the bin folder) an already compiled version 
+and a docker of the generated tool that you can test with the command:
 
+    $ docker run eis513/session-type-checker:v1 <example>
 
-you can also test the available examples with docker running
-   $ docker run eis513/session-type-checker:v1 <example>
-replacing <example> with one of the following:
- - seller-bank
- - three-buyer
- - recursion
+replacing <_example_> with one of the following:
+- seller-bank
+- three-buyer
+- recursion
 
-### project 
-In project folder you can find sources and instructions to develop
+The content of the folder examples is described in the readme of the project folder.
