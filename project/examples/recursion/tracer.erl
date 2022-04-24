@@ -40,6 +40,7 @@ print_trace(S, UserList, Label, {send, _Serial, From, To, Message}) ->
     true ->
       Sender=lists:keyfind(From, 2, UserList),
       Recipient=lists:keyfind(To, 2, UserList),
+      io:format("~p: Sent ~p to ~p ~n", [Sender, Message, Recipient]),
       io:format(S, "~p: Sent ~p to ~p ~n", [Sender, Message, Recipient]);
     _ ->
       unit
@@ -61,12 +62,10 @@ getPrint(Message, UserList, Pid) ->
     is_tuple(Message) ->  element(1, Message);
     true -> 'stop'
   end,
-  io:format("call: ~p   --    ", [UserList]),
-  io:format("call: ~p ~n", [Call]),
   Ret = if
     is_atom(Call) ->  lists:member({Call,Pid}, UserList);
     (Call) ->  lists:member({Call,Pid}, UserList);
-    true -> true
+    true -> false
   end,
   Ret.
 
@@ -74,8 +73,7 @@ checkList(Message, UserList, Pid) ->
     NewList = if
     is_tuple(Message) ->
         case Message of
-             {spawn_request,_A,_B,_C,{Attore,init,0},
-                                    [],spawn_reply,[]} -> [{Attore,Pid} | UserList];
+             {spawn_request,_A,_B,_C,{Attore,init,0}, [],spawn_reply,[]} -> [{Attore,Pid} | UserList];
             _ -> UserList
         end;
         true -> UserList
