@@ -1,3 +1,4 @@
+
 # Building
 Just run
 
@@ -51,3 +52,5 @@ The folders in `examples` contain:
 The last two files are ignored by the type-ckecer.
 They can be used to run the protocol in the Erlang shell, compiling all the `.erl` files and evaluating `main:start_prtocol()`	
 	
+	
+The project files are also available from the zipped directory `project_.zip`
