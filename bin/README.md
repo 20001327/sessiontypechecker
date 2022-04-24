@@ -1,4 +1,6 @@
-Here is the `.jar` of the type-checker, to run it:
+## The project `.jar` 
+
+To run it:
 
     `$ java -jar typecheker.jar <source-directory>`
 
