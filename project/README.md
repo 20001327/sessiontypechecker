@@ -3,7 +3,7 @@ Just run
 
 	$ ant build
 
-to build a working jar file in the `jar` directory. then execute by simple java command
+to build a working jar file in the `jar` directory, then execute by simple java command
 
     $ java -jar type-checker.jar <source-directory>
 
