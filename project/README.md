@@ -21,11 +21,11 @@ If you encounter some problems on Cygwin environment, try to add the `-v` flag.
 
 In the examples folder you can find three example:
   
-- seller-bank: a typical example of delegation involving three participants:Client,Seller,and Bank.
+- `seller-bank`: a typical example of delegation involving three participants:Client,Seller,and Bank.
                In the protocol, the client and seller engage in a session in which they agree on 
                the terms of a purchase. If the client decide to purchase, the seller delegates 
                the processing of the client’s credit card to the bank.
-- three-buyer: a system involving Alice, Bob and Carol cooperating to buy a book from a Seller. 
+- `three-buye`r: a system involving Alice, Bob and Carol cooperating to buy a book from a Seller. 
                In the protocol, alice and seller engage in a session in which they agree on
                the terms of a purchase. Alice tells Bob how much she can contribute. 
                If the price is within Bob’s budget,Bob notifies both Seller and Alice he accepts, 
@@ -36,5 +36,13 @@ In the examples folder you can find three example:
                Seller and Alice as if she were Bob and then ends delegation, giving back control to Bob.
                Otherwise, she notifies Alice and Seller to quit the protocol and then ends delegation, giving back control to Bob.
   the processing of the client’s credit card to the bank.
-- recusion:    a simple example of a recursive protocol, in which an actor(client) ask to
+- `recursion`:    a simple example of a recursive protocol, in which an actor(client) ask to
                another actor to do the sum of two numbers for 10 times.
+
+A folder `global` contains some examples of global types.
+	
+The folders with examples contain:
+	
+- a file `.erl`	for each participant 
+- a file `main.erl` that can be used to execute the protocol
+- a file `tracer.erl` that is used to trace the execution of the exchanged messages 	
