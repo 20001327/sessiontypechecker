@@ -19,7 +19,7 @@ If you encounter some problems on Cygwin environment, try to add the `-v` flag.
 
 # Examples
 
-In the examples folder you can find three example:
+In the `examples` folder you can find three example:
   
 - `seller-bank`: a typical example of delegation involving three participants:Client,Seller,and Bank.
                In the protocol, the client and seller engage in a session in which they agree on 
@@ -41,8 +41,13 @@ In the examples folder you can find three example:
 
 A folder `global` contains some examples of global types.
 	
-The folders with examples contain:
+The folders in `examples` contain:
 	
-- a file `.erl`	for each participant 
-- a file `main.erl` that can be used to execute the protocol
-- a file `tracer.erl` that is used to trace the execution of the exchanged messages 	
+- a file `.erl`	for each participant of the multiparty session
+- a file `global` contaning the global type for the multiparty session
+- a file `main.erl` that can be used to execute the protocol in the Erlang interpreter
+- a file `tracer.erl` that traces the execution of the sent and received messages (called in `main.erl`)
+
+The last two files are ignored by the type-ckecer.
+They can be used to run the protocol in the Erlang shell, compiling all the `.erl` files and evaluating `main:start_prtocol()`	
+	
