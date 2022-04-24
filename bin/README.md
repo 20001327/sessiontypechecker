@@ -2,5 +2,5 @@ Here is the `.jar` of the type-checker, to run it:
 
     `$ java -jar typecheker.jar <source-directory>`
 
-where `<source-directory>` is the directory containing the Erlang code for the multyparty session. 
-The directory with the examples can be downloaded from this folder.
+where `<source-directory>` is the folder containing the Erlang code for the multyparty session. 
+The folder with the examples can be downloaded from this folder.
