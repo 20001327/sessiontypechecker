@@ -1,12 +1,12 @@
 aspect InternalChoiceSubTyping{
-     public boolean InternalChoice.subtypeOf(Object other){
+     public boolean InternalChoice.subtype(Object other){
                   if(Program.sameClass(this, other)){
                   InternalChoice obj = (InternalChoice) other;
                   boolean foundAll = true;
                   for (SessionSend send: getSendss()){
                     boolean found = false;
                     for (SessionSend s2 : obj.getSendss()){
-                      found = found || send.subtypeOf(s2);
+                      found = found || send.subtype(s2);
                     }
                     foundAll = found && foundAll;
                   }

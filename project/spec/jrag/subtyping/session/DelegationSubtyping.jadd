@@ -1,39 +1,39 @@
 aspect DelegationSubtyping{
-    public boolean RequestForwardDelegation.subtypeOf(Object other){
+    public boolean RequestForwardDelegation.subtype(Object other){
         if(Program.sameClass(this, other)){
             RequestForwardDelegation obj = (RequestForwardDelegation) other;
             return getDelegating().equals(obj.getDelegating()) &&
-                               getNext().subtypeOf(obj.getNext());
+                               getNext().subtype(obj.getNext());
 
         }
         return false;
     }
 
-    public boolean AcceptBackwardDelegation.subtypeOf(Object other){
+    public boolean AcceptBackwardDelegation.subtype(Object other){
         if(Program.sameClass(this, other)){
             AcceptBackwardDelegation obj = (AcceptBackwardDelegation) other;
             return getDelegating().equals(obj.getDelegating()) &&
-                               getNext().subtypeOf(obj.getNext());
+                               getNext().subtype(obj.getNext());
 
         }
         return false;
     }
 
-    public boolean AcceptForwardDelegation.subtypeOf(Object other){
+    public boolean AcceptForwardDelegation.subtype(Object other){
         if(Program.sameClass(this, other)){
             AcceptForwardDelegation obj = (AcceptForwardDelegation) other;
             return getDelegate().equals(obj.getDelegate()) &&
-                               getNext().subtypeOf(obj.getNext());
+                               getNext().subtype(obj.getNext());
 
         }
         return false;
     }
 
-    public boolean RequestBackwardDelegation.subtypeOf(Object other){
+    public boolean RequestBackwardDelegation.subtype(Object other){
         if(Program.sameClass(this, other)){
             RequestBackwardDelegation obj = (RequestBackwardDelegation) other;
             return getDelegate().equals(obj.getDelegate()) &&
-                               getNext().subtypeOf(obj.getNext());
+                               getNext().subtype(obj.getNext());
 
         }
         return false;

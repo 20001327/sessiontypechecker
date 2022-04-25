@@ -29,16 +29,16 @@ aspect SendSubtyping{
         return s;
     }
 
-    public boolean ConnectingSend.subtypeOf(Object other){
-        return super.subtypeOf(other);
+    public boolean ConnectingSend.subtype(Object other){
+        return super.subtype(other);
     }
 
-    public boolean SessionSend.subtypeOf(Object other){
+    public boolean SessionSend.subtype(Object other){
         if(((Session)other).isSubtypeOf(new SessionSend())){
             SessionSend send = (SessionSend) other;
             if(getSender().equals(send.getSender()) && getLabel().equals(send.getLabel())){
                 boolean list = Program.checkListsByClassName(getTypes(), send.getTypes());
-                if(list && getNext().subtypeOf(send.getNext())){
+                if(list && getNext().subtype(send.getNext())){
                     return true;
                 }
             }
@@ -47,7 +47,7 @@ aspect SendSubtyping{
             List<SessionSend> list2 = send.getNextSendList();
             Session s1 = list1.getChild(list1.getNumChild()-1).getNext();
             Session s2 = list2.getChild(list2.getNumChild()-1).getNext();
-            return Program.checkSendLists(list1, list2) && ((s1==null && s2==null) || s1.subtypeOf(s2));
+            return Program.checkSendLists(list1, list2) && ((s1==null && s2==null) || s1.subtype(s2));
         }
         return false;
     }

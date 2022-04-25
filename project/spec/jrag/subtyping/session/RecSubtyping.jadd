@@ -1,16 +1,16 @@
 aspect RecSubtyping{
 
-    public boolean RecType.subtypeOf(Object other){
+    public boolean RecType.subtype(Object other){
         if(getType().endsWith(getRecVariable())){
             if(((Session)other).isSubtypeOf(new RecType())){
                 RecType oth = (RecType) other;
-                return this.getType().subtypeOf(oth.getType());
+                return this.getType().subtype(oth.getType());
             }
         }
         return false;
     }
 
-    public boolean RecVar.subtypeOf(Object other){
+    public boolean RecVar.subtype(Object other){
         return ((Session)other).isSubtypeOf(new RecVar());
     }
 }

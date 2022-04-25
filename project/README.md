@@ -52,4 +52,4 @@ The last two files are ignored by the type-ckecer.
 They can be used to run the protocol in the Erlang shell, compiling all the `.erl` files and evaluating `main:start_protocol()`	
 	
 	
-The project files are also available from the zipped directory `project_.zip`
+The project files are also available from the zipped directory `project.zip`

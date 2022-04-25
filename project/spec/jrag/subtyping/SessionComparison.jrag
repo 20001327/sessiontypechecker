@@ -3,13 +3,13 @@ aspect SessionComparison{
     public boolean FunType.compareWith(FunType type) {
         boolean name = this.getFunName().equals(type.getFunName());
         boolean arguments = Program.checkLists(getArgumentss(),type.getArgumentss());
-        boolean sessions = getSessionType().subtypeOf(type.getSessionType());
+        boolean sessions = getSessionType().subtype(type.getSessionType());
         return name && arguments && sessions;
     }
 
-    public abstract boolean Session.subtypeOf(Object other);
+    public abstract boolean Session.subtype(Object other);
 
-    public boolean FunType.subtypeOf(Object other){
+    public boolean FunType.subtype(Object other){
         return false;
     }
 

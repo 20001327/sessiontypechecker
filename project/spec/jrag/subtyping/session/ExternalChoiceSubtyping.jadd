@@ -1,12 +1,12 @@
 aspect ExternalChoiceSubTyping{
-    public boolean ExternalChoice.subtypeOf(Object other){
+    public boolean ExternalChoice.subtype(Object other){
         if(Program.sameClass(this, other)){
             ExternalChoice obj = (ExternalChoice) other;
             boolean foundAll = true;
             for (SessionReceive s1: getReceivess()){
               boolean found = false;
               for (SessionReceive s2 : obj.getReceivess()){
-                found = found || s1.subtypeOf(s2);
+                found = found || s1.subtype(s2);
               }
               foundAll = found && foundAll;
             }
