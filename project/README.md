@@ -49,7 +49,7 @@ The folders in `examples` contain:
 - a file `tracer.erl` that traces the execution of the sent and received messages (called in `main.erl`)
 
 The last two files are ignored by the type-ckecer.
-They can be used to run the protocol in the Erlang shell, compiling all the `.erl` files and evaluating `main:start_prtocol()`	
+They can be used to run the protocol in the Erlang shell, compiling all the `.erl` files and evaluating `main:start_protocol()`	
 	
 	
 The project files are also available from the zipped directory `project_.zip`
