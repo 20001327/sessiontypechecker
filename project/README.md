@@ -36,7 +36,6 @@ In the `examples` folder you can find three example:
                she accepts the quote, notifies Alice and Seller, continues the rest of the protocol with
                Seller and Alice as if she were Bob and then ends delegation, giving back control to Bob.
                Otherwise, she notifies Alice and Seller to quit the protocol and then ends delegation, giving back control to Bob.
-  the processing of the client’s credit card to the bank.
 - `recursion`:    a simple example of a recursive protocol, in which an actor(client) ask to
                another actor to do the sum of two numbers for 10 times.
 
