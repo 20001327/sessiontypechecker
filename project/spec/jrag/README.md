@@ -11,4 +11,4 @@
 - utils / equals.jrag: equals utility for typechecking
 
 ### TypeChecking.jadd
-code that infer the types of the Erlang actors and checks them against their annotated/projected types
+code that derives the types of the Erlang actors and checks them against their annotated/projected types
