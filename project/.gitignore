@@ -20,3 +20,6 @@ jar/
 **/*.dump
 /resources/examples/three-buyer/ast/*
 /examples/three-buyer/*.beam
+/impl.puml
+**/*.form
+

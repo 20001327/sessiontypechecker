@@ -19,20 +19,20 @@ public class GlobalTypeChecker {
 
     public void run(String... args) throws IOException {
         // check that the file exists and is a directory
-        doTypeChecking(args.length == 0? null: args[0]);
+        doTypeChecking(args.length == 0 ? null : args[0]);
 
     }
 
     protected static void doTypeChecking(String pathTotype) throws IOException {
         String basepath = pathTotype;
-        if (basepath == null){
+        if (basepath == null) {
             System.out.println("It seems you have not specified a valid path, available examples are :");
             System.out.println("  - recursion");
             System.out.println("  - seller-bank");
             System.out.println("  - three-buyer");
             BufferedReader c = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("rerun the program with a one  of the examples");
-        }else {
+        } else {
 
             File file = new File(basepath);
             File fileGlobal = new File(basepath + File.separator + "global");
@@ -85,48 +85,26 @@ public class GlobalTypeChecker {
                             p.destroy();
                         }
                     }
-                } else {
-                    try (Stream<Path> paths = Files.walk(Paths.get(basepath))) {
-                        File finalFile = file;
+
+                    Program p = new Program();
+                    try (Stream<Path> paths = Files.walk(pathast)) {
                         paths.filter(Files::isRegularFile)
                                 .forEach(f -> {
                                     try {
-                                        String[] fname = f.getFileName().toString().split("\\.");
-                                        if (fname.length == 2 && !fname[0].startsWith("main") && fname[1].equals("erl")) {
-                                            String s = fname[0];
-                                            Process p = Runtime.getRuntime().exec("erl -noshell " +
-                                                    "-eval \"forms:read_to_binary(" + s + ",'form/" + s + ".form').\" " +
-                                                    "-eval 'init:stop().'", null, finalFile);
-                                            p.waitFor(3, TimeUnit.SECONDS);
-                                            p.destroy();
+                                        Reader readerloc = new FileReader(f.toFile());
+                                        ErlangScanner scannerloc = new ErlangScanner(new BufferedReader(readerloc));
+                                        Program pr_part = (Program) parser.parse(scannerloc);
+                                        for (miniErlang.Module m : pr_part.getModuless()) {
+                                            p.addModules(m);
                                         }
-                                    } catch (Exception e) {
+                                        readerloc.close();
+                                    } catch (IOException | Parser.Exception e) {
                                         e.printStackTrace();
                                     }
                                 });
                     }
-                }
 
-                Program p = new Program();
-                try (Stream<Path> paths = Files.walk(pathast)) {
-                    paths.filter(Files::isRegularFile)
-                            .forEach(f -> {
-                                try {
-                                    Reader readerloc = new FileReader(f.toFile());
-                                    ErlangScanner scannerloc = new ErlangScanner(new BufferedReader(readerloc));
-                                    Program pr_part = (Program) parser.parse(scannerloc);
-                                    for (miniErlang.Module m : pr_part.getModuless()) {
-                                        p.addModules(m);
-                                    }
-                                    readerloc.close();
-                                } catch (IOException | Parser.Exception e) {
-                                    e.printStackTrace();
-                                }
-                            });
-                }
-
-                boolean verified = true;
-                if (g != null) {
+                    boolean verified = true;
                     for (String s : g.getActors()) {
                         if (g.project(s) != null) {
                             Session session = g.project(s);
@@ -134,15 +112,15 @@ public class GlobalTypeChecker {
                             verified = verified && p.checkType(s, type);
                         }
                     }
-                } else {
-                    verified = p.checkType();
-                }
 
 
-                if (verified) {
-                    System.out.println("the protocol follows the global type ");
+                    if (verified) {
+                        System.out.println("the protocol follows the global type ");
+                    } else {
+                        System.out.println("some error has occoured, it seems the protocol doesn't follow the global type");
+                    }
                 } else {
-                    System.out.println("some error has occoured, it seems the protocol doesn't follow the global type");
+                    System.out.println("No global type specified");
                 }
             } catch (Exception e) {
                 System.err.println("error (PrettyPrint) : " + e.getMessage());
