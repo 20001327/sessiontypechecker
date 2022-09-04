@@ -20,32 +20,47 @@ print_trace(S, UserList,_Label, {print, _Serial, _From, _To, _Info}) ->
   io:format(S, "~n"),
   UserList;
 
-print_trace(S, UserList,Label, {'receive', _Serial, From, To, Message}) ->
+print_trace(S, UserList,_Label, {'receive', _Serial, From, To, Message}) ->
   NewList = checkList(Message,UserList, To),
   Print = getPrint(Message,UserList, From),
-  case Print of
+  L = case Print of
     true ->
-      Sender=lists:keyfind(From, 2, UserList),
-      Recipient=lists:keyfind(To, 2, UserList),
-      io:format("~p: Received ~p from ~p ~n", [Recipient,Message, Sender]),
-      io:format(S, "~p: Received ~p from ~p ~n", [Recipient,Message, Sender]);
-    false -> ok
+      {Sender,SenderPid}=lists:keyfind(From, 2, UserList),
+      {Recipient,RecipientPid}=lists:keyfind(To, 2, UserList),
+      Ls = case Message of
+         {_Sndr, start_delegation, Name, Pid} ->
+            Tmp = setelem({Recipient,RecipientPid}, NewList, {unreg,Pid}),
+            setelem({Sender,SenderPid}, Tmp, {Name,RecipientPid});
+         _ -> NewList
+      end,
+      io:format("~p: Received ~p from ~p ~n", [{Recipient,RecipientPid},Message, Sender]),
+      io:format(S, "~p: Received ~p from ~p ~n", [{Recipient,RecipientPid},Message, Sender]),
+      Ls;
+    false -> NewList
   end,
-  NewList;
+  L;
 
-print_trace(S, UserList, Label, {send, _Serial, From, To, Message}) ->
-  NewList = checkList(Message,UserList, From),
+print_trace(S, UserList, _Label, {send, _Serial, From, To, Message}) ->
   Print = getPrint(Message,UserList,From),
-  case Print of
+  L = case Print of
     true ->
-      Sender=lists:keyfind(From, 2, UserList),
-      Recipient=lists:keyfind(To, 2, UserList),
-      io:format("~p: Sent ~p to ~p ~n", [Sender, Message, Recipient]),
-      io:format(S, "~p: Sent ~p to ~p ~n", [Sender, Message, Recipient]);
+      {Sender,SenderPid}=lists:keyfind(From, 2, UserList),
+      {Recipient,RecipientPid}=lists:keyfind(To, 2, UserList),
+      Ls = case Message of
+         {Snd, end_delegation} ->
+            Tmp = setelem({Sender,SenderPid},UserList,{Sender,RecipientPid}),
+            Tmp2 = setelem({unreg,RecipientPid}, Tmp, {Snd,SenderPid}),
+
+            Tmp2;
+         _ -> UserList
+      end,
+      io:format("~p: Sent ~p to ~p ~n", [{Sender,SenderPid}, Message, {Recipient,RecipientPid}]),
+      io:format(S, "~p: Sent ~p to ~p ~n", [{Sender,SenderPid}, Message, {Recipient,RecipientPid}]),
+      Ls;
     _ ->
-      unit
+      UserList
   end,
-  UserList.
+  L.
 
 
 
@@ -62,10 +77,17 @@ getPrint(Message, UserList, Pid) ->
     is_tuple(Message) ->  element(1, Message);
     true -> 'stop'
   end,
-  Ret = if
-    is_atom(Call) ->  lists:member({Call,Pid}, UserList);
-    (Call) ->  lists:member({Call,Pid}, UserList);
-    true -> false
+  Lbl = if
+      is_tuple(Message) ->  element(2, Message);
+      true -> 'stop'
+  end,
+  Ret = case Lbl of
+    end_delegation -> true;
+    _ -> if
+            is_atom(Call) -> lists:member({Call,Pid}, UserList);
+            (Call) ->  lists:member({Call,Pid}, UserList);
+            true -> false
+         end
   end,
   Ret.
 
@@ -74,8 +96,12 @@ checkList(Message, UserList, Pid) ->
     is_tuple(Message) ->
         case Message of
              {spawn_request,_A,_B,_C,{Attore,init,0}, [],spawn_reply,[]} -> [{Attore,Pid} | UserList];
-            _ -> UserList
+             _ -> UserList
         end;
         true -> UserList
     end,
     NewList.
+
+setelem(_,[],_)->[];
+setelem(Old, [Old|Rest], New) -> [New|Rest];
+setelem(Old, [H|Rest], New) -> [H|setelem(Old,Rest,New)].
