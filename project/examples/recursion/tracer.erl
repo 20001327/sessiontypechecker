@@ -50,12 +50,13 @@ print_trace(S, UserList, _Label, {send, _Serial, From, To, Message}) ->
          {Snd, end_delegation} ->
             Tmp = setelem({Sender,SenderPid},UserList,{Sender,RecipientPid}),
             Tmp2 = setelem({unreg,RecipientPid}, Tmp, {Snd,SenderPid}),
-
             Tmp2;
          _ -> UserList
       end,
-      io:format("~p: Sent ~p to ~p ~n", [{Sender,SenderPid}, Message, {Recipient,RecipientPid}]),
-      io:format(S, "~p: Sent ~p to ~p ~n", [{Sender,SenderPid}, Message, {Recipient,RecipientPid}]),
+      SndT=lists:keyfind(From, 2, UserList),
+      RcvT=lists:keyfind(To, 2, UserList),
+      io:format("~p: Sent ~p to ~p ~n", [SndT, Message, RcvT]),
+      io:format(S, "~p: Sent ~p to ~p ~n", [SndT, Message, RcvT]),
       Ls;
     _ ->
       UserList
