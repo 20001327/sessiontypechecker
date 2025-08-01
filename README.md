@@ -1,4 +1,4 @@
-# Session type checker
+# Project: Session type checker
 
 The aim of the project is to typecheck a **multyparty session** written in Erlang 
 to ensure that it conforms to the **global type** that specifies its expected protocol.
@@ -17,3 +17,12 @@ In addition to the source files of the project, available in the folder `project
     - recursion
 
 The examples are described in the readme of the `project` folder.
+
+# Authors
+
+* Lorenzo Ventura - [University of Eastern Piedmont](https://www.uniupo.it/en)
+* [Paola Giannini](https://people.unipmn.it/giannini/) - [University of Eastern Piedmont](https://www.uniupo.it/en)
+
+# Acknowledgments
+This work is supported by the MIUR project ["T-LADIES" under grant PRIN 2020TL3X8X](https://cazzola.di.unimi.it/t-ladies.html).
+
